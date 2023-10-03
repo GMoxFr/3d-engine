@@ -39,6 +39,7 @@ Execute the project using
 
 - Command Line Tools: `xcode-select --install`
 - SFML: `brew install sfml`
+- OpenAL: `brew install openal-soft`
 - Make: `brew install make`
 
 #### Compilation

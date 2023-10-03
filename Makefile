@@ -10,7 +10,14 @@ NAME		=	`pwd | rev | cut -d "/" -f1 | rev | tr [:upper:] [:lower:]`
 
 COMPILER	=	g++
 RM			=	rm -f
-ECHO		=	/bin/echo -e
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+  ECHO = echo
+else
+  ECHO = /bin/echo -e
+endif
+
 LOGDIR		=	errors/
 INCLUDES	=	-I./include/ -I./ $(shell pkg-config --cflags sfml-all)
 FLAGS		=	-std=c++11
