@@ -30,3 +30,14 @@
 *.exe
 *.out
 *.app
+
+# Debug files
+*~
+*.dSYM/
+*.su
+*.idb
+*.pdb
+errors/
+
+# Compiled Program
+3d-engine
