@@ -1,17 +1,4 @@
-#include <SFML/Graphics.hpp>
-
-const int WINDOW_WIDTH = 1280;
-const int WINDOW_HEIGHT = 720;
-
-// Function to get the pixel color at a given (x,y) position.
-sf::Color getPixelColor(int x, int y) {
-    // Replace this with your code to determine the color at (x, y).
-    // Here's a simple placeholder:
-    if ((x / 10) % 2 == (y / 10) % 2) {
-        return sf::Color::White;
-    }
-    return sf::Color::Black;
-}
+#include "3dengine.hpp"
 
 int main() {
     // Create the main window
@@ -24,6 +11,18 @@ int main() {
     // Texture and sprite for rendering the image
     sf::Texture texture;
     sf::Sprite sprite;
+
+    // Custom initialization
+    myImage I = myImage(WINDOW_WIDTH, WINDOW_HEIGHT, myColor(0, 0, 0, 255));
+
+    for (int x = 0; x < WINDOW_WIDTH; x++) {
+        for (int y = 0; y < WINDOW_HEIGHT; y++) {
+            float xNorm = (float)x / (float)WINDOW_WIDTH;
+            float yNorm = (float)y / (float)WINDOW_HEIGHT;
+            float xyNorm = (xNorm + yNorm) / 2.0f;
+            I.setPixelColor(x, y, myColor(xNorm, yNorm, xyNorm, 1.0f));
+        }
+    }
 
     // Main loop
     while (window.isOpen()) {
@@ -38,7 +37,7 @@ int main() {
         // Update image with pixel colors
         for (int y = 0; y < WINDOW_HEIGHT; ++y) {
             for (int x = 0; x < WINDOW_WIDTH; ++x) {
-                image.setPixel(x, y, getPixelColor(x, y));
+                image.setPixel(x, y, I.getPixelColor(x, y).toSFMLColor());
             }
         }
 
