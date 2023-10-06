@@ -9,6 +9,7 @@ class myImage {
         int width;
         int height;
         myColor* pixels;
+        double* yBuffer;
 
     public:
         // CONSTRUCTORS
@@ -25,8 +26,10 @@ class myImage {
         myColor getPixelColor(int x, int y);
         myColor getPixelColor(myVector2 v);
 
+        void setPixelColor(myPoint v, myColor c, double y);
         void setPixelColor(int x, int y, myColor c);
         void setPixelColor(myVector2 v, myColor c);
+        void setPixelColor(myVector3 v, myColor c);
         
         void clear(myColor c);
 };

@@ -19,6 +19,7 @@
 #include "myColor.hpp"
 #include "myVector3.hpp"
 #include "myVector2.hpp"
+#include "myPoint.hpp"
 #include "myImage.hpp"
 
 // DEFINITIONS

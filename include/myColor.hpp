@@ -11,6 +11,7 @@ class myColor {
         u_int8_t r;
         u_int8_t g;
         u_int8_t b;
+        u_int8_t a;
 
         // SETTERS AND GETTERS
         public:
@@ -72,6 +73,24 @@ class myColor {
         // METHODS
         sf::Color toSFMLColor();
         void fromSFMLColor(const sf::Color& c);
+
+        // DEFAULT COLORS
+        static const myColor BLACK;
+        static const myColor WHITE;
+        static const myColor RED;
+        static const myColor GREEN;
+        static const myColor BLUE;
+        static const myColor YELLOW;
+        static const myColor MAGENTA;
+        static const myColor CYAN;
+        
+        static const myColor PINK;
+        static const myColor ORANGE;
+        static const myColor PURPLE;
+        static const myColor BROWN;
+        static const myColor GOLD;
+        static const myColor SILVER;
+        static const myColor GRAY;
 };
 
 #endif
