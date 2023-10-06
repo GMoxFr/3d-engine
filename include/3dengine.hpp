@@ -1,33 +1,17 @@
-#ifndef __3D_ENGINE_HPP__
-#define __3D_ENGINE_HPP__
+#pragma once
 
-// GENERAL INCLUDES
+//////////////////////////
+// CONSTANTS DEFINITION //
+//////////////////////////
 
-#include <iostream>
-#include <cmath>
-#include <algorithm>
-#include <vector>
-#include <string>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
-#include <SFML/OpenGL.hpp>
-#include <SFML/Audio.hpp>
+constexpr int WINDOW_WIDTH = 1280;
+constexpr int WINDOW_HEIGHT = 720;
+constexpr double EPSILON = 1e-10;
 
-// PERSONAL INCLUDES
+//////////////////////////
+// METHODS DECLARATION  //
+//////////////////////////
 
-#include "myColor.hpp"
-#include "myVector3.hpp"
-#include "myVector2.hpp"
-#include "myPoint.hpp"
-#include "myImage.hpp"
-
-// DEFINITIONS
-
-#define WINDOW_WIDTH    1280
-#define WINDOW_HEIGHT   720
-#define EPSILON         1e-10
-
-// FUNCTION PROTOTYPES
-
-#endif
+namespace my3d {
+    double clamp(double v);
+}

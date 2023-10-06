@@ -1,7 +1,8 @@
-#ifndef __MY_POINT_HPP__
-#define __MY_POINT_HPP__
+#pragma once
 
-#include "3dengine.hpp"
+#include <iostream>
+
+#include "myVector3.hpp"
 
 class myPoint {
     private:
@@ -13,10 +14,27 @@ class myPoint {
 
         // CONSTRUCTORS
         myPoint();
-        myPoint(int x, int y);
-        myPoint(myVector2 v);
+        myPoint(int x = 0, int y = 0);
         myPoint(myVector3 v);
         ~myPoint();
-};
 
-#endif
+        // OPERATORS
+        myPoint& operator=(const myPoint& p);
+
+        myPoint& operator+=(const myPoint& p);
+        myPoint& operator-=(const myPoint& p);
+
+        myPoint operator+(const myPoint& p) const;
+        myPoint operator-(const myPoint& p) const;
+
+        bool operator==(const myPoint& p) const;
+        bool operator!=(const myPoint& p) const;
+        bool operator<(const myPoint& p) const;
+        bool operator>(const myPoint& p) const;
+        bool operator<=(const myPoint& p) const;
+        bool operator>=(const myPoint& p) const;
+
+        myPoint operator-() const;
+
+        friend std::ostream& operator<<(std::ostream& os, const myPoint& p);
+};

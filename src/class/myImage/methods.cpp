@@ -1,44 +1,46 @@
-#include "3dengine.hpp"
+#include "myImage.hpp"
 
-myColor myImage::getPixelColor(int x, int y) {
-    if (x < 0 || x >= width || y < 0 || y >= height) {
-        return myColor(0, 0, 0, 0);
-    }
-    return pixels[y * width + x];
-}
-
-myColor myImage::getPixelColor(myVector2 v) {
+myColor myImage::getPixel(myPoint v) {
     if (v.x < 0 || v.x >= width || v.y < 0 || v.y >= height) {
-        return myColor(0, 0, 0, 0);
+        return myColor::BLACK;
     }
-    return pixels[(int)v.y * width + (int)v.x];
+    return pixels[(height - v.y) * width + v.x];
 }
 
-void myImage::setPixelColor(myPoint v, myColor c, double y) {
-    if (v.x < 0 || v.x >= width || v.y < 0 || v.y >= height) {
-        return;
-    }
-    if(yBuffer[(int)v.y * width + (int)v.x] < y || yBuffer[(int)v.y * width + (int)v.x] == -1.0) {
-        pixels[(int)v.y * width + (int)v.x] = c;
-        yBuffer[(int)v.y * width + (int)v.x] = y;
-    }
+void myImage::setPixel(myPoint v, myColor c, double z) {
+    // This pos computation is needed in order to respect the origin being at the bottom left
+    unsigned int pos = (height - v.y) * width + v.x;
+
+    if (v.x < 0 || v.x >= width || v.y < 0 || v.y >= height) return;
+    if (zBuffer[pos] > z) return;
+
+    pixels[pos] = c;
 }
 
-void myImage::setPixelColor(int x, int y, myColor c) {
-    myImage::setPixelColor(myPoint(x, y), c, 0.0);
-}
-
-void myImage::setPixelColor(myVector2 v, myColor c) {
-    myImage::setPixelColor(myPoint(v), c, 0.0);
-}
-
-void myImage::setPixelColor(myVector3 v, myColor c) {
-    myImage::setPixelColor(myPoint(v), c, v.y);
+void myImage::setPixel(myVector3 v, myColor c) {
+    // Scramble the coordinates to match the subject's coordinate system
+    setPixel(myPoint(v.x, v.z), c, v.y);
 }
 
 void myImage::clear(myColor c) {
     for (int i = 0; i < width * height; i++) {
         pixels[i] = c;
-        yBuffer[i] = -1.0;
+        zBuffer[i] = std::numeric_limits<double>::max();
     }
+}
+
+sf::Image myImage::toSFMLImage() {
+    sf::Image image;
+    image.create(width, height);
+
+    for (int i = 0; i < width * height; i++) {
+        image.setPixel(i % width, i / width, pixels[i].toSFMLColor());
+    }
+
+    return image;
+}
+
+void myImage::toPNG(std::string filename) {
+    sf::Image image = toSFMLImage();
+    image.saveToFile(filename);
 }

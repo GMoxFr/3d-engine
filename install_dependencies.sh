@@ -16,14 +16,18 @@ install_linux() {
     echo "Installing dependencies for Linux..."
     
     sudo apt-get update
-    sudo apt-get install -y build-essential libsfml-dev make
+    sudo apt-get install -y build-essential libsfml-dev make pkg-config
 }
 
 # Function to install dependencies on macOS
 install_mac() {
     echo "Installing dependencies for macOS..."
     
-    # Assuming you have Homebrew installed
+    # Check for Homebrew, install if we don't have it
+    if test ! $(which brew); then
+        echo "Installing homebrew..."
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    fi
     brew install sfml make openal-soft
 }
 

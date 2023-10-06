@@ -1,5 +1,8 @@
-#ifndef __MY_VECTOR_3_HPP__
-#define __MY_VECTOR_3_HPP__
+#pragma once
+
+#include <iostream>
+#include <vector>
+#include <cmath>
 
 #include "3dengine.hpp"
 
@@ -13,8 +16,7 @@ class myVector3 {
         double z;
 
         // CONSTRUCTORS
-        myVector3();
-        myVector3(double x, double y, double z);
+        myVector3(double x = 0.0, double y = 0.0, double z = 0.0);
         myVector3(const myVector3& v);
         myVector3(const std::vector<double>& v);
         ~myVector3();
@@ -64,5 +66,3 @@ class myVector3 {
 
 
 };
-
-#endif

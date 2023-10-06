@@ -1,43 +1,83 @@
+#include <SFML/Graphics.hpp>
+
 #include "3dengine.hpp"
+#include "myImage.hpp"
+#include "myPoint.hpp"
+#include "myColor.hpp"
 
-int main() {
-    // Create the main window
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "3D Engine");
+int main(int argc, char** argv) {
+    ///////////////////////
+    // ARGUMENTS PARSING //
+    ///////////////////////
+    std::string filename;
 
-    // Image to hold pixel data
-    sf::Image image;
-    image.create(WINDOW_WIDTH, WINDOW_HEIGHT, sf::Color::Black);
+    for (int i = 1; i < argc; i++) {
+        std::string arg = argv[i];
 
-    // Texture and sprite for rendering the image
-    sf::Texture texture;
-    sf::Sprite sprite;
+        if (arg == "-h" || arg == "--help") {
+            std::cout << "Usage: " << argv[0] << " [options]" << std::endl;
+            std::cout << "Options:" << std::endl;
+            std::cout << "  -h, --help\t\t\tShow this help message" << std::endl;
+            std::cout << "  -S, --save <filename>\t\tSave the image to a PNG file" << std::endl;
+            return 0;
+        } else if (arg == "-S" || arg == "--save") {
+            if (i + 1 < argc) {
+                filename = argv[++i];
 
-    // Custom initialization
-    myImage I = myImage(WINDOW_WIDTH, WINDOW_HEIGHT, myColor(0, 0, 0, 255));
+                std::string extension;
+                if (filename.size() > 4) {
+                    extension = filename.substr(filename.size() - 4);
+                }
 
-    for (int x = 0; x < WINDOW_WIDTH; x++) {
-        for (int y = 0; y < WINDOW_HEIGHT; y++) {
-            float xNorm = (float)x / (float)WINDOW_WIDTH;
-            float yNorm = (float)y / (float)WINDOW_HEIGHT;
-            float xyNorm = (xNorm + yNorm) / 2.0f;
-            I.setPixelColor(x, y, myColor(xNorm, yNorm, xyNorm, 1.0f));
+                if (extension != ".png" && extension != ".PNG") {
+                    std::cout << "Error: The provided filename does not have a .png or .PNG extension." << std::endl;
+                    return 1;
+                }
+            } else {
+                std::cout << "Error: missing filename after " << arg << std::endl;
+                return 1;
+            }
+        } else {
+            std::cout << "Error: unknown argument " << arg << std::endl;
+            std::cout << "Try '" << argv[0] << " --help' for more information" << std::endl;
+            return 1;
         }
     }
 
+    /////////////////////////
+    // 3D Engine Test Code //
+    /////////////////////////
+    
+    myImage I = myImage(WINDOW_WIDTH, WINDOW_HEIGHT, myColor(0, 0, 0, 255));
+
+    for (int x = 0; x < WINDOW_WIDTH; x++) {
+        myColor c = myColor(rand() % 256, rand() % 256, rand() % 256, 255);
+        for (int y = 0; y < WINDOW_HEIGHT; y++) {
+            myColor d = c.darken(1.0 - (double)y / WINDOW_HEIGHT);
+            I.setPixel(myPoint(x, y), d);
+        }
+    }
+
+    if (!filename.empty()) {
+        std::cout << "Saving image to " << filename << std::endl;
+        I.toPNG(filename);
+    }
+
+    /////////////////////////
+    // SFML initialization //
+    /////////////////////////
+
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "3D Engine");
+    sf::Image image = I.toSFMLImage();
+    sf::Texture texture;
+    sf::Sprite sprite;
+
     // Main loop
     while (window.isOpen()) {
-        // Process events
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
-            }
-        }
-
-        // Update image with pixel colors
-        for (int y = 0; y < WINDOW_HEIGHT; ++y) {
-            for (int x = 0; x < WINDOW_WIDTH; ++x) {
-                image.setPixel(x, y, I.getPixelColor(x, y).toSFMLColor());
             }
         }
 

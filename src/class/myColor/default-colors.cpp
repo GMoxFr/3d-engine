@@ -1,4 +1,4 @@
-#include "3dengine.hpp"
+#include "myColor.hpp"
 
 const myColor myColor::BLACK(0, 0, 0);
 const myColor myColor::WHITE(255, 255, 255);

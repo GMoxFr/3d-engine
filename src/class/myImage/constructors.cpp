@@ -1,30 +1,14 @@
-#include "3dengine.hpp"
+#include "myImage.hpp"
 
-myImage::myImage() {
-    width = WINDOW_WIDTH;
-    height = WINDOW_HEIGHT;
+// Primary constructor with width, height, and color
+myImage::myImage(int width, int height, myColor c) : width(width), height(height) {
     pixels = new myColor[width * height];
-    yBuffer = new double[width * height];
-    clear(myColor::BLACK);
-}
-
-myImage::myImage(int width, int height) {
-    this->width = width;
-    this->height = height;
-    pixels = new myColor[width * height];
-    yBuffer = new double[width * height];
-    clear(myColor::BLACK);
-}
-
-myImage::myImage(int width, int height, myColor c) {
-    this->width = width;
-    this->height = height;
-    pixels = new myColor[width * height];
-    yBuffer = new double[width * height];
+    zBuffer = new double[width * height];
     clear(c);
 }
 
+// Destructor
 myImage::~myImage() {
     delete[] pixels;
-    delete[] yBuffer;
+    delete[] zBuffer;
 }

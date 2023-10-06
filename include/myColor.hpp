@@ -1,7 +1,10 @@
-#ifndef __MY_COLOR_HPP__
-#define __MY_COLOR_HPP__
+#pragma once
 
-#include "3dengine.hpp"
+#include <iostream>
+#include <cmath>
+#include <SFML/Graphics.hpp>
+
+#include "3dengine.hpp"	
 
 class myColor {
     private:
@@ -13,55 +16,18 @@ class myColor {
         u_int8_t b;
         u_int8_t a;
 
-        // SETTERS AND GETTERS
-        public:
-        u_int8_t getR() const { return r; }
-        void setR(int value) { r = std::clamp(value, 0, 255); }
-
-        u_int8_t getG() const { return g; }
-        void setG(int value) { g = std::clamp(value, 0, 255); }
-
-        u_int8_t getB() const { return b; }
-        void setB(int value) { b = std::clamp(value, 0, 255); }
-
-        u_int8_t getA() const { return a; }
-        void setA(int value) { a = std::clamp(value, 0, 255); }
-
         // CONSTRUCTORS
         myColor();
-        myColor(u_int8_t r, u_int8_t g, u_int8_t b);
-        myColor(u_int8_t r, u_int8_t g, u_int8_t b, u_int8_t a);
-        myColor(int r, int g, int b);
-        myColor(int r, int g, int b, int a);
-        myColor(float r, float g, float b);
-        myColor(float r, float g, float b, float a);
-        myColor(double r, double g, double b);
-        myColor(double r, double g, double b, double a);
+        myColor(u_int8_t r, u_int8_t g, u_int8_t b, u_int8_t a = 255);
+        myColor(int r, int g, int b, int a = 255);
         myColor(const myColor& c);
         myColor(const sf::Color& c);
+        myColor(double r, double g, double b, double a = 1.0);
         ~myColor();
 
         // OPERATORS
         myColor& operator=(const myColor& c);
         myColor& operator=(const sf::Color& c);
-
-        myColor& operator+=(const myColor& c);
-        friend myColor operator+(const myColor& lhs, const myColor& rhs);
-        
-        myColor& operator-=(const myColor& c);
-        friend myColor operator-(const myColor& lhs, const myColor& rhs);
-
-        myColor& operator*=(float factor);
-        friend myColor operator*(const myColor& c, float factor);
-        friend myColor operator*(float factor, const myColor& c);
-        myColor& operator*=(const myColor& c);
-        friend myColor operator*(const myColor& lhs, const myColor& rhs);
-
-
-        myColor& operator/=(float factor);
-        friend myColor operator/(const myColor& c, float factor);
-        myColor& operator/=(const myColor& c);
-        friend myColor operator/(const myColor& lhs, const myColor& rhs);
 
         friend bool operator==(const myColor& lhs, const myColor& rhs);
         friend bool operator!=(const myColor& lhs, const myColor& rhs);
@@ -70,9 +36,12 @@ class myColor {
 
         friend std::ostream& operator<<(std::ostream& os, const myColor& c);
 
+        operator sf::Color() const;
+
         // METHODS
         sf::Color toSFMLColor();
         void fromSFMLColor(const sf::Color& c);
+        myColor darken(double factor);
 
         // DEFAULT COLORS
         static const myColor BLACK;
@@ -92,5 +61,3 @@ class myColor {
         static const myColor SILVER;
         static const myColor GRAY;
 };
-
-#endif

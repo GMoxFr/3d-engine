@@ -1,7 +1,13 @@
-#ifndef __MY_IMAGE_HPP__
-#define __MY_IMAGE_HPP__
+#pragma once
+
+#include <iostream>
+#include <limits>
+#include <SFML/Graphics.hpp>
 
 #include "3dengine.hpp"
+#include "myColor.hpp"
+#include "myPoint.hpp"
+#include "myVector3.hpp"
 
 class myImage {
     private:
@@ -9,13 +15,11 @@ class myImage {
         int width;
         int height;
         myColor* pixels;
-        double* yBuffer;
+        double* zBuffer;
 
     public:
         // CONSTRUCTORS
-        myImage();
-        myImage(int width, int height);
-        myImage(int width, int height, myColor c);
+        myImage(int width = WINDOW_WIDTH, int height = WINDOW_HEIGHT, myColor c = myColor::BLACK);
         ~myImage();
 
         // SETTERS AND GETTERS
@@ -23,15 +27,14 @@ class myImage {
         int getHeight() const { return height; }
 
         // METHODS
-        myColor getPixelColor(int x, int y);
-        myColor getPixelColor(myVector2 v);
+        myColor getPixel(myPoint v);
 
-        void setPixelColor(myPoint v, myColor c, double y);
-        void setPixelColor(int x, int y, myColor c);
-        void setPixelColor(myVector2 v, myColor c);
-        void setPixelColor(myVector3 v, myColor c);
-        
+        void setPixel(myPoint v, myColor c, double z = std::numeric_limits<double>::max());
+        void setPixel(myVector3 v, myColor c);
+
         void clear(myColor c);
-};
 
-#endif
+        sf::Image toSFMLImage();
+
+        void toPNG(std::string filename);
+};

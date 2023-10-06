@@ -1,4 +1,4 @@
-#include "3dengine.hpp"
+#include "myVector3.hpp"
 
 myVector3& myVector3::operator=(const myVector3& v) {
     if (this != &v) {
@@ -31,6 +31,9 @@ myVector3& myVector3::operator*=(const double& d) {
 }
 
 myVector3& myVector3::operator/=(const double& d) {
+    if (std::abs(d) < EPSILON) {
+        throw std::runtime_error("Division by zero or near-zero value");
+    }
     x /= d;
     y /= d;
     z /= d;
@@ -62,6 +65,9 @@ myVector3 myVector3::operator*(const double& d) const {
 }
 
 myVector3 myVector3::operator/(const double& d) const {
+    if (std::abs(d) < EPSILON) {
+        throw std::runtime_error("Division by zero");
+    }
     return myVector3(
         x / d,
         y / d,
