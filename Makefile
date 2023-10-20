@@ -20,7 +20,7 @@ endif
 
 LOGDIR		=	errors/
 INCLUDES	=	-I./include/ -I./ $(shell pkg-config --cflags sfml-all)
-FLAGS		=	-std=c++17 -MMD -MP
+FLAGS		=	-std=c++17 -MMD -MP #-g3 -ggdb -g
 LIBRARIES	=	$(shell pkg-config --libs sfml-all) -lstdc++ -lm -lpthread -ldl
 
 OBJDIR		=	obj/

@@ -23,6 +23,13 @@ myTexture::myTexture(const std::string& filename) {
     }
 }
 
+// Default constructor
+myTexture::myTexture() {
+    width = 0;
+    height = 0;
+    pixels = nullptr;
+}
+
 // Destructor
 myTexture::~myTexture() {
     delete[] pixels;

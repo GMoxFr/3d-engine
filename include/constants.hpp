@@ -15,4 +15,4 @@ constexpr double PI = M_PI;
 constexpr double PI2 = M_PI / 2;
 constexpr double PI4 = M_PI / 4;
 
-constexpr double PRECISION = 0.005;
+constexpr double PRECISION = 0.003;

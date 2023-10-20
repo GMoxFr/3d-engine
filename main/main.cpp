@@ -1,4 +1,10 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <thread>
+#include <chrono>
+#include <atomic>
 
 #include "my3d.hpp"
 #include "constants.hpp"
@@ -11,9 +17,10 @@
 #include "myTexture.hpp"
 
 int main(int argc, char** argv) {
-    ///////////////////////
-    // ARGUMENTS PARSING //
-    ///////////////////////
+    //////////////////////
+    // Argument Parsing //
+    //////////////////////
+
     std::string filename;
     std::string textureFilename;
 
@@ -57,65 +64,75 @@ int main(int argc, char** argv) {
         }
     }
 
-    /////////////////////////
-    // 3D Engine Test Code //
-    /////////////////////////
-    
+    ///////////////////////////
+    // Global Initialization //
+    ///////////////////////////
+
     myImage I = myImage(WINDOW_WIDTH, WINDOW_HEIGHT, myColor(255, 255, 255, 255));
-
-    mySphere s = mySphere(myVector3(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 300), 200, myColor(255, 0, 0, 255), 0.5);
-    s.draw(I);
-
-    myParallelogram p = myParallelogram(myVector3(100, 100, 100), myVector3(100, 400, 100), myVector3(400, 100, 100), myColor(0, 255, 0, 255));
-    p.draw(I);
-
-    myTriangle t = myTriangle(myVector3(1000, 200, 100), myVector3(1100, 600, 100), myVector3(1260, 100, 100), myColor(0, 0, 255, 255));
-    t.draw(I);
-
-    // for (int x = 0; x < WINDOW_WIDTH; x++) {
-    //     myColor c = myColor(rand() % 256, rand() % 256, rand() % 256, 255);
-    //     for (int y = 0; y < WINDOW_HEIGHT; y++) {
-    //         myColor d = c.darken(1.0 - (double)y / WINDOW_HEIGHT);
-    //         I.setPixel(myPoint(x, y), d);
-    //     }
-    // }
-
-    if (!textureFilename.empty()) {
-        myTexture t = myTexture(textureFilename);
-        for (int x = 0; x < WINDOW_WIDTH; x++) {
-            for (int y = 0; y < WINDOW_HEIGHT; y++) {
-                double u = (double)x / WINDOW_WIDTH;
-                double v = (double)y / WINDOW_HEIGHT;
-                I.setPixel(myPoint(x, y), t.getPixel(u, v));
-            }
-        }
-    }
-
-    if (!filename.empty()) {
-        std::cout << "Saving image to " << filename << std::endl;
-        I.toPNG(filename);
-    }
-
-    /////////////////////////
-    // SFML initialization //
-    /////////////////////////
-
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "3D Engine");
-    sf::Image image = I.toSFMLImage();
     sf::Texture texture;
     sf::Sprite sprite;
 
-    // Main loop
+    std::atomic<bool> running = true;
+
+    /////////////////////////////
+    // 3D Engine Render Thread //
+    /////////////////////////////
+    
+    std::thread renderThread([&]() {
+        mySphere s = mySphere(myVector3(WINDOW_WIDTH / 4, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, myColor(255, 0, 0, 255), 1);
+        s.draw(I);
+
+        mySphere s2 = mySphere(myVector3(3 * WINDOW_WIDTH / 4, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, "earth-8k.jpg", 1);
+        s2.draw(I);
+
+        // myParallelogram p = myParallelogram(myVector3(100, 100, 100), myVector3(100, 400, 100), myVector3(400, 100, 100), myColor(0, 255, 0, 255));
+        // p.draw(I);
+
+        // myTriangle t = myTriangle(myVector3(1000, 200, 100), myVector3(1100, 600, 100), myVector3(1260, 100, 100), myColor(0, 0, 255, 255));
+        // t.draw(I);
+
+        if (!textureFilename.empty()) {
+            myTexture t = myTexture(textureFilename);
+            for (int x = 0; x < WINDOW_WIDTH; x++) {
+                for (int y = 0; y < WINDOW_HEIGHT; y++) {
+                    double u = (double)x / WINDOW_WIDTH;
+                    double v = (double)y / WINDOW_HEIGHT;
+                    I.setPixel(myPoint(x, y), t.getPixel(u, v));
+                }
+            }
+        }
+
+        if (!filename.empty()) {
+            std::cout << "Saving image to " << filename << std::endl;
+            I.toPNG(filename);
+        }
+    });
+
+    //////////////////////////
+    // Window Update Thread //
+    //////////////////////////
+
+    std::thread updateThread([&]() {
+        while(running) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(8));
+            texture.loadFromImage(I.toSFMLImage());
+        }
+    });
+
+    /////////////////////////
+    // SFML Window Handler //
+    /////////////////////////
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
+            if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                 window.close();
             }
         }
 
         // Load image into texture and associate with sprite
-        texture.loadFromImage(image);
         sprite.setTexture(texture, true);
 
         // Draw the sprite
@@ -123,6 +140,14 @@ int main(int argc, char** argv) {
         window.draw(sprite);
         window.display();
     }
+
+    /////////////////////////
+    // Thread Termination  //
+    /////////////////////////
+
+    running = false;
+    renderThread.join();
+    updateThread.join();
 
     return 0;
 }

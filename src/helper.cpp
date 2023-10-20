@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <thread>
+#include <chrono>
 
 #include "my3d.hpp"
 
@@ -49,6 +51,17 @@ namespace my3d {
             else {
                 if (p.y < 0) u = 2 * PI - std::acos(t);
                 else u = std::acos(t);
+            }
+        }
+    }
+
+    void smallSleep(int delay) {
+        auto start = std::chrono::high_resolution_clock::now();
+        while (true) {
+            auto now = std::chrono::high_resolution_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(now - start);
+            if (elapsed.count() > delay) {
+                break;
             }
         }
     }

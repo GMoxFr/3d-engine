@@ -16,6 +16,7 @@ class myTexture {
 
     public:
         myTexture(const std::string& filename);
+        myTexture();
         ~myTexture();
 
         myColor getPixel(double u, double v);

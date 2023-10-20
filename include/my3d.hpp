@@ -19,4 +19,5 @@ namespace my3d {
     double randNP(double v);
     double randP(double v);
     void invertCoordSpherique(const myVector3& P3D, const myVector3& sphereCenter, double r, double& u, double& v);
+    void smallSleep(int delay);
 }
