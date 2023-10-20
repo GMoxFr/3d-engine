@@ -6,6 +6,8 @@
 #include "myPoint.hpp"
 #include "myColor.hpp"
 #include "mySphere.hpp"
+#include "myParallelogram.hpp"
+#include "myTriangle.hpp"
 #include "myTexture.hpp"
 
 int main(int argc, char** argv) {
@@ -63,6 +65,12 @@ int main(int argc, char** argv) {
 
     mySphere s = mySphere(myVector3(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 300), 200, myColor(255, 0, 0, 255));
     s.draw(I);
+
+    myParallelogram p = myParallelogram(myVector3(100, 100, 100), myVector3(100, 400, 100), myVector3(400, 100, 100), myColor(0, 255, 0, 255));
+    p.draw(I);
+
+    myTriangle t = myTriangle(myVector3(1000, 200, 100), myVector3(1100, 600, 100), myVector3(1260, 100, 100), myColor(0, 0, 255, 255));
+    t.draw(I);
 
     // for (int x = 0; x < WINDOW_WIDTH; x++) {
     //     myColor c = myColor(rand() % 256, rand() % 256, rand() % 256, 255);
