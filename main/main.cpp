@@ -1,16 +1,19 @@
 #include <SFML/Graphics.hpp>
 
-#include "3dengine.hpp"
+#include "my3d.hpp"
+#include "constants.hpp"
 #include "myImage.hpp"
 #include "myPoint.hpp"
 #include "myColor.hpp"
 #include "mySphere.hpp"
+#include "myTexture.hpp"
 
 int main(int argc, char** argv) {
     ///////////////////////
     // ARGUMENTS PARSING //
     ///////////////////////
     std::string filename;
+    std::string textureFilename;
 
     for (int i = 1; i < argc; i++) {
         std::string arg = argv[i];
@@ -38,6 +41,13 @@ int main(int argc, char** argv) {
                 std::cout << "Error: missing filename after " << arg << std::endl;
                 return 1;
             }
+        } else if (arg == "-l" || arg == "--load") {
+            if (i + 1 < argc) {
+                textureFilename = argv[++i];
+            } else {
+                std::cout << "Error: missing filename after " << arg << std::endl;
+                return 1;
+            }
         } else {
             std::cout << "Error: unknown argument " << arg << std::endl;
             std::cout << "Try '" << argv[0] << " --help' for more information" << std::endl;
@@ -61,6 +71,17 @@ int main(int argc, char** argv) {
     //         I.setPixel(myPoint(x, y), d);
     //     }
     // }
+
+    if (!textureFilename.empty()) {
+        myTexture t = myTexture(textureFilename);
+        for (int x = 0; x < WINDOW_WIDTH; x++) {
+            for (int y = 0; y < WINDOW_HEIGHT; y++) {
+                double u = (double)x / WINDOW_WIDTH;
+                double v = (double)y / WINDOW_HEIGHT;
+                I.setPixel(myPoint(x, y), t.getPixel(u, v));
+            }
+        }
+    }
 
     if (!filename.empty()) {
         std::cout << "Saving image to " << filename << std::endl;

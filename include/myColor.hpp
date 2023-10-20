@@ -4,7 +4,7 @@
 #include <cmath>
 #include <SFML/Graphics.hpp>
 
-#include "3dengine.hpp"	
+#include "my3d.hpp"	
 
 class myColor {
     private:
