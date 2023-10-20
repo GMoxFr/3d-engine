@@ -16,6 +16,7 @@ class myPoint {
         myPoint();
         myPoint(int x = 0, int y = 0);
         myPoint(myVector3 v);
+        myPoint(const myPoint& p);
         ~myPoint();
 
         // OPERATORS
@@ -37,4 +38,7 @@ class myPoint {
         myPoint operator-() const;
 
         friend std::ostream& operator<<(std::ostream& os, const myPoint& p);
+
+        // METHODS
+        double distance(const myPoint& p) const;
 };

@@ -12,7 +12,7 @@ void myImage::setPixel(myPoint v, myColor c, double z) {
     unsigned int pos = (height - v.y) * width + v.x;
 
     if (v.x < 0 || v.x >= width || v.y < 0 || v.y >= height) return;
-    if (zBuffer[pos] > z) return;
+    if (zBuffer[pos] < z) return;
 
     pixels[pos] = c;
 }

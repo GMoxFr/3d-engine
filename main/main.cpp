@@ -4,6 +4,7 @@
 #include "myImage.hpp"
 #include "myPoint.hpp"
 #include "myColor.hpp"
+#include "mySphere.hpp"
 
 int main(int argc, char** argv) {
     ///////////////////////
@@ -48,15 +49,18 @@ int main(int argc, char** argv) {
     // 3D Engine Test Code //
     /////////////////////////
     
-    myImage I = myImage(WINDOW_WIDTH, WINDOW_HEIGHT, myColor(0, 0, 0, 255));
+    myImage I = myImage(WINDOW_WIDTH, WINDOW_HEIGHT, myColor(255, 255, 255, 255));
 
-    for (int x = 0; x < WINDOW_WIDTH; x++) {
-        myColor c = myColor(rand() % 256, rand() % 256, rand() % 256, 255);
-        for (int y = 0; y < WINDOW_HEIGHT; y++) {
-            myColor d = c.darken(1.0 - (double)y / WINDOW_HEIGHT);
-            I.setPixel(myPoint(x, y), d);
-        }
-    }
+    mySphere s = mySphere(myVector3(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 300), 200, myColor(255, 0, 0, 255));
+    s.draw(I);
+
+    // for (int x = 0; x < WINDOW_WIDTH; x++) {
+    //     myColor c = myColor(rand() % 256, rand() % 256, rand() % 256, 255);
+    //     for (int y = 0; y < WINDOW_HEIGHT; y++) {
+    //         myColor d = c.darken(1.0 - (double)y / WINDOW_HEIGHT);
+    //         I.setPixel(myPoint(x, y), d);
+    //     }
+    // }
 
     if (!filename.empty()) {
         std::cout << "Saving image to " << filename << std::endl;
