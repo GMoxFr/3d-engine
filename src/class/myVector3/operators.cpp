@@ -32,7 +32,7 @@ myVector3& myVector3::operator*=(const double& d) {
 
 myVector3& myVector3::operator/=(const double& d) {
     if (std::abs(d) < EPSILON) {
-        throw std::runtime_error("Division by zero or near-zero value");
+        throw std::runtime_error("Division by zero");
     }
     x /= d;
     y /= d;
@@ -109,6 +109,18 @@ myVector3 operator*(const double& d, const myVector3& v) {
 
 myVector3 myVector3::operator-() const {
     return myVector3(-x, -y, -z);
+}
+
+myVector3 myVector3::operator^(const myVector3& v) const {
+    return myVector3(
+        z * v.y - y * v.z,
+        x * v.z - z * v.x,
+        y * v.x - x * v.y
+    );
+}
+
+float myVector3::operator*(const myVector3& v) const {
+    return x * v.x + y * v.y + z * v.z;
 }
 
 std::ostream& operator<<(std::ostream& os, const myVector3& v) {

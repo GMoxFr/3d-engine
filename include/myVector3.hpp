@@ -45,6 +45,9 @@ class myVector3 {
 
         myVector3 operator-() const;
 
+        myVector3 operator^(const myVector3& v) const;
+        float operator*(const myVector3& v) const;
+
         friend std::ostream& operator<<(std::ostream& os, const myVector3& v);
 
         // METHODS

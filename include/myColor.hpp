@@ -11,10 +11,10 @@ class myColor {
 
     public:
         // ATTRIBUTES
-        u_int8_t r;
-        u_int8_t g;
-        u_int8_t b;
-        u_int8_t a;
+        double r;
+        double g;
+        double b;
+        double a;
 
         // CONSTRUCTORS
         myColor();
@@ -28,6 +28,20 @@ class myColor {
         // OPERATORS
         myColor& operator=(const myColor& c);
         myColor& operator=(const sf::Color& c);
+
+        myColor operator+(const myColor& c) const;
+        myColor operator-(const myColor& c) const;
+        myColor operator*(const myColor& c) const;
+
+        myColor& operator+=(const myColor& c);
+        myColor& operator-=(const myColor& c);
+        myColor& operator*=(const myColor& c);
+
+        myColor operator*(double factor) const;
+        myColor operator/(double factor) const;
+        myColor& operator*=(double factor);
+        myColor& operator/=(double factor);
+
 
         friend bool operator==(const myColor& lhs, const myColor& rhs);
         friend bool operator!=(const myColor& lhs, const myColor& rhs);
