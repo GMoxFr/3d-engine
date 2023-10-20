@@ -75,4 +75,6 @@ class myColor {
         static const myColor GOLD;
         static const myColor SILVER;
         static const myColor GRAY;
+
+        static const myColor AMBIENT_LIGHT;
 };

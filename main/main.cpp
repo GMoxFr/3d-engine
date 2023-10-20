@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
     
     myImage I = myImage(WINDOW_WIDTH, WINDOW_HEIGHT, myColor(255, 255, 255, 255));
 
-    mySphere s = mySphere(myVector3(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 300), 200, myColor(255, 0, 0, 255));
+    mySphere s = mySphere(myVector3(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 300), 200, myColor(255, 0, 0, 255), 0.5);
     s.draw(I);
 
     myParallelogram p = myParallelogram(myVector3(100, 100, 100), myVector3(100, 400, 100), myVector3(400, 100, 100), myColor(0, 255, 0, 255));
