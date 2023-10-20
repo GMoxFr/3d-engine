@@ -56,6 +56,7 @@ class myColor {
         sf::Color toSFMLColor();
         void fromSFMLColor(const sf::Color& c);
         myColor darken(double factor);
+        double getGrayScale();
 
         // DEFAULT COLORS
         static const myColor BLACK;

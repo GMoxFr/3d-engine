@@ -19,8 +19,7 @@ void myColor::fromSFMLColor(const sf::Color& c) {
 }
 
 myColor myColor::darken(double factor) {
-    if (factor < 0.0) factor = 0.0;
-    if (factor > 1.0) factor = 1.0;
+    factor = my3d::clamp(factor);
 
     return myColor(
         r * factor,
@@ -28,4 +27,8 @@ myColor myColor::darken(double factor) {
         b * factor,
         a
     );
+}
+
+double myColor::getGrayScale() {
+    return (r + g + b) / 3.0;
 }
