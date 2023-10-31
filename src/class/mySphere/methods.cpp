@@ -1,6 +1,11 @@
 #include "mySphere.hpp"
 #include "myTexture.hpp"
 
+void mySphere::setBumpMap(std::string filename) {
+    hasBumpMap = true;
+    bumpMap = new myTexture(filename);
+}
+
 void mySphere::draw(myImage& I) {
     for (double u = 0; u < DPI; u += PRECISION) {
         for (double v = -PI2; v < PI2; v += PRECISION) {
@@ -13,7 +18,32 @@ void mySphere::draw(myImage& I) {
             // Object
             myVector3 normal = pos - center;
             normal.normalize();
-            myColor workingColor = hasTexture ? texture.getPixel(u / DPI, (v + PI / 2) / PI) : color;
+            myColor workingColor = hasTexture ? texture->getPixel(u / DPI, (v + PI / 2) / PI) : color;
+
+            // Bump Map
+            if (hasBumpMap) {
+                double dhdu = 0;
+                double dhdv = 0;
+                bumpMap->bump(u / DPI, (v + PI / 2) / PI, dhdu, dhdv);
+
+                // Compute tangents based on partial derivatives
+                myVector3 dMdu(
+                    -radius * my3d::cosf(v) * my3d::sinf(u),
+                    radius * my3d::cosf(v) * my3d::cosf(u),
+                    0
+                );
+
+                myVector3 dMdv(
+                    -radius * my3d::sinf(v) * my3d::cosf(u),
+                    -radius * my3d::sinf(v) * my3d::sinf(u),
+                    radius * my3d::cosf(v)
+                );
+
+                double K = 0.01;
+                myVector3 bumpNormal = normal + (K * ((dMdu ^ (dhdv * normal)) + (dMdv ^ (dhdu * normal))));
+                bumpNormal.normalize();
+                normal = bumpNormal;
+            }
 
             // Light
             myVector3 lightDirection(1, -1, 1);
@@ -40,7 +70,7 @@ void mySphere::draw(myImage& I) {
 
             // Draw
             I.setPixel(pos, newColor);
-            // my3d::smallSleep(200);
+            // my3d::smallSleep(500);
         }
     }
 }

@@ -10,9 +10,13 @@ class mySphere : public myShape {
         myVector3 center;
         double radius;
         
-        bool hasTexture;
         myColor color;
-        myTexture texture;
+
+        bool hasTexture;
+        myTexture *texture;
+
+        bool hasBumpMap;
+        myTexture *bumpMap;
 
         double diffuse;
 
@@ -20,6 +24,8 @@ class mySphere : public myShape {
         mySphere(myVector3 c, double r, myColor clr, double diffuse = 1.0);
         mySphere(myVector3 c, double r, std::string texture, double diffuse = 1.0);
         ~mySphere();
+
+        void setBumpMap(std::string filename);
 
         void draw(myImage& I);
 };

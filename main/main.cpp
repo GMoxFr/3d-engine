@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
     // Global Initialization //
     ///////////////////////////
 
-    myImage I = myImage(WINDOW_WIDTH, WINDOW_HEIGHT, myColor(255, 255, 255, 255));
+    myImage I(WINDOW_WIDTH, WINDOW_HEIGHT, myColor(255, 255, 255, 255));
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "3D Engine");
     sf::Texture texture;
     sf::Sprite sprite;
@@ -80,10 +80,11 @@ int main(int argc, char** argv) {
     /////////////////////////////
     
     std::thread renderThread([&]() {
-        mySphere s = mySphere(myVector3(WINDOW_WIDTH / 4, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 6, myColor(255, 0, 0, 255), 1);
-        s.draw(I);
+        // mySphere s(myVector3(WINDOW_WIDTH / 4, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, myColor(255, 0, 0, 255), 1);
+        // s.draw(I);
 
-        mySphere s2 = mySphere(myVector3(3 * WINDOW_WIDTH / 4, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, "or.png", 1);
+        mySphere s2(myVector3(WINDOW_WIDTH / 2, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, myColor::ORANGE, 1);
+        s2.setBumpMap("bump.png");
         s2.draw(I);
 
         // myParallelogram p = myParallelogram(myVector3(100, 100, 100), myVector3(100, 400, 100), myVector3(400, 100, 100), myColor(0, 255, 0, 255));
@@ -93,7 +94,7 @@ int main(int argc, char** argv) {
         // t.draw(I);
 
         if (!textureFilename.empty()) {
-            myTexture t = myTexture(textureFilename);
+            myTexture t(textureFilename);
             for (int x = 0; x < WINDOW_WIDTH; x++) {
                 for (int y = 0; y < WINDOW_HEIGHT; y++) {
                     double u = (double)x / WINDOW_WIDTH;
