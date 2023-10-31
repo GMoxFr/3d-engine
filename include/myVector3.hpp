@@ -67,5 +67,5 @@ class myVector3 {
 
         double angleBetween(const myVector3& v) const;
 
-
+        static const myVector3 CAMERA;
 };

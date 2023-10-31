@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "myVector3.hpp"
+
 //////////////////////////
 // CONSTANTS DEFINITION //
 //////////////////////////

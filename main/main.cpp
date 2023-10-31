@@ -80,10 +80,10 @@ int main(int argc, char** argv) {
     /////////////////////////////
     
     std::thread renderThread([&]() {
-        mySphere s = mySphere(myVector3(WINDOW_WIDTH / 4, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, myColor(255, 0, 0, 255), 1);
+        mySphere s = mySphere(myVector3(WINDOW_WIDTH / 4, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 6, myColor(255, 0, 0, 255), 1);
         s.draw(I);
 
-        mySphere s2 = mySphere(myVector3(3 * WINDOW_WIDTH / 4, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, "earth-8k.jpg", 1);
+        mySphere s2 = mySphere(myVector3(3 * WINDOW_WIDTH / 4, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, "or.png", 1);
         s2.draw(I);
 
         // myParallelogram p = myParallelogram(myVector3(100, 100, 100), myVector3(100, 400, 100), myVector3(400, 100, 100), myColor(0, 255, 0, 255));
