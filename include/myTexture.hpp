@@ -10,15 +10,13 @@ class myTexture {
     private:
         int width;
         int height;
-        myColor *pixels;
+        std::vector<myColor> pixels;
 
-        myColor interpolate(double u, double v);
+        myColor interpolate(double u, double v) const;
 
     public:
-        myTexture(const std::string& filename);
-        myTexture();
-        ~myTexture();
+        explicit myTexture(const std::string& filename);
 
-        myColor getPixel(double u, double v);
-        void bump(double u, double v, double& dhdu, double& dhdv);
+        myColor getPixel(double u, double v) const;
+        void bump(double u, double v, double& dhdu, double& dhdv) const;
 };

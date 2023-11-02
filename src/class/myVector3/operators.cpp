@@ -1,14 +1,5 @@
 #include "myVector3.hpp"
 
-myVector3& myVector3::operator=(const myVector3& v) {
-    if (this != &v) {
-        x = v.x;
-        y = v.y;
-        z = v.z;
-    }
-    return *this;
-}
-
 myVector3& myVector3::operator+=(const myVector3& v) {
     x += v.x;
     y += v.y;
@@ -32,7 +23,7 @@ myVector3& myVector3::operator*=(const double& d) {
 
 myVector3& myVector3::operator/=(const double& d) {
     if (std::abs(d) < EPSILON) {
-        throw std::runtime_error("Division by zero");
+        throw DivisionByZeroException();
     }
     x /= d;
     y /= d;
@@ -66,7 +57,7 @@ myVector3 myVector3::operator*(const double& d) const {
 
 myVector3 myVector3::operator/(const double& d) const {
     if (std::abs(d) < EPSILON) {
-        throw std::runtime_error("Division by zero");
+        throw DivisionByZeroException();
     }
     return myVector3(
         x / d,
@@ -119,7 +110,7 @@ myVector3 myVector3::operator^(const myVector3& v) const {
     );
 }
 
-float myVector3::operator*(const myVector3& v) const {
+double myVector3::operator*(const myVector3& v) const {
     return x * v.x + y * v.y + z * v.z;
 }
 

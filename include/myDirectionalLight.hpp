@@ -9,7 +9,7 @@ class myDirectionalLight : public myLight {
         double intensity;
 
     public:
-        myDirectionalLight(myColor clr, myVector3 dir, double intensity = 1.0) :
+        myDirectionalLight(myColor const& clr, myVector3 dir, double intensity = 1.0) :
             myLight(clr),
             direction(dir),
             intensity(intensity)
@@ -22,7 +22,7 @@ class myDirectionalLight : public myLight {
 
             // Diffuse Lighting
             double impact = my3d::clamp(normal * -direction);
-            result += (color * intensity) * workingColor * impact * diffuse;
+            result += (getColor() * intensity) * workingColor * impact * diffuse;
 
             // Specular Lighting
             myVector3 reflectedLight = 2 * (-direction * normal) * normal + direction;
@@ -30,8 +30,7 @@ class myDirectionalLight : public myLight {
             viewDirection.normalize();
             double k = 50.0;
             impact = my3d::clamp(reflectedLight * viewDirection);
-            myColor specularColor = (color * intensity) * std::pow(impact, k);
-            result += specularColor;
+            result += (getColor() * intensity) * std::pow(impact, k);
 
             return result;
         };

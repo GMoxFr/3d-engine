@@ -5,6 +5,9 @@
 #include <thread>
 #include <chrono>
 #include <atomic>
+#include <map>
+#include <algorithm>
+#include <string_view>
 
 #include "my3d.hpp"
 #include "constants.hpp"
@@ -24,39 +27,32 @@ int main(int argc, char** argv) {
     //////////////////////
 
     std::string filename;
-    std::string textureFilename;
 
-    for (int i = 1; i < argc; i++) {
-        std::string arg = argv[i];
+    std::map<std::string, ArgumentType, std::less<>> argumentMap = {
+        {"-h", ArgumentType::HELP},
+        {"--help", ArgumentType::HELP},
+        {"-S", ArgumentType::SAVE},
+        {"--save", ArgumentType::SAVE}
+    };
 
-        if (arg == "-h" || arg == "--help") {
-            std::cout << "Usage: " << argv[0] << " [options]" << std::endl;
-            std::cout << "Options:" << std::endl;
-            std::cout << "  -h, --help\t\t\tShow this help message" << std::endl;
-            std::cout << "  -S, --save <filename>\t\tSave the image to a PNG file" << std::endl;
-            return 0;
-        } else if (arg == "-S" || arg == "--save") {
-            if (i + 1 < argc) {
-                filename = argv[++i];
+    int i = 1;
+    while (i < argc) {
+        switch (std::string arg = argv[i]; argumentMap.count(arg) ? argumentMap[arg] : ArgumentType::UNKNOWN) {
+            case ArgumentType::HELP:
+                my3d::displayHelp(argv[0]);
+                return 0;
 
-                std::string extension;
-                if (filename.size() > 4) {
-                    extension = filename.substr(filename.size() - 4);
-                }
-
-                if (extension != ".png" && extension != ".PNG") {
-                    std::cout << "Error: The provided filename does not have a .png or .PNG extension." << std::endl;
+            case ArgumentType::SAVE:
+                if (!my3d::handleSAVE(i, (const char**)argv, argc, filename))
                     return 1;
-                }
-            } else {
-                std::cout << "Error: missing filename after " << arg << std::endl;
+                break;
+
+            default:
+                std::cout << "Error: Unknown argument " << arg << std::endl;
+                std::cout << "Try '" << argv[0] << " --help' for more information" << std::endl;
                 return 1;
-            }
-        } else {
-            std::cout << "Error: unknown argument " << arg << std::endl;
-            std::cout << "Try '" << argv[0] << " --help' for more information" << std::endl;
-            return 1;
         }
+        i++;
     }
 
     ///////////////////////////
@@ -74,7 +70,7 @@ int main(int argc, char** argv) {
     // 3D Engine Render Thread //
     /////////////////////////////
     
-    std::thread renderThread([&]() {
+    std::thread renderThread([&I, &filename]() {
 
         std::vector<myLight*> lights;
         lights.push_back(new myAmbientLight(myColor::WHITE, 0.1));
@@ -82,13 +78,14 @@ int main(int argc, char** argv) {
         lights.push_back(new myDirectionalLight(myColor::WHITE, myVector3(1, 1, -1), 0.3));
 
         std::vector<myShape*> shapes;
-        shapes.push_back(new mySphere(myVector3(WINDOW_WIDTH / 2, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, "earth-8k.jpg"));
-        shapes.push_back(new myParallelogram(myVector3(0, 0, 0), myVector3(0, 2000, 0), myVector3(0, 0, WINDOW_HEIGHT - 1), "wood2.jpg")); // Left Wall
-        shapes.push_back(new myParallelogram(myVector3(WINDOW_WIDTH - 1, 2000, 1), myVector3(WINDOW_WIDTH - 1, 1, 1), myVector3(WINDOW_WIDTH - 1, 2000, WINDOW_HEIGHT - 1), myColor::PURPLE)); // Right Wall
-        shapes.push_back(new myParallelogram(myVector3(0, 0, 0), myVector3(WINDOW_WIDTH - 1, 1, 1), myVector3(0, 2000, 0), myColor::CYAN)); // Floor
-        shapes.push_back(new myParallelogram(myVector3(0, 2000, WINDOW_HEIGHT - 1), myVector3(WINDOW_WIDTH - 1, 2000, WINDOW_HEIGHT - 1), myVector3(0, 0, WINDOW_HEIGHT - 1), myColor::MAGENTA)); // Ceiling
-        shapes.push_back(new myParallelogram(myVector3(0, 2000, 0), myVector3(WINDOW_WIDTH - 1, 2000, 0), myVector3(0, 2000, WINDOW_HEIGHT - 1), myColor::SILVER)); // Back Wall
-        shapes.push_back(new myTriangle(myVector3(WINDOW_WIDTH / 2, 500, WINDOW_HEIGHT / 2), myVector3((WINDOW_WIDTH / 2) + 130, 600, WINDOW_HEIGHT / 2), myVector3((WINDOW_WIDTH / 2), 600, (WINDOW_HEIGHT / 2) + 120), myColor::GREEN));
+        shapes.push_back(new mySphere(myVector3(WINDOW_WIDTH / 2, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, "earth-8k.jpg")); // Earth
+        shapes.push_back(new myTriangle(myVector3(WINDOW_WIDTH / 2, 500, WINDOW_HEIGHT / 2), myVector3((WINDOW_WIDTH / 2) + 130, 600, WINDOW_HEIGHT / 2), myVector3((WINDOW_WIDTH / 2), 600, (WINDOW_HEIGHT / 2) + 120), myColor::GREEN)); // Triangle
+        shapes.push_back(new myParallelogram(myVector3::BOTTOM_LEFT, myVector3::BOTTOM_LEFT + (2000 * myVector3::FORWARD), myVector3::TOP_LEFT, myColor::GOLD)); // Left Wall
+        shapes.push_back(new myParallelogram(myVector3::BOTTOM_RIGHT + (2000 * myVector3::FORWARD), myVector3::BOTTOM_RIGHT, myVector3::TOP_RIGHT + (2000 * myVector3::FORWARD), myColor::PURPLE)); // Right Wall
+        shapes.push_back(new myParallelogram(myVector3::BOTTOM_LEFT, myVector3::BOTTOM_RIGHT, myVector3::BOTTOM_LEFT + (2000 * myVector3::FORWARD), myColor::CYAN)); // Floor
+        shapes.push_back(new myParallelogram(myVector3::TOP_LEFT + (2000 * myVector3::FORWARD), myVector3::TOP_RIGHT + (2000 * myVector3::FORWARD), myVector3::TOP_LEFT, myColor::GREEN)); // Ceiling
+        shapes.push_back(new myParallelogram(myVector3::BOTTOM_LEFT + (2000 * myVector3::FORWARD), myVector3::TOP_LEFT + (2000 * myVector3::FORWARD), myVector3::BOTTOM_RIGHT + (2000 * myVector3::FORWARD), myColor::PINK)); // Back Wall
+
 
         shapes[0]->setBumpMap("bump2.png");
 
@@ -108,7 +105,7 @@ int main(int argc, char** argv) {
     // Window Update Thread //
     //////////////////////////
 
-    std::thread updateThread([&]() {
+    std::thread updateThread([&running, &texture, &I]() {
         while(running) {
             std::this_thread::sleep_for(std::chrono::milliseconds(8));
             texture.loadFromImage(I.toSFMLImage());

@@ -5,9 +5,7 @@
 #include "my3d.hpp"
 
 namespace my3d {
-
-    static std::default_random_engine generator;
-
+    
     double clamp(double v) {
         return std::max(0.0, std::min(1.0, v));
     }
@@ -22,20 +20,6 @@ namespace my3d {
 
     double sqrtf(double x) {
         return std::sqrt(x);
-    }
-
-    void initRand() {
-        generator.seed(std::random_device()());
-    }
-
-    double randNP(double v) {
-        std::uniform_real_distribution<double> distribution(-v, v);
-        return distribution(generator);
-    }
-
-    double randP(double v) {
-        std::uniform_real_distribution<double> distribution(0, v);
-        return distribution(generator);
     }
 
     void invertCoordSpherique(const myVector3& P3D, const myVector3& sphereCenter, double r, double& u, double& v) {
@@ -63,6 +47,41 @@ namespace my3d {
             if (elapsed.count() > delay) {
                 break;
             }
+        }
+    }
+
+    bool isValidExtension(std::string_view filename, std::string_view extension) {
+        if (filename.size() <= extension.size()) return false;
+        
+        std::string_view fileExtension = filename.substr(filename.size() - extension.size());
+
+        // Directly compare the string_views without converting to std::string
+        return std::equal(fileExtension.begin(), fileExtension.end(),
+                        extension.begin(), extension.end(),
+                        [](char a, char b) {
+                            return std::tolower(a) == std::tolower(b);
+                        });
+    }
+
+    void displayHelp(std::string const& programName) {
+        std::cout << "Usage: " << programName << " [options]" << std::endl;
+        std::cout << "Options:" << std::endl;
+        std::cout << "  -h, --help\t\t\tShow this help message" << std::endl;
+        std::cout << "  -S, --save <filename>\t\tSave the image to a PNG file" << std::endl;
+    }
+
+    bool handleSAVE(int& i, const char** argv, int argc, std::string& filename) {
+        i++;
+        if (i < argc) {
+            filename = argv[i];
+            if (!my3d::isValidExtension(filename, ".png")) {
+                std::cout << "Error: The provided filename does not have a .png or .PNG extension." << std::endl;
+                return false;
+            }
+            return true;
+        } else {
+            std::cout << "Error: missing filename after " << argv[i-1] << std::endl;
+            return false;
         }
     }
 

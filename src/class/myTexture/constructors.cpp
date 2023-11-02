@@ -4,9 +4,7 @@
 myTexture::myTexture(const std::string& filename) {
     sf::Image image;
 
-    std::string path = "assets/textures/" + filename;
-
-    if (!image.loadFromFile(path)) {
+    if (std::string path = "assets/textures/" + filename; !image.loadFromFile(path)) {
         std::cout << "Error loading texture from file: " << path << std::endl;
         return;
     }
@@ -14,23 +12,11 @@ myTexture::myTexture(const std::string& filename) {
     width = image.getSize().x;
     height = image.getSize().y;
 
-    pixels = new myColor[width * height];
+    pixels = std::vector<myColor>(width * height);
     for (int x = 0; x < width; x++) {
         for (int y = height - 1; y >= 0; y--) {
             sf::Color c = image.getPixel(x, height - y - 1);
-            pixels[x + y * width] = myColor(c.r, c.g, c.b, c.a);
+            pixels.at(x + y * width).fromSFMLColor(c);
         }
     }
-}
-
-// Default constructor
-myTexture::myTexture() {
-    width = 0;
-    height = 0;
-    pixels = nullptr;
-}
-
-// Destructor
-myTexture::~myTexture() {
-    delete[] pixels;
 }

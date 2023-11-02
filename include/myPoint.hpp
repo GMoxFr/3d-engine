@@ -5,8 +5,6 @@
 #include "myVector3.hpp"
 
 class myPoint {
-    private:
-
     public:
         // ATTRIBUTES
         int x;
@@ -15,13 +13,9 @@ class myPoint {
         // CONSTRUCTORS
         myPoint();
         myPoint(int x = 0, int y = 0);
-        myPoint(myVector3 v);
-        myPoint(const myPoint& p);
-        ~myPoint();
+        explicit myPoint(myVector3 v);
 
         // OPERATORS
-        myPoint& operator=(const myPoint& p);
-
         myPoint& operator+=(const myPoint& p);
         myPoint& operator-=(const myPoint& p);
 

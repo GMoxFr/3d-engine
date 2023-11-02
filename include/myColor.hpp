@@ -5,10 +5,9 @@
 #include <SFML/Graphics.hpp>
 
 #include "my3d.hpp"	
+#include "exceptions.hpp"
 
 class myColor {
-    private:
-
     public:
         // ATTRIBUTES
         double r;
@@ -20,13 +19,10 @@ class myColor {
         myColor();
         myColor(u_int8_t r, u_int8_t g, u_int8_t b, u_int8_t a = 255);
         myColor(int r, int g, int b, int a = 255);
-        myColor(const myColor& c);
-        myColor(const sf::Color& c);
+        explicit myColor(const sf::Color& c);
         myColor(double r, double g, double b, double a = 1.0);
-        ~myColor();
 
         // OPERATORS
-        myColor& operator=(const myColor& c);
         myColor& operator=(const sf::Color& c);
 
         myColor operator+(const myColor& c) const;
@@ -50,13 +46,13 @@ class myColor {
 
         friend std::ostream& operator<<(std::ostream& os, const myColor& c);
 
-        operator sf::Color() const;
+        explicit operator sf::Color() const;
 
         // METHODS
-        sf::Color toSFMLColor();
+        sf::Color toSFMLColor() const;
         void fromSFMLColor(const sf::Color& c);
         myColor darken(double factor);
-        double getGrayScale();
+        double getGrayScale() const;
 
         // DEFAULT COLORS
         static const myColor BLACK;

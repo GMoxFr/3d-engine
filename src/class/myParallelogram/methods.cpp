@@ -1,20 +1,24 @@
 #include "myParallelogram.hpp"
 
-void myParallelogram::draw(myImage& I, std::vector<myLight *> L) {
-    for (double u = 0; u < 1; u += 0.0005) {
-        for(double v = 0; v < 1; v += 0.0005) {
+void myParallelogram::draw(myImage& I, std::vector<myLight *> const& L) {
+    const int steps = 2000;
+    for (int i = 0; i < steps; i++) {
+        double u = static_cast<double>(i) / steps;
+        for(int j = 0; j < steps; j++) {
+            double v = static_cast<double>(j) / steps;
+            
             myVector3 pos = A + (u * (B - A)) + (v * (C - A));
 
             // Object
             myVector3 normal = (B - A) ^ (C - A);
             normal.normalize();
-            myColor workingColor = hasTexture ? texture->getPixel(u, v) : color;
+            myColor workingColor = getHasTexture() ? getTexture().getPixel(u, v) : getColor();
 
             // Bump Map
-            if (hasBumpMap) {
+            if (getHasBumpMap()) {
                 double dhdu = 0;
                 double dhdv = 0;
-                bumpMap->bump(u, v, dhdu, dhdv);
+                getBumpMap().bump(u, v, dhdu, dhdv);
 
                 myVector3 dMdu = B - A;
                 myVector3 dMdv = C - A;
@@ -55,13 +59,13 @@ bool myParallelogram::intersect(myVector3 const& origin, myVector3 const& direct
     if (u < 0 || u > 1 || v < 0 || v > 1)
         return false;
     
-    color = hasTexture ? texture->getPixel(u, v) : this->color;
+    color = getHasTexture() ? getTexture().getPixel(u, v) : getColor();
 
     // Bump Map
-    if (hasBumpMap) {
+    if (getHasBumpMap()) {
         double dhdu = 0;
         double dhdv = 0;
-        bumpMap->bump(u, v, dhdu, dhdv);
+        getBumpMap().bump(u, v, dhdu, dhdv);
 
         myVector3 dMdu = B - A;
         myVector3 dMdv = C - A;

@@ -18,13 +18,12 @@ class myImage {
         // ATTRIBUTES
         int width;
         int height;
-        myColor* pixels;
-        double* zBuffer;
+        std::vector<myColor> pixels;
+        std::vector<double> zBuffer;
 
     public:
         // CONSTRUCTORS
-        myImage(int width = WINDOW_WIDTH, int height = WINDOW_HEIGHT, myColor c = myColor::BLACK);
-        ~myImage();
+        myImage(int width = WINDOW_WIDTH, int height = WINDOW_HEIGHT, myColor const& c = myColor::BLACK);
 
         // SETTERS AND GETTERS
         int getWidth() const { return width; }
@@ -33,15 +32,15 @@ class myImage {
         // METHODS
         myColor getPixel(myPoint v);
 
-        void setPixel(myPoint v, myColor c, double z = std::numeric_limits<double>::max());
-        void setPixel(myVector3 v, myColor c);
+        void setPixel(myPoint v, myColor const& c, double z = std::numeric_limits<double>::max());
+        void setPixel(myVector3 v, myColor const& c);
 
-        void clear(myColor c);
+        void clear(myColor const& c);
 
-        void rayCast(myVector3 camera, std::vector<myShape*> shapes, std::vector<myLight*> lights);
+        void handleRayIntersection(int x, int z, myVector3 const& camera, myVector3 const& rayDirection, std::vector<myShape*> const& shapes, std::vector<myLight*> const& lights);
+        void rayCast(myVector3 camera, std::vector<myShape*> const& shapes, std::vector<myLight*> const& lights);
 
         sf::Image toSFMLImage();
 
-
-        void toPNG(std::string filename);
+        void toPNG(std::string const& filename);
 };

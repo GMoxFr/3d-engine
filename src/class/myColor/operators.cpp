@@ -1,17 +1,5 @@
 #include "myColor.hpp"
 
-// Assignment operator for myColor
-myColor& myColor::operator=(const myColor& c) {
-    if (this != &c) {
-        r = c.r;
-        g = c.g;
-        b = c.b;
-        a = c.a;
-    }
-
-    return *this;
-}
-
 // Assignment operator for sf::Color
 myColor& myColor::operator=(const sf::Color& c) {
     r = static_cast<double>(c.r) / 255.0;
@@ -99,7 +87,7 @@ myColor myColor::operator*(double factor) const {
 // Division operator with a double
 myColor myColor::operator/(double factor) const {
     if (std::abs(factor) < EPSILON) {
-        throw std::runtime_error("Division by zero");
+        throw DivisionByZeroException();
     }
     myColor result;
     result.r = my3d::clamp(r / factor);
@@ -123,7 +111,7 @@ myColor& myColor::operator*=(double factor) {
 // Division assignment operator with a double
 myColor& myColor::operator/=(double factor) {
     if (std::abs(factor) < EPSILON) {
-        throw std::runtime_error("Division by zero");
+        throw DivisionByZeroException();
     }
     r = my3d::clamp(r / factor);
     g = my3d::clamp(g / factor);

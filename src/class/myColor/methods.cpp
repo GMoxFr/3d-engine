@@ -1,7 +1,7 @@
 #include "myColor.hpp"
 
 // Convert to sf::Color
-sf::Color myColor::toSFMLColor() {
+sf::Color myColor::toSFMLColor() const {
     return sf::Color(
         static_cast<u_int8_t>(r * 255.0),
         static_cast<u_int8_t>(g * 255.0),
@@ -29,6 +29,6 @@ myColor myColor::darken(double factor) {
     );
 }
 
-double myColor::getGrayScale() {
+double myColor::getGrayScale() const {
     return (r + g + b) / 3.0;
 }

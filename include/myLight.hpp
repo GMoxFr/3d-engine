@@ -3,15 +3,19 @@
 #include "myColor.hpp"
 
 class myLight {
-    protected:
+    private:
         myColor color;
 
+    protected:
+        const myColor& getColor() const { return color; }
+        void setColor(myColor const& clr) { color = clr; }
+
     public:
-        myLight(myColor clr) :
+        explicit myLight(myColor const& clr) :
             color(clr)
         {};
 
-        virtual ~myLight() {};
+        virtual ~myLight() = default;
 
         virtual myColor applyLighting(myVector3 pos, myVector3 normal, myColor const& workingColor, double diffuse) = 0;
 };

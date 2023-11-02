@@ -5,10 +5,9 @@
 #include <cmath>
 
 #include "constants.hpp"
+#include "exceptions.hpp"
 
 class myVector3 {
-    private:
-
     public:
         // ATTRIBUTES
         double x;
@@ -17,13 +16,10 @@ class myVector3 {
 
         // CONSTRUCTORS
         myVector3(double x = 0.0, double y = 0.0, double z = 0.0);
-        myVector3(const myVector3& v);
-        myVector3(const std::vector<double>& v);
-        ~myVector3();
+        explicit myVector3(const std::vector<double>& v);
+        ~myVector3() = default;
 
         // OPERATORS
-        myVector3& operator=(const myVector3& v);
-        
         myVector3& operator+=(const myVector3& v);
         myVector3& operator-=(const myVector3& v);
         myVector3& operator*=(const double& d);
@@ -46,7 +42,7 @@ class myVector3 {
         myVector3 operator-() const;
 
         myVector3 operator^(const myVector3& v) const;
-        float operator*(const myVector3& v) const;
+        double operator*(const myVector3& v) const;
 
         friend std::ostream& operator<<(std::ostream& os, const myVector3& v);
 
@@ -68,4 +64,18 @@ class myVector3 {
         double angleBetween(const myVector3& v) const;
 
         static const myVector3 CAMERA;
+
+        static const myVector3 ZERO;
+
+        static const myVector3 UP;
+        static const myVector3 DOWN;
+        static const myVector3 LEFT;
+        static const myVector3 RIGHT;
+        static const myVector3 FORWARD;
+        static const myVector3 BACKWARD;
+
+        static const myVector3 BOTTOM_LEFT;
+        static const myVector3 BOTTOM_RIGHT;
+        static const myVector3 TOP_LEFT;
+        static const myVector3 TOP_RIGHT;
 };

@@ -8,36 +8,65 @@
 class myImage;
 
 class myShape {
-    protected:
+    private:
         myColor color;
 
         bool hasTexture;
-        myTexture *texture;
+        std::unique_ptr<myTexture> texture;
 
         bool hasBumpMap = false;
-        myTexture *bumpMap;
+        std::unique_ptr<myTexture> bumpMap;
 
         double diffuse;
 
+    protected:
+        const myColor& getColor() const { return color; }
+        void setColor(myColor const& clr) { color = clr; }
+
+        const myTexture& getTexture() const { return *texture; }
+
+        const myTexture& getBumpMap() const { return *bumpMap; }
+
+        bool getHasTexture() const { return hasTexture; }
+        bool getHasBumpMap() const { return hasBumpMap; }
+
+        double getDiffuse() const { return diffuse; }
+        void setDiffuse(double d) { diffuse = d; }
+
     public:
-        myShape(myColor clr, double diffuse = 1.0) :
+        myShape(myColor const& clr, double diffuse = 1.0) :
             color(clr),
             hasTexture(false),
             diffuse(diffuse)
         {};
 
-        myShape(std::string texture, double diffuse = 1.0) :
+        myShape(std::string const& texture, double diffuse = 1.0) :
             hasTexture(true),
             diffuse(diffuse)
         {
-            this->texture = new myTexture(texture);
+            this->texture = std::make_unique<myTexture>(texture);
         };
 
-        virtual ~myShape() {};
+        virtual ~myShape() = default;
 
-        void setBumpMap(std::string filename) {
+        void setTexture(std::string const& filename) {
+            hasTexture = true;
+            texture = std::make_unique<myTexture>(filename);
+        }
+
+        void removeTexture() {
+            hasTexture = false;
+            texture.reset();
+        }
+
+        void setBumpMap(std::string const& filename) {
             hasBumpMap = true;
-            bumpMap = new myTexture(filename);
+            bumpMap = std::make_unique<myTexture>(filename);
+        }
+
+        void removeBumpMap() {
+            hasBumpMap = false;
+            bumpMap.reset();
         }
 
         myColor applyLighting(myVector3 pos, myVector3 normal, myColor const& workingColor, std::vector<myLight*> const& lights) {
@@ -50,6 +79,6 @@ class myShape {
             return newColor;
         }
 
-        virtual void draw(myImage& I, std::vector<myLight *> L) = 0;
+        virtual void draw(myImage& I, std::vector<myLight *> const& L) = 0;
         virtual bool intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color, double &u, double &v) = 0;
 };

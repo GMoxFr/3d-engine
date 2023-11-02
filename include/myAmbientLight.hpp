@@ -8,7 +8,7 @@ class myAmbientLight : public myLight {
         double intensity;
 
     public:
-        myAmbientLight(myColor clr, double intensity = 1.0) :
+        myAmbientLight(myColor const& clr, double intensity = 1.0) :
             myLight(clr),
             intensity(intensity)
         {};
@@ -17,6 +17,6 @@ class myAmbientLight : public myLight {
             (void)pos;
             (void)normal;
             (void)diffuse;
-            return (color * intensity) * workingColor;
+            return (getColor() * intensity) * workingColor;
         };
 };

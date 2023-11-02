@@ -1,11 +1,5 @@
 #include "myPoint.hpp"
 
-myPoint& myPoint::operator=(const myPoint& p) {
-    x = p.x;
-    y = p.y;
-    return *this;
-}
-
 myPoint& myPoint::operator+=(const myPoint& p) {
     x += p.x;
     y += p.y;

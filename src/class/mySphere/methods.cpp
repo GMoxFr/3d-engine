@@ -1,8 +1,13 @@
 #include "mySphere.hpp"
 
-void mySphere::draw(myImage& I, std::vector<myLight *> L) {
-    for (double u = 0; u < DPI; u += PRECISION) {
-        for (double v = -PI2; v < PI2; v += PRECISION) {
+void mySphere::draw(myImage& I, std::vector<myLight *> const& L) {
+    const int uSteps = 1000;
+    const int vSteps = 500;
+
+    for (int i = 0; i < uSteps; i++) {
+        double u = i * PRECISION;
+        for (int j = 0; j < vSteps; j++) {
+            double v = j * PRECISION - PI2;
             myVector3 pos(
                 radius * my3d::cosf(v) * my3d::cosf(u) + center.x,
                 radius * my3d::cosf(v) * my3d::sinf(u) + center.y,
@@ -12,13 +17,13 @@ void mySphere::draw(myImage& I, std::vector<myLight *> L) {
             // Object
             myVector3 normal = pos - center;
             normal.normalize();
-            myColor workingColor = hasTexture ? texture->getPixel(u / DPI, (v + PI / 2) / PI) : color;
+            myColor workingColor = getHasTexture() ? getTexture().getPixel(u / DPI, (v + PI / 2) / PI) : getColor();
 
             // Bump Map
-            if (hasBumpMap) {
+            if (getHasBumpMap()) {
                 double dhdu = 0;
                 double dhdv = 0;
-                bumpMap->bump(u / DPI, (v + PI / 2) / PI, dhdu, dhdv);
+                getBumpMap().bump(u / DPI, (v + PI / 2) / PI, dhdu, dhdv);
 
                 myVector3 dMdu(
                     -radius * my3d::cosf(v) * my3d::sinf(u),
@@ -40,7 +45,6 @@ void mySphere::draw(myImage& I, std::vector<myLight *> L) {
 
             // Draw
             I.setPixel(pos, applyLighting(pos, normal, workingColor, L));
-            // my3d::smallSleep(500);
         }
     }
 }
@@ -61,21 +65,21 @@ bool mySphere::intersect(myVector3 const& origin, myVector3 const& direction, my
 
     if (t1 < 0 && t2 < 0)
         return false;
-    if (t1 > 0 && t1 > 0)
+    if (t1 > 0 && t2 > 0)
         intersection = origin + t1 * direction;
     if (t1 < 0 && t2 > 0)
         intersection = origin + t2 * direction;
 
     normal = intersection - center;
     normal.normalize();
-    color = this->color;
+    color = getColor();
     my3d::invertCoordSpherique(intersection, this->center, this->radius, u, v);
-    color = hasTexture ? texture->getPixel(u / DPI, (v + PI / 2) / PI) : this->color;
+    color = getHasTexture() ? getTexture().getPixel(u / DPI, (v + PI / 2) / PI) : getColor();
 
-    if (hasBumpMap) {
+    if (getHasBumpMap()) {
         double dhdu = 0;
         double dhdv = 0;
-        bumpMap->bump(u / DPI, (v + PI / 2) / PI, dhdu, dhdv);
+        getBumpMap().bump(u / DPI, (v + PI / 2) / PI, dhdu, dhdv);
 
         myVector3 dMdu(
             -radius * my3d::cosf(v) * my3d::sinf(u),
