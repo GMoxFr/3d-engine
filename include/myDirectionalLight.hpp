@@ -1,23 +1,38 @@
 #pragma once
 
 #include "myVector3.hpp"
-#include "myColor.hpp"
+#include "myLight.hpp"
 
-class myDirectionalLight {
+class myDirectionalLight : public myLight {
     private:
-
-    public:
-        // ATTRIBUTES
         myVector3 direction;
-        myColor color;
         double intensity;
 
-        // CONSTRUCTORS
-        myDirectionalLight();
-        myDirectionalLight(const myVector3 direction, const myColor color, double intensity = 1.0);
-        myDirectionalLight(const myDirectionalLight& l);
-        ~myDirectionalLight();
+    public:
+        myDirectionalLight(myColor clr, myVector3 dir, double intensity = 1.0) :
+            myLight(clr),
+            direction(dir),
+            intensity(intensity)
+        {
+            direction.normalize();
+        };
 
-        // OPERATORS
-        myDirectionalLight& operator=(const myDirectionalLight& l);
+        myColor applyLighting(myVector3 pos, myVector3 normal, myColor const& workingColor, double diffuse) override {
+            myColor result(0, 0, 0);
+
+            // Diffuse Lighting
+            double impact = my3d::clamp(normal * direction);
+            result += (color * intensity) * workingColor * impact * diffuse;
+
+            // Specular Lighting
+            myVector3 reflectedLight = 2 * (direction * normal) * normal - direction;
+            myVector3 viewDirection = myVector3::CAMERA - pos;
+            viewDirection.normalize();
+            double k = 50.0;
+            impact = my3d::clamp(reflectedLight * viewDirection);
+            myColor specularColor = (color * intensity) * std::pow(impact, k);
+            result += specularColor;
+
+            return result;
+        };
 };

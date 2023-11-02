@@ -15,6 +15,8 @@
 #include "myParallelogram.hpp"
 #include "myTriangle.hpp"
 #include "myTexture.hpp"
+#include "myAmbientLight.hpp"
+#include "myDirectionalLight.hpp"
 
 int main(int argc, char** argv) {
     //////////////////////
@@ -68,7 +70,7 @@ int main(int argc, char** argv) {
     // Global Initialization //
     ///////////////////////////
 
-    myImage I(WINDOW_WIDTH, WINDOW_HEIGHT, myColor(255, 255, 255, 255));
+    myImage I(WINDOW_WIDTH, WINDOW_HEIGHT, myColor::WHITE);
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "3D Engine");
     sf::Texture texture;
     sf::Sprite sprite;
@@ -80,18 +82,20 @@ int main(int argc, char** argv) {
     /////////////////////////////
     
     std::thread renderThread([&]() {
-        // mySphere s(myVector3(WINDOW_WIDTH / 4, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, myColor(255, 0, 0, 255), 1);
-        // s.draw(I);
 
-        mySphere s2(myVector3(WINDOW_WIDTH / 2, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, myColor::ORANGE, 1);
-        s2.setBumpMap("bump.png");
-        s2.draw(I);
+        std::vector<myLight*> lights;
+        lights.push_back(new myAmbientLight(myColor::WHITE, 0.1));
+        lights.push_back(new myDirectionalLight(myColor::WHITE, myVector3(1, -1, 1), 0.6));
+        lights.push_back(new myDirectionalLight(myColor::WHITE, myVector3(-1, -1, 1), 0.3));
 
-        // myParallelogram p = myParallelogram(myVector3(100, 100, 100), myVector3(100, 400, 100), myVector3(400, 100, 100), myColor(0, 255, 0, 255));
-        // p.draw(I);
+        std::vector<myShape*> shapes;
+        shapes.push_back(new myParallelogram(myVector3(1, 1, 1), myVector3(1, 3000, WINDOW_HEIGHT / 2), myVector3(WINDOW_WIDTH - 1, 1, 1), myColor(0.8, 0.8, 0.8)));
+        shapes.push_back(new myParallelogram(myVector3(1, 1, WINDOW_HEIGHT / 2), myVector3(1, 3000, WINDOW_HEIGHT), myVector3(WINDOW_WIDTH, 1, WINDOW_HEIGHT / 2), myColor(0.4, 0.4, 0.4)));
+        shapes.push_back(new mySphere(myVector3(WINDOW_WIDTH / 2, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, myColor(255, 0, 0, 255)));
 
-        // myTriangle t = myTriangle(myVector3(1000, 200, 100), myVector3(1100, 600, 100), myVector3(1260, 100, 100), myColor(0, 0, 255, 255));
-        // t.draw(I);
+        for (myShape* shape : shapes) {
+            shape->draw(I, lights);
+        }
 
         if (!textureFilename.empty()) {
             myTexture t(textureFilename);

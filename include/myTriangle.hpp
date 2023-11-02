@@ -9,11 +9,11 @@ class myTriangle : public myShape {
         myVector3 A;
         myVector3 B;
         myVector3 C;
-        myColor color;
 
     public:
-        myTriangle(myVector3 A, myVector3 B, myVector3 C, myColor clr);
+        myTriangle(myVector3 A, myVector3 B, myVector3 C, myColor clr, double diffuse = 1.0);
+        myTriangle(myVector3 A, myVector3 B, myVector3 C, std::string texture, double diffuse = 1.0);
         ~myTriangle();
 
-        void draw(myImage& I);
+        void draw(myImage& I, std::vector<myLight *> L);
 };
