@@ -15,6 +15,6 @@ class myTriangle : public myShape {
         myTriangle(myVector3 A, myVector3 B, myVector3 C, std::string const& texture, double diffuse = 1.0);
         ~myTriangle() override = default;
 
-        void draw(myImage& I, std::vector<myLight *> const& L) override;
+        void draw(myImage& I, std::vector<std::unique_ptr<myLight>> const& L) override;
         bool intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color, double &u, double &v) override;
 };

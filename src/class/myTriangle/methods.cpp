@@ -1,6 +1,6 @@
 #include "myTriangle.hpp"
 
-void myTriangle::draw(myImage& I, std::vector<myLight *> const& L) {
+void myTriangle::draw(myImage& I, std::vector<std::unique_ptr<myLight>> const& L) {
     const int steps = 2000;
     for (int i = 0; i < steps; i++) {
         double u = static_cast<double>(i) / steps;

@@ -69,16 +69,16 @@ class myShape {
             bumpMap.reset();
         }
 
-        myColor applyLighting(myVector3 pos, myVector3 normal, myColor const& workingColor, std::vector<myLight*> const& lights) {
+        myColor applyLighting(myVector3 pos, myVector3 normal, myColor const& workingColor, std::vector<std::unique_ptr<myLight>> const& lights) {
             myColor newColor(0, 0, 0);
 
-            for (myLight* light : lights) {
+            for (std::unique_ptr<myLight> const& light : lights) {
                 newColor += light->applyLighting(pos, normal, workingColor, diffuse);
             }
 
             return newColor;
         }
 
-        virtual void draw(myImage& I, std::vector<myLight *> const& L) = 0;
+        virtual void draw(myImage& I, std::vector<std::unique_ptr<myLight>> const& L) = 0;
         virtual bool intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color, double &u, double &v) = 0;
 };

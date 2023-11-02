@@ -6,7 +6,18 @@
 #include <algorithm>
 
 #include "constants.hpp"
-#include "myVector3.hpp"
+
+class myVector3;
+class myShape;
+class myLight;
+class myImage;
+class myColor;
+class mySphere;
+class myParallelogram;
+class myTriangle;
+class myTexture;
+class myAmbientLight;
+class myDirectionalLight;
 
 //////////////////////////
 // METHODS DECLARATION  //
@@ -15,6 +26,7 @@
 enum class ArgumentType {
     HELP,
     SAVE,
+    CONFIG,
     UNKNOWN
 };
 
@@ -31,4 +43,5 @@ namespace my3d {
     bool isValidExtension(std::string_view filename, std::string_view extension);
     void displayHelp(std::string const& programName);
     bool handleSAVE(int& i, const char** argv, int argc, std::string& filename);
+    bool handleCONFIG(int& i, const char** argv, int argc, std::string& filename);
 }

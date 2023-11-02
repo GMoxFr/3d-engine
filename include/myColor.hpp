@@ -21,6 +21,7 @@ class myColor {
         myColor(int r, int g, int b, int a = 255);
         explicit myColor(const sf::Color& c);
         myColor(double r, double g, double b, double a = 1.0);
+        explicit myColor(const std::vector<int>& components);
 
         // OPERATORS
         myColor& operator=(const sf::Color& c);

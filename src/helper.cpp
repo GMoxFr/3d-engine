@@ -1,6 +1,8 @@
 #include <algorithm>
 #include <thread>
 #include <chrono>
+#include <fstream>
+#include <nlohmann/json.hpp>
 
 #include "my3d.hpp"
 
@@ -55,7 +57,6 @@ namespace my3d {
         
         std::string_view fileExtension = filename.substr(filename.size() - extension.size());
 
-        // Directly compare the string_views without converting to std::string
         return std::equal(fileExtension.begin(), fileExtension.end(),
                         extension.begin(), extension.end(),
                         [](char a, char b) {
@@ -64,7 +65,9 @@ namespace my3d {
     }
 
     void displayHelp(std::string const& programName) {
-        std::cout << "Usage: " << programName << " [options]" << std::endl;
+        std::cout << "Usage: " << programName << " <arguments> [options]" << std::endl;
+        std::cout << "Arguments:" << std::endl;
+        std::cout << "  -C, --config <filename>\tLoad the scene from a JSON file" << std::endl;
         std::cout << "Options:" << std::endl;
         std::cout << "  -h, --help\t\t\tShow this help message" << std::endl;
         std::cout << "  -S, --save <filename>\t\tSave the image to a PNG file" << std::endl;
@@ -85,4 +88,18 @@ namespace my3d {
         }
     }
 
+    bool handleCONFIG(int& i, const char** argv, int argc, std::string& filename) {
+        i++;
+        if (i < argc) {
+            filename = argv[i];
+            if (!my3d::isValidExtension(filename, ".json")) {
+                std::cout << "Error: The provided filename does not have a .png or .PNG extension." << std::endl;
+                return false;
+            }
+            return true;
+        } else {
+            std::cout << "Error: missing filename after " << argv[i-1] << std::endl;
+            return false;
+        }
+    }
 }

@@ -37,8 +37,8 @@ class myImage {
 
         void clear(myColor const& c);
 
-        void handleRayIntersection(int x, int z, myVector3 const& camera, myVector3 const& rayDirection, std::vector<myShape*> const& shapes, std::vector<myLight*> const& lights);
-        void rayCast(myVector3 camera, std::vector<myShape*> const& shapes, std::vector<myLight*> const& lights);
+        void handleRayIntersection(int x, int z, myVector3 const& camera, myVector3 const& rayDirection, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights);
+        void rayCast(myVector3 camera, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights);
 
         sf::Image toSFMLImage();
 

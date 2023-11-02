@@ -16,7 +16,7 @@ install_linux() {
     echo "Installing dependencies for Linux..."
     
     sudo apt-get update
-    sudo apt-get install -y build-essential libsfml-dev make pkg-config
+    sudo apt-get install -y build-essential libsfml-dev make pkg-config nlohmann-json3-dev
 }
 
 # Function to install dependencies on macOS
@@ -26,9 +26,9 @@ install_mac() {
     # Check for Homebrew, install if we don't have it
     if test ! $(which brew); then
         echo "Installing homebrew..."
-        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
-    brew install sfml make openal-soft
+    brew install sfml make openal-soft nlohmann-json
 }
 
 OS=$(detect_os)

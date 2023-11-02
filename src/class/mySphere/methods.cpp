@@ -1,6 +1,6 @@
 #include "mySphere.hpp"
 
-void mySphere::draw(myImage& I, std::vector<myLight *> const& L) {
+void mySphere::draw(myImage& I, std::vector<std::unique_ptr<myLight>> const& L) {
     const int uSteps = 1000;
     const int vSteps = 500;
 
