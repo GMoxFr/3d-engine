@@ -21,11 +21,11 @@ class myDirectionalLight : public myLight {
             myColor result(0, 0, 0);
 
             // Diffuse Lighting
-            double impact = my3d::clamp(normal * direction);
+            double impact = my3d::clamp(normal * -direction);
             result += (color * intensity) * workingColor * impact * diffuse;
 
             // Specular Lighting
-            myVector3 reflectedLight = 2 * (direction * normal) * normal - direction;
+            myVector3 reflectedLight = 2 * (-direction * normal) * normal + direction;
             myVector3 viewDirection = myVector3::CAMERA - pos;
             viewDirection.normalize();
             double k = 50.0;

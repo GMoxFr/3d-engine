@@ -52,13 +52,6 @@ int main(int argc, char** argv) {
                 std::cout << "Error: missing filename after " << arg << std::endl;
                 return 1;
             }
-        } else if (arg == "-l" || arg == "--load") {
-            if (i + 1 < argc) {
-                textureFilename = argv[++i];
-            } else {
-                std::cout << "Error: missing filename after " << arg << std::endl;
-                return 1;
-            }
         } else {
             std::cout << "Error: unknown argument " << arg << std::endl;
             std::cout << "Try '" << argv[0] << " --help' for more information" << std::endl;
@@ -85,28 +78,25 @@ int main(int argc, char** argv) {
 
         std::vector<myLight*> lights;
         lights.push_back(new myAmbientLight(myColor::WHITE, 0.1));
-        lights.push_back(new myDirectionalLight(myColor::WHITE, myVector3(1, -1, 1), 0.6));
-        lights.push_back(new myDirectionalLight(myColor::WHITE, myVector3(-1, -1, 1), 0.3));
+        lights.push_back(new myDirectionalLight(myColor::WHITE, myVector3(-1, 1, -1), 0.6));
+        lights.push_back(new myDirectionalLight(myColor::WHITE, myVector3(1, 1, -1), 0.3));
 
         std::vector<myShape*> shapes;
-        shapes.push_back(new myParallelogram(myVector3(1, 1, 1), myVector3(1, 3000, WINDOW_HEIGHT / 2), myVector3(WINDOW_WIDTH - 1, 1, 1), myColor(0.8, 0.8, 0.8)));
-        shapes.push_back(new myParallelogram(myVector3(1, 1, WINDOW_HEIGHT / 2), myVector3(1, 3000, WINDOW_HEIGHT), myVector3(WINDOW_WIDTH, 1, WINDOW_HEIGHT / 2), myColor(0.4, 0.4, 0.4)));
-        shapes.push_back(new mySphere(myVector3(WINDOW_WIDTH / 2, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, myColor(255, 0, 0, 255)));
+        shapes.push_back(new mySphere(myVector3(WINDOW_WIDTH / 2, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, "earth-8k.jpg"));
+        shapes.push_back(new myParallelogram(myVector3(0, 0, 0), myVector3(0, 2000, 0), myVector3(0, 0, WINDOW_HEIGHT - 1), "wood2.jpg")); // Left Wall
+        shapes.push_back(new myParallelogram(myVector3(WINDOW_WIDTH - 1, 2000, 1), myVector3(WINDOW_WIDTH - 1, 1, 1), myVector3(WINDOW_WIDTH - 1, 2000, WINDOW_HEIGHT - 1), myColor::PURPLE)); // Right Wall
+        shapes.push_back(new myParallelogram(myVector3(0, 0, 0), myVector3(WINDOW_WIDTH - 1, 1, 1), myVector3(0, 2000, 0), myColor::CYAN)); // Floor
+        shapes.push_back(new myParallelogram(myVector3(0, 2000, WINDOW_HEIGHT - 1), myVector3(WINDOW_WIDTH - 1, 2000, WINDOW_HEIGHT - 1), myVector3(0, 0, WINDOW_HEIGHT - 1), myColor::MAGENTA)); // Ceiling
+        shapes.push_back(new myParallelogram(myVector3(0, 2000, 0), myVector3(WINDOW_WIDTH - 1, 2000, 0), myVector3(0, 2000, WINDOW_HEIGHT - 1), myColor::SILVER)); // Back Wall
+        shapes.push_back(new myTriangle(myVector3(WINDOW_WIDTH / 2, 500, WINDOW_HEIGHT / 2), myVector3((WINDOW_WIDTH / 2) + 130, 600, WINDOW_HEIGHT / 2), myVector3((WINDOW_WIDTH / 2), 600, (WINDOW_HEIGHT / 2) + 120), myColor::GREEN));
 
-        for (myShape* shape : shapes) {
-            shape->draw(I, lights);
-        }
+        shapes[0]->setBumpMap("bump2.png");
 
-        if (!textureFilename.empty()) {
-            myTexture t(textureFilename);
-            for (int x = 0; x < WINDOW_WIDTH; x++) {
-                for (int y = 0; y < WINDOW_HEIGHT; y++) {
-                    double u = (double)x / WINDOW_WIDTH;
-                    double v = (double)y / WINDOW_HEIGHT;
-                    I.setPixel(myPoint(x, y), t.getPixel(u, v));
-                }
-            }
-        }
+        // for (myShape* shape : shapes) {
+        //     shape->draw(I, lights);
+        // }
+
+        I.rayCast(myVector3::CAMERA, shapes, lights);
 
         if (!filename.empty()) {
             std::cout << "Saving image to " << filename << std::endl;

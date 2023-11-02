@@ -5,6 +5,8 @@
 #include "myTexture.hpp"
 #include "myLight.hpp"
 
+class myImage;
+
 class myShape {
     protected:
         myColor color;
@@ -49,4 +51,5 @@ class myShape {
         }
 
         virtual void draw(myImage& I, std::vector<myLight *> L) = 0;
+        virtual bool intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color, double &u, double &v) = 0;
 };

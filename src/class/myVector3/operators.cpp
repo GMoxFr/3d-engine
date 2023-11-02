@@ -113,9 +113,9 @@ myVector3 myVector3::operator-() const {
 
 myVector3 myVector3::operator^(const myVector3& v) const {
     return myVector3(
-        z * v.y - y * v.z,
-        x * v.z - z * v.x,
-        y * v.x - x * v.y
+        y * v.z - z * v.y,
+        z * v.x - x * v.z,
+        x * v.y - y * v.x
     );
 }
 

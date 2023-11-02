@@ -8,6 +8,10 @@
 #include "myColor.hpp"
 #include "myPoint.hpp"
 #include "myVector3.hpp"
+#include "myShape.hpp"
+#include "myLight.hpp"
+
+class myShape;
 
 class myImage {
     private:
@@ -34,7 +38,10 @@ class myImage {
 
         void clear(myColor c);
 
+        void rayCast(myVector3 camera, std::vector<myShape*> shapes, std::vector<myLight*> lights);
+
         sf::Image toSFMLImage();
+
 
         void toPNG(std::string filename);
 };
