@@ -11,8 +11,8 @@ class myTriangle : public myShape {
         myVector3 C;
 
     public:
-        myTriangle(myVector3 A, myVector3 B, myVector3 C, myColor const& clr, double diffuse = 1.0);
-        myTriangle(myVector3 A, myVector3 B, myVector3 C, std::string const& texture, double diffuse = 1.0);
+        myTriangle(myVector3 A, myVector3 B, myVector3 C, myColor const& clr, double diffuse = 1.0, double fresnel = 1.0, double reflection = 0.0, double refraction = 0.0);
+        myTriangle(myVector3 A, myVector3 B, myVector3 C, std::string const& texture, double diffuse = 1.0, double fresnel = 1.0, double reflection = 0.0, double refraction = 0.0);
         ~myTriangle() override = default;
 
         void draw(myImage& I, std::vector<std::unique_ptr<myLight>> const& L) override;

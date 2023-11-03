@@ -23,6 +23,40 @@ void myImage::setPixel(myVector3 v, myColor const& c) {
     setPixel(myPoint(static_cast<int>(round(v.x)), static_cast<int>(round(v.z))), c, v.y);
 }
 
+myColor myImage::handleBounce(myVector3 start, myVector3 rayDirection, std::unique_ptr<myShape> const& baseShape, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights, double index, int depth) {
+    if (depth <= 0) return myColor::BLACK;
+
+    myVector3 intersection;
+    myVector3 normal;
+    myColor color;
+
+    double u;
+    double v;
+
+    for (std::unique_ptr<myShape> const& shape : shapes) {
+        if (shape.get() == baseShape.get()) continue;
+
+        if (shape->intersect(start, rayDirection, intersection, normal, color, u, v)) {
+            myColor newColor = shape->applyLighting(intersection, normal, color, lights, shapes);
+            if (shape->getReflection() > EPSILON) {
+                myVector3 newDirection = rayDirection - normal * 2 * (rayDirection * normal);
+                newColor += handleBounce(intersection, newDirection, shape, shapes, lights, shape->getFresnel(), depth - 1) * shape->getReflection();
+            }
+            if (shape->getRefraction() > EPSILON) {
+                double n1 = index;
+                double n2 = shape->getFresnel();
+                double micro = n1 / n2;
+
+                myVector3 refractedDir = micro * rayDirection + normal * (std::sqrt(1 - micro * micro * (1 - (normal * rayDirection) * (normal * rayDirection)))) - (micro * normal * (normal * rayDirection));
+                newColor += handleBounce(intersection, refractedDir, shape, shapes, lights, shape->getFresnel(), depth - 1) * shape->getRefraction();
+            }
+            return newColor;
+        }
+    }
+
+    return myColor::BLACK;
+}
+
 void myImage::handleRayIntersection(int x, int z, myVector3 const& camera, myVector3 const& rayDirection, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights) {
     myVector3 intersection;
     myVector3 normal;
@@ -34,6 +68,18 @@ void myImage::handleRayIntersection(int x, int z, myVector3 const& camera, myVec
     for (std::unique_ptr<myShape> const& shape : shapes) {
         if (shape->intersect(camera, rayDirection, intersection, normal, color, u, v)) {
             myColor newColor = shape->applyLighting(intersection, normal, color, lights, shapes);
+            if (shape->getReflection() > EPSILON) {
+                myVector3 reflectionDir = rayDirection - normal * 2 * (rayDirection * normal);
+                newColor += handleBounce(intersection, reflectionDir, shape, shapes, lights, 1.0, 32) * shape->getReflection();
+            }
+            if (shape->getRefraction() > EPSILON) {            
+                double n1 = 1.0;
+                double n2 = shape->getFresnel();
+                double micro = n1 / n2;
+
+                myVector3 refractedDir = micro * rayDirection + (-normal) * (std::sqrt(1 - micro * micro * (1 - ((-normal) * rayDirection) * ((-normal) * rayDirection)))) - (micro * (-normal) * ((-normal) * rayDirection));
+                newColor += handleBounce(intersection, refractedDir, shape, shapes, lights, shape->getFresnel(), 32) * shape->getRefraction();
+            }
             setPixel(myPoint(x, z), newColor, intersection.y);
         }
     }

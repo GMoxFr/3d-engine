@@ -1,0 +1,78 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.2
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [-1, 1, -1],
+            "intensity": 0.9
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -1],
+            "intensity": 0.4
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Sphere",
+            "center": [640, 1000, 360],
+            "radius": 240,
+            "color": [255, 255, 255],
+            "fresnel": 0.1,
+            "reflection": 1,
+            "refraction": 0.3
+        },
+        {
+            "type": "Sphere",
+            "center": [800, 1200, 160],
+            "radius": 240,
+            "color": [255, 0, 0],
+            "fresnel": 0.1,
+            "reflection": 0.7,
+            "refraction": 0.3
+        },
+        {
+            "type": "Sphere",
+            "center": [800, 1200, 560],
+            "radius": 240,
+            "color": [255, 0, 0],
+            "fresnel": 0.1,
+            "reflection": 0.7,
+            "refraction": 0.3
+        },
+        {
+            "type": "Sphere",
+            "center": [200, 500, 120],
+            "radius": 240,
+            "color": [0, 255, 0],
+            "fresnel": 0.1,
+            "reflection": 0.7,
+            "refraction": 0.3
+        },
+        {
+            "type": "Sphere",
+            "center": [640, -1700, 360],
+            "radius": 400,
+            "color": [0, 0, 255],
+            "fresnel": 0.1,
+            "reflection": 0.7,
+            "refraction": 0.3
+        },
+        {
+            "type": "Parallelogram",
+            "A": [-2560, -1000, 0],
+            "B": [3840, -1000, 0],
+            "C": [-2560, 1500, 0],
+            "texture": "uv.png",
+            "fresnel": 0.5,
+            "reflection": 0,
+            "refraction": 0
+        }
+    ]
+}

@@ -37,6 +37,7 @@ class myImage {
 
         void clear(myColor const& c);
 
+        myColor handleBounce(myVector3 start, myVector3 direction, std::unique_ptr<myShape> const& baseShape, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights, double index, int depth);
         void handleRayIntersection(int x, int z, myVector3 const& camera, myVector3 const& rayDirection, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights);
         void rayCast(myVector3 camera, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights);
         void rayCast(myVector3 camera, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights, int x1, int z1, int x2, int z2);

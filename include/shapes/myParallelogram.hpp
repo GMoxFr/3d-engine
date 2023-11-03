@@ -12,8 +12,8 @@ class myParallelogram : public myShape {
         myVector3 C;
 
     public:
-        myParallelogram(myVector3 A, myVector3 B, myVector3 C, myColor const& clr, double diffuse = 1.0);
-        myParallelogram(myVector3 A, myVector3 B, myVector3 C, std::string const& texture, double diffuse = 1.0);
+        myParallelogram(myVector3 A, myVector3 B, myVector3 C, myColor const& clr, double diffuse = 1.0, double fresnel = 1.0, double reflection = 0.0, double refraction = 0.0);
+        myParallelogram(myVector3 A, myVector3 B, myVector3 C, std::string const& texture, double diffuse = 1.0, double fresnel = 1.0, double reflection = 0.0, double refraction = 0.0);
         ~myParallelogram() override = default;
 
         void draw(myImage& I, std::vector<std::unique_ptr<myLight>> const& L) override;

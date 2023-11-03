@@ -1,0 +1,78 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.2
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [-1, 1, -1],
+            "intensity": 0.9
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -1],
+            "intensity": 0.4
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Sphere",
+            "center": [640, 1000, 240],
+            "radius": 240,
+            "color": [255, 0, 0],
+            "fresnel": 0,
+            "reflection": 0.6,
+            "refraction": 0
+        },
+        {
+            "type": "Sphere",
+            "center": [80, 1000, 240],
+            "radius": 240,
+            "color": [0, 255, 0],
+            "fresnel": 0,
+            "reflection": 0.6,
+            "refraction": 0
+        },
+        {
+            "type": "Sphere",
+            "center": [1180, 1000, 240],
+            "radius": 240,
+            "color": [0, 0, 255],
+            "fresnel": 0,
+            "reflection": 0.6,
+            "refraction": 0
+        },
+        {
+            "type": "Sphere",
+            "center": [910, 600, 240],
+            "radius": 120,
+            "color": [32, 32, 32],
+            "fresnel": 1.6,
+            "reflection": 0,
+            "refraction": 0.8
+        },
+        {
+            "type": "Sphere",
+            "center": [370, 600, 240],
+            "radius": 120,
+            "color": [32, 32, 32],
+            "fresnel": 1.6,
+            "reflection": 0,
+            "refraction": 0.8
+        },
+        {
+            "type": "Parallelogram",
+            "A": [-2560, -1000, 0],
+            "B": [3840, -1000, 0],
+            "C": [-2560, 5000, 0],
+            "texture": "uv.png",
+            "fresnel": 0,
+            "reflection": 0.2,
+            "refraction": 0
+        }
+    ]
+}

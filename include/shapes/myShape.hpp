@@ -19,6 +19,10 @@ class myShape {
 
         double diffuse;
 
+        double fresnel;
+        double reflection;
+        double refraction;
+
     protected:
         const myColor& getColor() const { return color; }
         void setColor(myColor const& clr) { color = clr; }
@@ -33,16 +37,28 @@ class myShape {
         double getDiffuse() const { return diffuse; }
         void setDiffuse(double d) { diffuse = d; }
 
+        void setFresnel(double f) { fresnel = f; }
+
+        void setReflection(double r) { reflection = r; }
+
+        void setRefraction(double r) { refraction = r; }
+
     public:
-        myShape(myColor const& clr, double diffuse = 1.0) :
+        myShape(myColor const& clr, double diffuse = 1.0, double fresnel = 1.0, double reflection = 0.0, double refraction = 0.0) :
             color(clr),
             hasTexture(false),
-            diffuse(diffuse)
+            diffuse(diffuse),
+            fresnel(fresnel),
+            reflection(reflection),
+            refraction(refraction)
         {};
 
-        myShape(std::string const& texture, double diffuse = 1.0) :
+        myShape(std::string const& texture, double diffuse = 1.0, double fresnel = 1.0, double reflection = 0.0, double refraction = 0.0) :
             hasTexture(true),
-            diffuse(diffuse)
+            diffuse(diffuse),
+            fresnel(fresnel),
+            reflection(reflection),
+            refraction(refraction)
         {
             this->texture = std::make_unique<myTexture>(texture);
         };
@@ -68,6 +84,10 @@ class myShape {
             hasBumpMap = false;
             bumpMap.reset();
         }
+
+        double getFresnel() const { return fresnel; }
+        double getReflection() const { return reflection; }
+        double getRefraction() const { return refraction; }
 
         myColor applyLighting(myVector3 pos, myVector3 normal, myColor const& workingColor, std::vector<std::unique_ptr<myLight>> const& lights, std::vector<std::unique_ptr<myShape>> const& shapes) {
             myColor newColor(0, 0, 0);

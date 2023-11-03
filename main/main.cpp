@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
     // Global Initialization //
     ///////////////////////////
 
-    myImage I(WINDOW_WIDTH, WINDOW_HEIGHT, myColor::WHITE);
+    myImage I(WINDOW_WIDTH, WINDOW_HEIGHT, myColor::BLACK);
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "3D Engine");
     sf::Texture texture;
     sf::Sprite sprite;
