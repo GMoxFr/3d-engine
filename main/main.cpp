@@ -32,44 +32,9 @@ int main(int argc, char** argv) {
 
     std::string saveFilename;
     std::string configFilename;
+    int threads = 4;
 
-    std::map<std::string, ArgumentType, std::less<>> argumentMap = {
-        {"-h", ArgumentType::HELP},
-        {"--help", ArgumentType::HELP},
-        {"-S", ArgumentType::SAVE},
-        {"--save", ArgumentType::SAVE},
-        {"-C", ArgumentType::CONFIG},
-        {"--config", ArgumentType::CONFIG}
-    };
-
-    int i = 1;
-    while (i < argc) {
-        switch (std::string arg = argv[i]; argumentMap.count(arg) ? argumentMap[arg] : ArgumentType::UNKNOWN) {
-            case ArgumentType::HELP:
-                my3d::displayHelp(argv[0]);
-                return 0;
-
-            case ArgumentType::SAVE:
-                if (!my3d::handleSAVE(i, (const char**)argv, argc, saveFilename))
-                    return 1;
-                break;
-
-            case ArgumentType::CONFIG:
-                if (!my3d::handleCONFIG(i, (const char**)argv, argc, configFilename))
-                    return 1;
-                break;
-
-            default:
-                std::cout << "Error: Unknown argument " << arg << std::endl;
-                std::cout << "Try '" << argv[0] << " --help' for more information" << std::endl;
-                return 1;
-        }
-        i++;
-    }
-
-    if (configFilename.empty()) {
-        std::cout << "Error: No config file provided" << std::endl;
-        std::cout << "Try '" << argv[0] << " --help' for more information" << std::endl;
+    if (my3d::argumentParser(argc, argv, configFilename, saveFilename, threads) == 1) {
         return 1;
     }
 
@@ -81,44 +46,52 @@ int main(int argc, char** argv) {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "3D Engine");
     sf::Texture texture;
     sf::Sprite sprite;
+    
+    std::vector<std::unique_ptr<myShape>> shapes;
+    std::vector<std::unique_ptr<myLight>> lights;
+    config::loadConfig(configFilename, shapes, lights);
 
     std::atomic<bool> running = true;
+    std::atomic<int> done = 0;
+    std::atomic<bool> saving = true;
+    std::vector<std::thread> renderThreads;
+
+    int widthPerThread = WINDOW_WIDTH / threads;
+    int leftoverPixels = WINDOW_WIDTH % threads;
+    int extraPixelCount = 0;
+
+    auto start = std::chrono::high_resolution_clock::now();
 
     /////////////////////////////
     // 3D Engine Render Thread //
     /////////////////////////////
-    
-    std::thread renderThread([&I, &saveFilename, &configFilename]() {
 
-        std::vector<std::unique_ptr<myShape>> shapes;
-        std::vector<std::unique_ptr<myLight>> lights;
-        config::loadConfig(configFilename, shapes, lights);
-        
-        // lights.push_back(new myAmbientLight(myColor::WHITE, 0.1));
-        // lights.push_back(new myDirectionalLight(myColor::WHITE, myVector3(-1, 1, -1), 0.6));
-        // lights.push_back(new myDirectionalLight(myColor::WHITE, myVector3(1, 1, -1), 0.3));
+    for (int k = 0; k < threads; ++k) {
+        int extraPixels = 0;
+        if (extraPixelCount < leftoverPixels) {
+            extraPixels = 1;
+            extraPixelCount++;
+        }
 
-        // shapes.push_back(new mySphere(myVector3(WINDOW_WIDTH / 2, 1000, (WINDOW_HEIGHT / 2)), std::min(WINDOW_HEIGHT, WINDOW_WIDTH) / 3, "earth-8k.jpg")); // Earth
-        // shapes.push_back(new myTriangle(myVector3(WINDOW_WIDTH / 2, 500, WINDOW_HEIGHT / 2), myVector3((WINDOW_WIDTH / 2) + 130, 600, WINDOW_HEIGHT / 2), myVector3((WINDOW_WIDTH / 2), 600, (WINDOW_HEIGHT / 2) + 120), myColor::GREEN)); // Triangle
-        // shapes.push_back(new myParallelogram(myVector3::BOTTOM_LEFT, myVector3::BOTTOM_LEFT + (2000 * myVector3::FORWARD), myVector3::TOP_LEFT, myColor::GOLD)); // Left Wall
-        // shapes.push_back(new myParallelogram(myVector3::BOTTOM_RIGHT + (2000 * myVector3::FORWARD), myVector3::BOTTOM_RIGHT, myVector3::TOP_RIGHT + (2000 * myVector3::FORWARD), myColor::PURPLE)); // Right Wall
-        // shapes.push_back(new myParallelogram(myVector3::BOTTOM_LEFT, myVector3::BOTTOM_RIGHT, myVector3::BOTTOM_LEFT + (2000 * myVector3::FORWARD), myColor::CYAN)); // Floor
-        // shapes.push_back(new myParallelogram(myVector3::TOP_LEFT + (2000 * myVector3::FORWARD), myVector3::TOP_RIGHT + (2000 * myVector3::FORWARD), myVector3::TOP_LEFT, myColor::GREEN)); // Ceiling
-        // shapes.push_back(new myParallelogram(myVector3::BOTTOM_LEFT + (2000 * myVector3::FORWARD), myVector3::TOP_LEFT + (2000 * myVector3::FORWARD), myVector3::BOTTOM_RIGHT + (2000 * myVector3::FORWARD), myColor::PINK)); // Back Wall
+        int startX = k * widthPerThread;
+        int endX = startX + widthPerThread + extraPixels;
 
+        renderThreads.emplace_back([&I, &shapes, &lights, &done, startX, endX]() {
+            I.rayCast(myVector3::CAMERA, shapes, lights, startX, 0, endX, WINDOW_HEIGHT);
+            done++;
+        });
+    }
 
-        // shapes[0]->setBumpMap("bump2.png");
-
-
-        // for (myShape* shape : shapes) {
-        //     shape->draw(I, lights);
-        // }
-
-        I.rayCast(myVector3::CAMERA, shapes, lights);
-
-        if (!saveFilename.empty()) {
-            std::cout << "Saving image to " << saveFilename << std::endl;
-            I.toPNG(saveFilename);
+    std::thread saveThread([&saving, &done, &I, &saveFilename, &threads, &start]() {
+        while (saving) {
+            if (done == threads) {
+                std::cout << "Rendering took " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() << "ms" << std::endl;
+                if (!saveFilename.empty()) {
+                    std::cout << "Saving image to " << saveFilename << std::endl;
+                    I.toPNG(saveFilename);
+                }
+                saving = false;
+            }
         }
     });
 
@@ -159,7 +132,8 @@ int main(int argc, char** argv) {
     /////////////////////////
 
     running = false;
-    renderThread.join();
+    for (std::thread& renderThread : renderThreads)
+        renderThread.join();
     updateThread.join();
 
     return 0;

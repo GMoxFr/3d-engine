@@ -71,6 +71,7 @@ namespace my3d {
         std::cout << "Options:" << std::endl;
         std::cout << "  -h, --help\t\t\tShow this help message" << std::endl;
         std::cout << "  -S, --save <filename>\t\tSave the image to a PNG file" << std::endl;
+        std::cout << "  -T, --threads <number>\tUse a specific number of threads for rendering (default is 4)" << std::endl;
     }
 
     bool handleSAVE(int& i, const char** argv, int argc, std::string& filename) {
@@ -101,5 +102,71 @@ namespace my3d {
             std::cout << "Error: missing filename after " << argv[i-1] << std::endl;
             return false;
         }
+    }
+
+    bool handleTHREADS(int& i, const char** argv, int argc, int& threads) {
+        i++;
+        if (i < argc) {
+            threads = std::stoi(argv[i]);
+            if (threads <= 0) {
+                std::cout << "Error: The number of threads must be greater than 0." << std::endl;
+                return false;
+            }
+            return true;
+        } else {
+            std::cout << "Error: missing number of threads after " << argv[i-1] << std::endl;
+            return false;
+        }
+    }
+
+    int argumentParser(int argc, char **argv, std::string& configFilename, std::string& saveFilename, int& threads) {
+        std::map<std::string, ArgumentType, std::less<>> argumentMap = {
+            {"-h", ArgumentType::HELP},
+            {"--help", ArgumentType::HELP},
+            {"-S", ArgumentType::SAVE},
+            {"--save", ArgumentType::SAVE},
+            {"-C", ArgumentType::CONFIG},
+            {"--config", ArgumentType::CONFIG},
+            {"-T", ArgumentType::THREADS},
+            {"--threads", ArgumentType::THREADS}
+        };
+
+        int i = 1;
+        while (i < argc) {
+            switch (std::string arg = argv[i]; argumentMap.count(arg) ? argumentMap[arg] : ArgumentType::UNKNOWN) {
+                case ArgumentType::HELP:
+                    my3d::displayHelp(argv[0]);
+                    return 0;
+
+                case ArgumentType::SAVE:
+                    if (!my3d::handleSAVE(i, (const char**)argv, argc, saveFilename))
+                        return 1;
+                    break;
+
+                case ArgumentType::CONFIG:
+                    if (!my3d::handleCONFIG(i, (const char**)argv, argc, configFilename))
+                        return 1;
+                    break;
+
+                case ArgumentType::THREADS:
+                    if (!my3d::handleTHREADS(i, (const char**)argv, argc, threads))
+                        return 1;
+                    break;
+
+                default:
+                    std::cout << "Error: Unknown argument " << arg << std::endl;
+                    std::cout << "Try '" << argv[0] << " --help' for more information" << std::endl;
+                    return 1;
+            }
+            i++;
+        }
+
+        if (configFilename.empty()) {
+            std::cout << "Error: No config file provided" << std::endl;
+            std::cout << "Try '" << argv[0] << " --help' for more information" << std::endl;
+            return 1;
+        }
+
+        return 0;
     }
 }

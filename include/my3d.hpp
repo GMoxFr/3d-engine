@@ -27,6 +27,7 @@ enum class ArgumentType {
     HELP,
     SAVE,
     CONFIG,
+    THREADS,
     UNKNOWN
 };
 
@@ -44,4 +45,6 @@ namespace my3d {
     void displayHelp(std::string const& programName);
     bool handleSAVE(int& i, const char** argv, int argc, std::string& filename);
     bool handleCONFIG(int& i, const char** argv, int argc, std::string& filename);
+    bool handleTHREADS(int& i, const char** argv, int argc, int& threads);
+    int argumentParser(int argc, char **argv, std::string& configFilename, std::string& saveFilename, int& threads);
 }

@@ -50,6 +50,17 @@ void myImage::rayCast(myVector3 camera, std::vector<std::unique_ptr<myShape>> co
     }
 }
 
+void myImage::rayCast(myVector3 camera, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights, int x1, int z1, int x2, int z2) {
+    for(int x = x1; x < x2; x++) {
+        for(int z = z1; z < z2; z++) {
+            myVector3 rayDirection = myVector3(x, 0, z) - camera;
+            rayDirection.normalize();
+
+            handleRayIntersection(x, z, camera, rayDirection, shapes, lights);
+        }
+    }
+}
+
 void myImage::clear(myColor const& c) {
     for (int i = 0; i < width * height; i++) {
         pixels[i] = c;
