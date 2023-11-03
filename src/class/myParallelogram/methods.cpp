@@ -30,7 +30,7 @@ void myParallelogram::draw(myImage& I, std::vector<std::unique_ptr<myLight>> con
             }
 
             // Draw
-            I.setPixel(pos, applyLighting(pos, normal, workingColor, L));
+            I.setPixel(pos, applyLighting(pos, normal, workingColor, L, std::vector<std::unique_ptr<myShape>>()));
         }
     }
 }

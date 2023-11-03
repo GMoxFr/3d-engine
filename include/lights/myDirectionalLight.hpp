@@ -9,8 +9,8 @@ class myDirectionalLight : public myLight {
         double intensity;
 
     public:
-        myDirectionalLight(myColor const& clr, myVector3 dir, double intensity = 1.0) :
-            myLight(clr),
+        myDirectionalLight(myColor const& clr, myVector3 dir, double intensity = 1.0, myLightType t = myLightType::DIRECTIONAL) :
+            myLight(clr, t),
             direction(dir),
             intensity(intensity)
         {
@@ -34,4 +34,6 @@ class myDirectionalLight : public myLight {
 
             return result;
         };
+
+        myVector3 getDirection() const override { return direction; }
 };

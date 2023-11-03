@@ -8,8 +8,8 @@ class myAmbientLight : public myLight {
         double intensity;
 
     public:
-        myAmbientLight(myColor const& clr, double intensity = 1.0) :
-            myLight(clr),
+        myAmbientLight(myColor const& clr, double intensity = 1.0, myLightType t = myLightType::AMBIENT) :
+            myLight(clr, t),
             intensity(intensity)
         {};
 
@@ -19,4 +19,6 @@ class myAmbientLight : public myLight {
             (void)diffuse;
             return (getColor() * intensity) * workingColor;
         };
+
+        myVector3 getDirection() const override { return myVector3(0, 0, 0); }
 };

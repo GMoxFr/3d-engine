@@ -19,7 +19,7 @@ else
 endif
 
 LOGDIR		=	errors/
-INCLUDES	=	-I./include/ -I./ $(shell pkg-config --cflags sfml-all)
+INCLUDES	=	-I./include/ -I./include/shapes -I./include/lights -I./ $(shell pkg-config --cflags sfml-all)
 FLAGS		=	-std=c++17 -MMD -MP
 LIBRARIES	=	$(shell pkg-config --libs sfml-all) -lstdc++ -lm -lpthread -ldl
 

@@ -33,7 +33,7 @@ void myImage::handleRayIntersection(int x, int z, myVector3 const& camera, myVec
 
     for (std::unique_ptr<myShape> const& shape : shapes) {
         if (shape->intersect(camera, rayDirection, intersection, normal, color, u, v)) {
-            myColor newColor = shape->applyLighting(intersection, normal, color, lights);
+            myColor newColor = shape->applyLighting(intersection, normal, color, lights, shapes);
             setPixel(myPoint(x, z), newColor, intersection.y);
         }
     }

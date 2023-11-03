@@ -22,7 +22,9 @@ namespace config {
     void loadLights(const nlohmann::json& j, std::vector<std::unique_ptr<myLight>>& lights) {
         for (const auto& light : j["lights"]) {
             if (light["type"] == "AmbientLight") {
-                lights.push_back(std::make_unique<myAmbientLight>(myColor(light["color"].get<std::vector<int>>()), light["intensity"].get<double>()));
+                lights.push_back(std::make_unique<myAmbientLight>(
+                    myColor(light["color"].get<std::vector<int>>()), light["intensity"].get<double>()
+                ));
             } else if (light["type"] == "DirectionalLight") {
                 lights.push_back(std::make_unique<myDirectionalLight>(
                     myColor(light["color"].get<std::vector<int>>()),

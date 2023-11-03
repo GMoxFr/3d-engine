@@ -44,7 +44,7 @@ void mySphere::draw(myImage& I, std::vector<std::unique_ptr<myLight>> const& L) 
             }
 
             // Draw
-            I.setPixel(pos, applyLighting(pos, normal, workingColor, L));
+            I.setPixel(pos, applyLighting(pos, normal, workingColor, L, std::vector<std::unique_ptr<myShape>>()));
         }
     }
 }

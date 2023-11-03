@@ -69,11 +69,33 @@ class myShape {
             bumpMap.reset();
         }
 
-        myColor applyLighting(myVector3 pos, myVector3 normal, myColor const& workingColor, std::vector<std::unique_ptr<myLight>> const& lights) {
+        myColor applyLighting(myVector3 pos, myVector3 normal, myColor const& workingColor, std::vector<std::unique_ptr<myLight>> const& lights, std::vector<std::unique_ptr<myShape>> const& shapes) {
             myColor newColor(0, 0, 0);
 
             for (std::unique_ptr<myLight> const& light : lights) {
-                newColor += light->applyLighting(pos, normal, workingColor, diffuse);
+                if (light->getType() != myLightType::DIRECTIONAL) {
+                    newColor += light->applyLighting(pos, normal, workingColor, diffuse);
+                    continue;
+                }
+
+                bool compute = true;
+                myVector3 direction = -light->getDirection();
+                for (std::unique_ptr<myShape> const& shape : shapes) {
+                    if (shape.get() == this) continue;
+
+                    myVector3 i;
+                    myVector3 n;
+                    myColor c;
+                    double u;
+                    double v;
+
+                    if (shape->intersect(pos, direction, i, n, c, u, v)) {
+                        compute = false;
+                        break;
+                    }
+                }
+                if (compute)
+                    newColor += light->applyLighting(pos, normal, workingColor, diffuse);
             }
 
             return newColor;

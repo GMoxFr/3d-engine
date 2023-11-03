@@ -1,0 +1,63 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [-1, 1, -1],
+            "intensity": 0.6
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -1],
+            "intensity": 0.3
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Sphere",
+            "center": [640, 1000, 360],
+            "radius": 240,
+            "texture": "earth-8k.jpg",
+            "bumpMap": "bump2.png"
+        },
+        {
+            "type": "Sphere",
+            "center": [300, 500, 200],
+            "radius": 80,
+            "color": [255, 0, 0]
+        },
+        {
+            "type": "Sphere",
+            "center": [960, 500, 520],
+            "radius": 100,
+            "color": [0, 0, 255]
+        },
+        {
+            "type": "Triangle",
+            "A": [640, 500, 360],
+            "B": [770, 600, 360],
+            "C": [640, 600, 480],
+            "color": [0, 255, 0]
+        },
+        {
+            "type": "Triangle",
+            "A": [320, 300, 180],
+            "B": [450, 400, 180],
+            "C": [320, 400, 300],
+            "color": [255, 165, 0]
+        },
+        {
+            "type": "Parallelogram",
+            "A": [-1280, 0, 0],
+            "B": [2560, 0, 0],
+            "C": [-1280, 2000, 0],
+            "color": [0, 255, 255]
+        }
+    ]
+}
