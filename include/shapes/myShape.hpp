@@ -89,7 +89,7 @@ class myShape {
         double getReflection() const { return reflection; }
         double getRefraction() const { return refraction; }
 
-        myColor applyLighting(myVector3 pos, myVector3 normal, myColor const& workingColor, std::vector<std::unique_ptr<myLight>> const& lights, std::vector<std::unique_ptr<myShape>> const& shapes) {
+        myColor applyLighting(myVector3 pos, myVector3 normal, myColor const& workingColor, std::vector<std::unique_ptr<myLight>> const& lights, std::vector<std::unique_ptr<myShape>> const& shapes) const {
             myColor newColor(0, 0, 0);
 
             for (std::unique_ptr<myLight> const& light : lights) {
