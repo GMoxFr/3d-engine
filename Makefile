@@ -64,6 +64,9 @@ WHITE 	  	=	"\033[1;37m"
 all:			FLAGS += -W -Wall -Wextra -Werror -g -ggdb -g3
 all:			erase full
 
+fast:			FLAGS += -O2 -march=native
+fast:			erase full
+
 full:			init $(MOBJ) $(OBJ)
 			@$(COMPILER) $(MOBJ) $(OBJ) -o $(NAME) $(LIBSPATH) $(LIBRARIES)	\
 			 2>> $(LOGDIR)/$(NAME) &&							\
