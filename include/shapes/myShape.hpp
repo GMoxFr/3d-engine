@@ -98,24 +98,31 @@ class myShape {
                     continue;
                 }
 
-                bool compute = true;
-                myVector3 direction = -light->getDirection();
-                for (std::unique_ptr<myShape> const& shape : shapes) {
-                    if (shape.get() == this) continue;
+                double lightIntensity = 1.0;
+                std::vector<myVector3> directions = my3d::ringDirection(-light->getDirection());
+                // std::vector<myVector3> directions = my3d::randomizeDirection(-light->getDirection());
 
-                    myVector3 i;
-                    myVector3 n;
-                    myColor c;
-                    double u;
-                    double v;
+                for(myVector3 const& dir : directions) {
+                    bool blocked = false;
+                    for (std::unique_ptr<myShape> const& shape : shapes) {
+                        if (shape.get() == this) continue;
 
-                    if (shape->intersect(pos, direction, i, n, c, u, v)) {
-                        compute = false;
-                        break;
+                        myVector3 i;
+                        myVector3 n;
+                        myColor c;
+                        double u;
+                        double v;
+
+                        if (shape->intersect(pos, dir, i, n, c, u, v)) {
+                            blocked = true;
+                            break;
+                        }
                     }
+                    if (blocked)
+                        lightIntensity -= 1.0 / static_cast<double>(directions.size());
                 }
-                if (compute)
-                    newColor += light->applyLighting(pos, normal, workingColor, diffuse);
+
+                newColor += (light->applyLighting(pos, normal, workingColor, diffuse) * lightIntensity);
             }
 
             return newColor;

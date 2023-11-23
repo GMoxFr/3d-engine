@@ -47,4 +47,7 @@ namespace my3d {
     bool handleCONFIG(int& i, const char** argv, int argc, std::string& filename);
     bool handleTHREADS(int& i, const char** argv, int argc, int& threads);
     int argumentParser(int argc, char **argv, std::string& configFilename, std::string& saveFilename, int& threads);
+    std::vector<myVector3> generateRingRays(const myVector3& direction, int rays, double deviationAngle);
+    std::vector<myVector3> ringDirection(const myVector3& direction);
+    std::vector<myVector3> randomizeDirection(const myVector3& direction);
 }

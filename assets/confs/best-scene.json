@@ -1,0 +1,62 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.2
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [-1, 1, -1],
+            "intensity": 0.9
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -1],
+            "intensity": 0.4
+        }
+    ],
+    "shapes": [
+        {
+            "IS": "Center Red Sphere",
+            "type": "Sphere",
+            "center": [640, 1000, 360],
+            "radius": 240,
+            "color": [255, 0, 0],
+            "fresnel": 1.6,
+            "reflection": 0,
+            "refraction": 0.3
+        },
+        {
+            "IS": "Ground",
+            "type": "Parallelogram",
+            "A": [-3840, -1000, 0],
+            "B": [5120, -1000, 0],
+            "C": [-3840, 6000, 0],
+            "texture": "carrelage2.png",
+            "fresnel": 0,
+            "reflection": 0,
+            "refraction": 0
+        },
+        {
+            "IS": "Front Wall",
+            "type": "Parallelogram",
+            "A": [-3840, 6000, 0],
+            "B": [5120, 6000, 0],
+            "C": [-3840, 6000, 3600],
+            "texture": "wall.png",
+            "reflection": 0
+        },
+        {
+            "IS": "Left Mirror",
+            "type": "Parallelogram",
+            "A": [-200, 600, 0],
+            "B": [-200, 600, 800],
+            "C": [1200, 3100, 0],
+            "color": [0, 0, 100],
+            "reflection": 1
+        }
+    ]
+}

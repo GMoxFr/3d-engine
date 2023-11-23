@@ -71,3 +71,18 @@ double myVector3::angleBetween(const myVector3& v) const {
 
     return std::acos(cosineValue);
 }
+
+myVector3 myVector3::findPerpendicular() const {
+    myVector3 arbitraryVector(1, 0, 0);
+    if (std::abs(this->x) > 1.0 - EPSILON) {
+        arbitraryVector = myVector3(0, 0, 1);
+    }
+    return this->cross(arbitraryVector).normalized();
+}
+
+myVector3 myVector3::rotateVector(const myVector3& axis, double angle) const {
+    double cosAngle = std::cos(angle);
+    double sinAngle = std::sin(angle);
+
+    return (*this) * cosAngle + axis.cross(*this) * sinAngle + axis * axis.dot(*this) * (1 - cosAngle);
+}

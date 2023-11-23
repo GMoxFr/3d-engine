@@ -88,7 +88,7 @@ void myImage::rayCast(myVector3 camera, std::vector<std::unique_ptr<myShape>> co
 
             myColorWithMetadata newColor = handleBounce(camera, rayDirection, nullptr, shapes, lights, 1.0, 32);
             if (newColor.modified)
-                setPixel(myPoint(x, z), newColor.color, newColor.y);
+                setPixel(myPoint(x, z), newColor.color, 1);
         }
     }
 }
