@@ -1,0 +1,101 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [-1, 1, -1],
+            "intensity": 0.6
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -1],
+            "intensity": 0.3
+        }
+    ],
+    "shapes": [
+        {
+            "IS": "Left Wall",
+            "type": "Parallelogram",
+            "A": [0, -50, 0],
+            "B": [0, 2000, 0],
+            "C": [0, -50, 720],
+            "color": [255, 0, 0]
+        },
+        {
+            "IS": "Right Wall",
+            "type": "Parallelogram",
+            "A": [1280, 2000, 0],
+            "B": [1280, -50, 0],
+            "C": [1280, 2000, 720],
+            "color": [0, 255, 0]
+        },
+        {
+            "IS": "Ground",
+            "type": "Parallelogram",
+            "A": [0, -50, 0],
+            "B": [1280, -50, 0],
+            "C": [0, 2000, 0],
+            "color": [0, 0, 255]
+        },
+        {
+            "IS": "Front Wall",
+            "type": "Parallelogram",
+            "A": [0, 2000, 0],
+            "B": [0, 2000, 720],
+            "C": [1280, 2000, 0],
+            "color": [0, 255, 255]
+        },
+        {
+            "IS": "Mirror on the wall",
+            "type": "Parallelogram",
+            "A": [1279, 100, 100],
+            "B": [1279, 1900, 100],
+            "C": [1279, 100, 620],
+            "color": [0, 0, 0],
+            "reflection": 1.0
+        },
+        {
+            "type": "Sphere",
+            "center": [640, 1000, 360],
+            "radius": 240,
+            "color": [255, 255, 0],
+            "reflection": 0.5
+        },
+        {
+            "type": "Sphere",
+            "center": [640, 1500, 360],
+            "radius": 120,
+            "color": [0, 255, 0]
+        },
+        {
+            "type": "Sphere",
+            "center": [260, 500, 120],
+            "radius": 120,
+            "color": [255, 0, 0],
+            "refraction": 0.7,
+            "fresnel": 1
+        },
+        {
+            "type": "Sphere",
+            "center": [900, 500, 120],
+            "radius": 120,
+            "color": [0, 0, 255],
+            "refraction": 0.7,
+            "fresnel": 0.3
+        },
+        {
+            "type": "Sphere",
+            "center": [890, 800, 469],
+            "radius": 120,
+            "color": [0, 0, 0],
+            "refraction": 1.0,
+            "fresnel": 1.6
+        }
+    ]
+}

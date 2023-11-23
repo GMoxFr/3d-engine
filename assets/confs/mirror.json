@@ -1,0 +1,72 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [-1, 1, -1],
+            "intensity": 0.6
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -1],
+            "intensity": 0.3
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Parallelogram",
+            "A": [0, 0, 0],
+            "B": [0, 2000, 0],
+            "C": [0, 0, 720],
+            "color": [64, 64, 64],
+            "reflection": 1
+        },
+        {
+            "type": "Parallelogram",
+            "A": [1280, 2000, 0],
+            "B": [1280, 0, 0],
+            "C": [1280, 2000, 720],
+            "color": [64, 64, 64],
+            "reflection": 1
+        },
+        {
+            "type": "Parallelogram",
+            "A": [0, 0, 0],
+            "B": [1280, 0, 0],
+            "C": [0, 2000, 0],
+            "color": [64, 64, 64],
+            "reflection": 1
+        },
+        {
+            "type": "Parallelogram",
+            "A": [0, 2000, 720],
+            "B": [1280, 2000, 720],
+            "C": [0, 0, 720],
+            "color": [64, 64, 64],
+            "reflection": 1
+        },
+        {
+            "type": "Parallelogram",
+            "A": [0, 2000, 0],
+            "B": [0, 2000, 720],
+            "C": [1280, 2000, 0],
+            "color": [64, 64, 64],
+            "reflection": 1
+        },
+        {
+            "type": "Sphere",
+            "center": [640, 1000, 360],
+            "radius": 240,
+            "color": [255, 255, 0],
+            "reflection": 0.5,
+            "refraction": 0.5,
+            "fresnel": 1.6
+        }
+    ]
+}

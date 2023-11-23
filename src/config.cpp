@@ -53,13 +53,21 @@ namespace config {
             s = std::make_unique<mySphere>(
                 myVector3(shape["center"].get<std::vector<double>>()),
                 shape["radius"].get<double>(),
-                myColor(shape["color"].get<std::vector<int>>())
+                myColor(shape["color"].get<std::vector<int>>()),
+                shape.contains("diffuse") ? shape["diffuse"].get<double>() : 1.0,
+                shape.contains("fresnel") ? shape["fresnel"].get<double>() : 1.0,
+                shape.contains("reflection") ? shape["reflection"].get<double>() : 0.0,
+                shape.contains("refraction") ? shape["refraction"].get<double>() : 0.0
             );
         } else if (shape.contains("texture")) {
             s = std::make_unique<mySphere>(
                 myVector3(shape["center"].get<std::vector<double>>()),
                 shape["radius"].get<double>(),
-                shape["texture"].get<std::string>()
+                shape["texture"].get<std::string>(),
+                shape.contains("diffuse") ? shape["diffuse"].get<double>() : 1.0,
+                shape.contains("fresnel") ? shape["fresnel"].get<double>() : 0.0,
+                shape.contains("reflection") ? shape["reflection"].get<double>() : 0.0,
+                shape.contains("refraction") ? shape["refraction"].get<double>() : 0.0
             );
         } else {
             throw InvalidShapeException();
@@ -78,14 +86,22 @@ namespace config {
                 myVector3(shape["A"].get<std::vector<double>>()),
                 myVector3(shape["B"].get<std::vector<double>>()),
                 myVector3(shape["C"].get<std::vector<double>>()),
-                myColor(shape["color"].get<std::vector<int>>())
+                myColor(shape["color"].get<std::vector<int>>()),
+                shape.contains("diffuse") ? shape["diffuse"].get<double>() : 1.0,
+                shape.contains("fresnel") ? shape["fresnel"].get<double>() : 0.0,
+                shape.contains("reflection") ? shape["reflection"].get<double>() : 0.0,
+                shape.contains("refraction") ? shape["refraction"].get<double>() : 0.0
             );
         } else if (shape.contains("texture")) {
             p = std::make_unique<myParallelogram>(
                 myVector3(shape["A"].get<std::vector<double>>()),
                 myVector3(shape["B"].get<std::vector<double>>()),
                 myVector3(shape["C"].get<std::vector<double>>()),
-                shape["texture"].get<std::string>()
+                shape["texture"].get<std::string>(),
+                shape.contains("diffuse") ? shape["diffuse"].get<double>() : 1.0,
+                shape.contains("fresnel") ? shape["fresnel"].get<double>() : 0.0,
+                shape.contains("reflection") ? shape["reflection"].get<double>() : 0.0,
+                shape.contains("refraction") ? shape["refraction"].get<double>() : 0.0
             );
         } else {
             throw InvalidShapeException();
@@ -104,14 +120,22 @@ namespace config {
                 myVector3(shape["A"].get<std::vector<double>>()),
                 myVector3(shape["B"].get<std::vector<double>>()),
                 myVector3(shape["C"].get<std::vector<double>>()),
-                myColor(shape["color"].get<std::vector<int>>())
+                myColor(shape["color"].get<std::vector<int>>()),
+                shape.contains("diffuse") ? shape["diffuse"].get<double>() : 1.0,
+                shape.contains("fresnel") ? shape["fresnel"].get<double>() : 0.0,
+                shape.contains("reflection") ? shape["reflection"].get<double>() : 0.0,
+                shape.contains("refraction") ? shape["refraction"].get<double>() : 0.0
             );
         } else if (shape.contains("texture")) {
             t = std::make_unique<myTriangle>(
                 myVector3(shape["A"].get<std::vector<double>>()),
                 myVector3(shape["B"].get<std::vector<double>>()),
                 myVector3(shape["C"].get<std::vector<double>>()),
-                shape["texture"].get<std::string>()
+                shape["texture"].get<std::string>(),
+                shape.contains("diffuse") ? shape["diffuse"].get<double>() : 1.0,
+                shape.contains("fresnel") ? shape["fresnel"].get<double>() : 0.0,
+                shape.contains("reflection") ? shape["reflection"].get<double>() : 0.0,
+                shape.contains("refraction") ? shape["refraction"].get<double>() : 0.0
             );
         } else {
             throw InvalidShapeException();

@@ -1,0 +1,86 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [-1, 1, -1],
+            "intensity": 0.6
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -1],
+            "intensity": 0.3
+        }
+    ],
+    "shapes": [
+        {
+            "IS": "Left Wall",
+            "type": "Parallelogram",
+            "A": [-500, -2000, -500],
+            "B": [-500, 2000, -500],
+            "C": [-500, -2000, 1220],
+            "color": [0, 0, 0],
+            "reflection": 1
+        },
+        {
+            "IS": "Right Wall",
+            "type": "Parallelogram",
+            "A": [1780, 2000, -500],
+            "B": [1780, -2000, -500],
+            "C": [1780, 2000, 1220],
+            "color": [0, 0, 0],
+            "reflection": 1
+        },
+        {
+            "IS": "Ground",
+            "type": "Parallelogram",
+            "A": [-500, -2000, -500],
+            "B": [1780, -2000, -500],
+            "C": [-500, 2000, -500],
+            "color": [0, 0, 0],
+            "reflection": 1
+        },
+        {
+            "IS": "Ceiling",
+            "type": "Parallelogram",
+            "A": [-500, 2000, 1220],
+            "B": [1780, 2000, 1220],
+            "C": [-500, -2000, 1220],
+            "color": [0, 0, 0],
+            "reflection": 1
+        },
+        {
+            "IS": "Front Wall",
+            "type": "Parallelogram",
+            "A": [-500, 2000, -500],
+            "B": [-500, 2000, 1220],
+            "C": [1780, 2000, -500],
+            "color": [0, 0, 0],
+            "reflection": 1
+        },
+        {
+            "IS": "Back Wall",
+            "type": "Parallelogram",
+            "A": [-500, -2000, -500],
+            "B": [-500, -2000, 1220],
+            "C": [1780, -2000, -500],
+            "color": [0, 0, 0],
+            "reflection": 1
+        },
+        {
+            "type": "Sphere",
+            "center": [640, 1000, 360],
+            "radius": 240,
+            "color": [255, 255, 0],
+            "reflection": 0.5,
+            "refraction": 0.5,
+            "fresnel": 1.6
+        }
+    ]
+}

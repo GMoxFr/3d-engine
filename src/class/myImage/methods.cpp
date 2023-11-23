@@ -23,31 +23,61 @@ void myImage::setPixel(myVector3 v, myColor const& c) {
     setPixel(myPoint(static_cast<int>(round(v.x)), static_cast<int>(round(v.z))), c, v.y);
 }
 
-void myImage::handleRayIntersection(int x, int z, myVector3 const& camera, myVector3 const& rayDirection, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights) {
-    myVector3 intersection;
-    myVector3 normal;
-    myColor color;
+myColorWithMetadata myImage::handleBounce(myVector3 start, myVector3 rayDirection, myShape const* baseShape, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights, double index, int depth) {
+    if (depth <= 0) return {myColor::BLACK, false, std::numeric_limits<double>::max()};
 
-    double u;
-    double v;
+    myVector3 closestIntersection;
+    myVector3 closestNormal;
+    myColor closestColor;
+    double minDistance = std::numeric_limits<double>::max();
+    myShape const* closestShape = nullptr;
 
-    for (std::unique_ptr<myShape> const& shape : shapes) {
-        if (shape->intersect(camera, rayDirection, intersection, normal, color, u, v)) {
-            myColor newColor = shape->applyLighting(intersection, normal, color, lights, shapes);
-            setPixel(myPoint(x, z), newColor, intersection.y);
+    for (std::unique_ptr<myShape> const& shape: shapes) {
+        if (shape.get() == baseShape) continue;
+
+        myVector3 intersection;
+        myVector3 normal;
+        myColor color;
+        double u;
+        double v;
+
+        if (shape->intersect(start, rayDirection, intersection, normal, color, u, v)) {
+            double distance = intersection.distanceTo(start);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIntersection = intersection;
+                closestNormal = normal;
+                closestColor = color;
+                closestShape = shape.get();
+            }
         }
     }
+
+    if (closestShape != nullptr) {
+        myColorWithMetadata newColor;
+        newColor.color = (*closestShape).applyLighting(closestIntersection, closestNormal, closestColor, lights, shapes);
+        newColor.modified = true;
+        newColor.y = closestIntersection.y;
+        if ((*closestShape).getReflection() > EPSILON) {
+            myVector3 newDirection = rayDirection - closestNormal * 2 * (rayDirection * closestNormal);
+            newColor.color += (handleBounce(closestIntersection, newDirection, closestShape, shapes, lights, (*closestShape).getFresnel(), depth - 1).color) * (*closestShape).getReflection();
+        }
+        if ((*closestShape).getRefraction() > EPSILON) {
+            double n1 = index;
+            double n2 = (*closestShape).getFresnel();
+            double micro = n1 / n2;
+
+            myVector3 refractedDir = micro * rayDirection + (-closestNormal) * (std::sqrt(1 - micro * micro * (1 - ((-closestNormal) * rayDirection) * ((-closestNormal) * rayDirection)))) - (micro * (-closestNormal) * ((-closestNormal) * rayDirection));
+            newColor.color += (handleBounce(closestIntersection, refractedDir, closestShape, shapes, lights, (*closestShape).getFresnel(), depth - 1)).color * (*closestShape).getRefraction();
+        }
+        return newColor;
+    }
+
+    return {myColor::BLACK, false, std::numeric_limits<double>::max()};
 }
 
 void myImage::rayCast(myVector3 camera, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights) {
-    for(int x = 0; x < width; x++) {
-        for(int z = 0; z < height; z++) {
-            myVector3 rayDirection = myVector3(x, 0, z) - camera;
-            rayDirection.normalize();
-
-            handleRayIntersection(x, z, camera, rayDirection, shapes, lights);
-        }
-    }
+    rayCast(camera, shapes, lights, 0, 0, width, height);
 }
 
 void myImage::rayCast(myVector3 camera, std::vector<std::unique_ptr<myShape>> const& shapes, std::vector<std::unique_ptr<myLight>> const& lights, int x1, int z1, int x2, int z2) {
@@ -56,7 +86,9 @@ void myImage::rayCast(myVector3 camera, std::vector<std::unique_ptr<myShape>> co
             myVector3 rayDirection = myVector3(x, 0, z) - camera;
             rayDirection.normalize();
 
-            handleRayIntersection(x, z, camera, rayDirection, shapes, lights);
+            myColorWithMetadata newColor = handleBounce(camera, rayDirection, nullptr, shapes, lights, 1.0, 32);
+            if (newColor.modified)
+                setPixel(myPoint(x, z), newColor.color, 1);
         }
     }
 }

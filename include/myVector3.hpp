@@ -63,6 +63,9 @@ class myVector3 {
 
         double angleBetween(const myVector3& v) const;
 
+        myVector3 findPerpendicular() const;
+        myVector3 rotateVector(const myVector3& axis, double angle) const;
+
         static const myVector3 CAMERA;
 
         static const myVector3 ZERO;

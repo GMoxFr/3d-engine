@@ -169,4 +169,49 @@ namespace my3d {
 
         return 0;
     }
+
+    std::vector<myVector3> generateRingRays(const myVector3& direction, int rays, double deviationAngle) {
+        std::vector<myVector3> directions;
+        myVector3 perpendicularAxis1 = direction.findPerpendicular();
+        myVector3 perpendicularAxis2 = direction ^ perpendicularAxis1;
+
+        for (int i = 0; i < rays; ++i) {
+            double angle = 2 * M_PI * i / rays;
+            myVector3 rotatedRay = direction.rotateVector(perpendicularAxis1, cos(angle) * deviationAngle);
+            rotatedRay = rotatedRay.rotateVector(perpendicularAxis2, sin(angle) * deviationAngle);
+            rotatedRay.normalize();
+            directions.push_back(rotatedRay);
+        }
+
+        return directions;
+    }
+
+    std::vector<myVector3> ringDirection(const myVector3& direction) {
+        std::vector<myVector3> directions;
+        directions.push_back(direction);
+
+        for (int i = 0; i < 27; i++) {
+            std::vector<myVector3> ring = generateRingRays(direction, 27, 0.01 * (i + 1));
+            directions.insert(directions.end(), ring.begin(), ring.end());
+        }
+
+        return directions;
+    }
+
+    std::vector<myVector3> randomizeDirection(const myVector3& direction) {
+        std::vector<myVector3> directions;
+
+        directions.push_back(direction);
+
+        for (int i = 0; i < 60; i++) {
+            myVector3 newDirection = direction;
+            newDirection.x += ((double)rand() / RAND_MAX - 0.5) * 0.5;
+            newDirection.y += ((double)rand() / RAND_MAX - 0.5) * 0.1;
+            newDirection.z += ((double)rand() / RAND_MAX - 0.5) * 0.1;
+            newDirection.normalize();
+            directions.push_back(newDirection);
+        }
+
+        return directions;
+    }
 }
