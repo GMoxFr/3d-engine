@@ -25,6 +25,10 @@ LIBRARIES	=	$(shell pkg-config --libs sfml-all) -lstdc++ -lm -lpthread -ldl
 
 OBJDIR		=	obj/
 
+ifeq ($(UNAME_S),Darwin)
+  INCLUDES	+=	-I/opt/homebrew/include/
+endif
+
 ##################################################################################################################
 ##  SOURCES																									 	##
 ##################################################################################################################
@@ -64,7 +68,11 @@ WHITE 	  	=	"\033[1;37m"
 all:			FLAGS += -W -Wall -Wextra -Werror -g -ggdb -g3
 all:			erase full
 
+<<<<<<< Updated upstream
 fast:			FLAGS += -O2 -march=native
+=======
+fast:			FLAGS += -O3
+>>>>>>> Stashed changes
 fast:			erase full
 
 full:			init $(MOBJ) $(OBJ)

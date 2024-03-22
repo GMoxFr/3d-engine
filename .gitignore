@@ -44,3 +44,4 @@ errors/
 
 $ VSCode
 .vscode/
+.DS_Store
