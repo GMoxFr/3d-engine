@@ -86,3 +86,29 @@ myVector3 myVector3::rotateVector(const myVector3& axis, double angle) const {
 
     return (*this) * cosAngle + axis.cross(*this) * sinAngle + axis * axis.dot(*this) * (1 - cosAngle);
 }
+
+myVector3 myVector3::rotateVector(const myVector3& rotation) const {
+    double rx = rotation.x * M_PI / 180.0;
+    double ry = rotation.y * M_PI / 180.0;
+    double rz = rotation.z * M_PI / 180.0;
+
+    double cosX = std::cos(rx);
+    double sinX = std::sin(rx);
+
+    double cosY = std::cos(ry);
+    double sinY = std::sin(ry);
+
+    double cosZ = std::cos(rz);
+    double sinZ = std::sin(rz);
+
+    double y1 = y * cosX - z * sinX;
+    double z1 = y * sinX + z * cosX;
+
+    double x2 = x * cosY + z1 * sinY;
+    double z2 = -x * sinY + z1 * cosY;
+
+    double x3 = x2 * cosZ - y1 * sinZ;
+    double y3 = x2 * sinZ + y1 * cosZ;
+
+    return myVector3(x3, y3, z2);
+}

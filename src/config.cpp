@@ -43,6 +43,8 @@ namespace config {
                 loadParallelogram(shape, shapes);
             } else if (shape["type"] == "Triangle") {
                 loadTriangle(shape, shapes);
+            } else if (shape["type"] == "Obj") {
+                loadObj(shape, shapes);
             }
         }
     }
@@ -145,6 +147,69 @@ namespace config {
             t->setBumpMap(shape["bumpMap"].get<std::string>());
         }
         shapes.push_back(std::move(t));
+    }
+
+    void loadObj(const nlohmann::json& shape, std::vector<std::unique_ptr<myShape>>& shapes) {
+        std::string filename = shape["obj"].get<std::string>();
+
+        std::vector<myVector3> vertices;
+        std::vector<std::vector<int>> faces;
+
+        std::ifstream file(filename);
+        std::string line;
+
+        if (!file.is_open()) {
+            throw CouldNotOpenFileException();
+        }
+        
+        while (getline(file, line)) {
+            std::istringstream iss(line);
+            std::string identifier;
+            iss >> identifier;
+
+            if (identifier == "v") {
+                double x, y, z;
+                iss >> x >> y >> z;
+                vertices.push_back(myVector3(x, y, z));
+            } else if (identifier == "f") {
+                std::vector<int> face;
+                int v;
+                while (iss >> v) {
+                    face.push_back(v);
+                }
+                faces.push_back(face);
+            }
+        }
+
+        file.close();
+
+        myVector3 pos(shape["position"].get<std::vector<double>>());
+        double scale = shape["scale"].get<double>();
+        myVector3 rot(shape["rotation"].get<std::vector<double>>());
+
+        for (auto& vertex : vertices) {
+            vertex = vertex.rotateVector(rot);
+            vertex = vertex * scale + pos;
+        }
+
+        for (const auto& face : faces) {
+            std::unique_ptr<myTriangle> t = std::make_unique<myTriangle>(
+                vertices[face[0] - 1],
+                vertices[face[1] - 1],
+                vertices[face[2] - 1],
+                myColor(shape["color"].get<std::vector<int>>()),
+                shape.contains("diffuse") ? shape["diffuse"].get<double>() : 1.0,
+                shape.contains("fresnel") ? shape["fresnel"].get<double>() : 0.0,
+                shape.contains("reflection") ? shape["reflection"].get<double>() : 0.0,
+                shape.contains("refraction") ? shape["refraction"].get<double>() : 0.0
+            );
+
+            shapes.push_back(std::move(t));
+        }
+
+
+        std::cout << "Faces loaded: " << faces.size() << "\n";
+
     }
 
     void loadConfig(std::string_view const& filename, std::vector<std::unique_ptr<myShape>>& shapes, std::vector<std::unique_ptr<myLight>>& lights) {

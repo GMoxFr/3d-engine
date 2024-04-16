@@ -8,16 +8,18 @@
         {
             "type": "DirectionalLight",
             "color": [255, 255, 255],
-            "direction": [-1, 1, -0.5],
+            "direction": [1, 1, -0.5],
             "intensity": 1
         }
     ],
     "shapes": [
         {
-            "type": "Mesh.fromObj",
-            "obj": "models/sample.obj",
-            "position": [0, 0, 0],
-            "color": [255, 0, 0]
+            "type": "Obj",
+            "obj": "assets/models/cube.obj",
+            "position": [200, 400, 360],
+            "color": [255, 0, 0],
+            "scale": 100,
+            "rotation": [45, 45, 45]
         },
         {
             "type": "Parallelogram",
