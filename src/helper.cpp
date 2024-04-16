@@ -136,7 +136,7 @@ namespace my3d {
             switch (std::string arg = argv[i]; argumentMap.count(arg) ? argumentMap[arg] : ArgumentType::UNKNOWN) {
                 case ArgumentType::HELP:
                     my3d::displayHelp(argv[0]);
-                    return 0;
+                    return 1;
 
                 case ArgumentType::SAVE:
                     if (!my3d::handleSAVE(i, (const char**)argv, argc, saveFilename))
@@ -190,8 +190,11 @@ namespace my3d {
         std::vector<myVector3> directions;
         directions.push_back(direction);
 
-        for (int i = 0; i < 27; i++) {
-            std::vector<myVector3> ring = generateRingRays(direction, 27, 0.01 * (i + 1));
+        int points = 1;
+
+        for (int i = 0; i < 9; i++) {
+            points += 2;
+            std::vector<myVector3> ring = generateRingRays(direction, points, 0.02 * (i + 1));
             directions.insert(directions.end(), ring.begin(), ring.end());
         }
 
@@ -214,4 +217,25 @@ namespace my3d {
 
         return directions;
     }
+
+    // std::vector<myVector3> randomizeDirection(const myVector3& direction) {
+    //     std::vector<myVector3> directions;
+
+    //     for (int i = 0; i < 30; i++) {
+    //         myVector3 newDirection;
+
+    //         double theta = DPI * ((double)rand() / (double)RAND_MAX);
+    //         double phi = acos(2 * ((double)rand() / (double)RAND_MAX) - 1.0);
+
+    //         newDirection.x = cos(theta)*sin(phi);
+    //         newDirection.y = sin(theta)*sin(phi);
+    //         newDirection.z = cos(phi);
+
+    //         newDirection.normalize();
+
+    //         directions.push_back(direction + (0.2 * newDirection));
+    //     }
+
+    //     return directions;
+    // } 
 }
