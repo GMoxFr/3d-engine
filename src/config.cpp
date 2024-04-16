@@ -173,11 +173,21 @@ namespace config {
                 vertices.push_back(myVector3(x, y, z));
             } else if (identifier == "f") {
                 std::vector<int> face;
-                int v;
-                while (iss >> v) {
-                    face.push_back(v);
+                std::string vertIndex;
+                while (iss >> vertIndex) {
+                    size_t slashPop = vertIndex.find("/");
+                    if (slashPop != std::string::npos) {
+                        vertIndex = vertIndex.substr(0, slashPop);
+                    }
+                    face.push_back(std::stoi(vertIndex));
                 }
-                faces.push_back(face);
+                if (face.size() == 3) {
+                    faces.push_back(face);
+                } else {
+                    for (size_t i = 1; i < face.size() - 1; i++) {
+                        faces.push_back({face[0], face[i], face[i + 1]});
+                    }
+                }
             }
         }
 
@@ -206,10 +216,6 @@ namespace config {
 
             shapes.push_back(std::move(t));
         }
-
-
-        std::cout << "Faces loaded: " << faces.size() << "\n";
-
     }
 
     void loadConfig(std::string_view const& filename, std::vector<std::unique_ptr<myShape>>& shapes, std::vector<std::unique_ptr<myLight>>& lights) {

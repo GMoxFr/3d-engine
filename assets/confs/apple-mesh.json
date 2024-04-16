@@ -15,11 +15,11 @@
     "shapes": [
         {
             "type": "Obj",
-            "obj": "assets/models/cube.obj",
-            "position": [200, 400, 360],
-            "color": [255, 0, 0],
-            "scale": 100,
-            "rotation": [45, 0, 0]
+            "obj": "assets/models/apple.obj",
+            "position": [640, 400, 360],
+            "color": [55, 71, 0],
+            "scale": 200,
+            "rotation": [90, 0, 0]
         },
         {
             "type": "Parallelogram",

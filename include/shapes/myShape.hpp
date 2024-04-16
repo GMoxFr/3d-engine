@@ -8,10 +8,10 @@
 class myImage;
 
 class myShape {
-    private:
+    protected:
         myColor color;
 
-        bool hasTexture;
+        bool hasTexture = false;
         std::unique_ptr<myTexture> texture;
 
         bool hasBumpMap = false;

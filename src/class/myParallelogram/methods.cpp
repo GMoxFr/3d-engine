@@ -10,8 +10,10 @@ void myParallelogram::draw(myImage& I, std::vector<std::unique_ptr<myLight>> con
             myVector3 pos = A + (u * (B - A)) + (v * (C - A));
 
             // Object
-            myVector3 normal = (B - A) ^ (C - A);
-            normal.normalize();
+            // myVector3 normal = (B - A) ^ (C - A);
+            // normal.normalize();
+            myVector3 usingNormal = normal;
+
             myColor workingColor = getHasTexture() ? getTexture().getPixel(u, v) : getColor();
 
             // Bump Map
@@ -26,21 +28,21 @@ void myParallelogram::draw(myImage& I, std::vector<std::unique_ptr<myLight>> con
                 double K = 0.01;
                 myVector3 bumpNormal = normal + (K * ((dMdu ^ (dhdv * normal)) + (dMdv ^ (dhdu * normal))));
                 bumpNormal.normalize();
-                normal = bumpNormal;
+                usingNormal = bumpNormal;
             }
 
             // Draw
-            I.setPixel(pos, applyLighting(pos, normal, workingColor, L, std::vector<std::unique_ptr<myShape>>()));
+            I.setPixel(pos, applyLighting(pos, usingNormal, workingColor, L, std::vector<std::unique_ptr<myShape>>()));
         }
     }
 }
 
 bool myParallelogram::intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color, double &u, double &v) {
-    myVector3 AB = B - A;
-    myVector3 AC = C - A;
+    normal = this->normal;
 
-    normal = AB ^ AC;
-    normal.normalize();
+    if (std::abs(direction * normal) < EPSILON) {
+        return false;
+    }
 
     double t = ((A - origin) * normal) / (direction * normal);
 
@@ -50,31 +52,35 @@ bool myParallelogram::intersect(myVector3 const& origin, myVector3 const& direct
 
     intersection = origin + (t * direction);
 
-    myVector3 ABAC = AB ^ AC;
-    myVector3 ACAB = AC ^ AB;
-
-    u = ((AC ^ normal) * (intersection - A)) / ABAC.magnitude();
-    v = ((AB ^ normal) * (A - intersection)) / ACAB.magnitude();
+    u = (AC_normal * (intersection - A)) / ABAC_magnitude;
+    v = (AB_normal * (A - intersection)) / ACAB_magnitude;
 
     if (u < 0 || u > 1 || v < 0 || v > 1)
         return false;
     
-    color = getHasTexture() ? getTexture().getPixel(u, v) : getColor();
+    color = hasTexture ? texture->getPixel(u, v) : getColor();
 
     // Bump Map
-    if (getHasBumpMap()) {
-        double dhdu = 0;
-        double dhdv = 0;
-        getBumpMap().bump(u, v, dhdu, dhdv);
-
-        myVector3 dMdu = B - A;
-        myVector3 dMdv = C - A;
-
-        double K = 0.01;
-        myVector3 bumpNormal = normal + (K * ((dMdu ^ (dhdv * normal)) + (dMdv ^ (dhdu * normal))));
-        bumpNormal.normalize();
-        normal = bumpNormal;
+    if (hasBumpMap) {
+        double dhdu, dhdv;
+        bumpMap->bump(u, v, dhdu, dhdv);
+        normal = normal + (0.01 * (((B - A) ^ (dhdv * normal)) + ((C - A) ^ (dhdu * normal))));
+        normal.normalize();
     }
 
     return true;
+}
+
+void myParallelogram::precalculate() {
+    normal = (B - A) ^ (C - A);
+    normal.normalize();
+
+    AB = B - A;
+    AC = C - A;
+
+    ABAC_magnitude = (AB ^ AC).magnitude();
+    ACAB_magnitude = (AC ^ AB).magnitude();
+
+    AB_normal = AB ^ normal;
+    AC_normal = AC ^ normal;
 }
