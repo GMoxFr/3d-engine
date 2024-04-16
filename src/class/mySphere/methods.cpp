@@ -101,3 +101,97 @@ bool mySphere::intersect(myVector3 const& origin, myVector3 const& direction, my
 
     return true;
 }
+
+bool mySphere::intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color) {
+
+    double a = direction * direction;
+    double b = 2 * direction * (origin - center);
+    double d = origin * origin - 2 * origin * center + center * center - radius * radius;
+
+    double delta = b * b - 4 * a * d;
+
+    if (delta < 0) {
+        return false;
+    }
+    double t1 = (-b - my3d::sqrtf(delta)) / (2 * a);
+    double t2 = (-b + my3d::sqrtf(delta)) / (2 * a);
+
+    if (t1 < 0 && t2 < 0)
+        return false;
+    if (t1 > 0 && t2 > 0)
+        intersection = origin + t1 * direction;
+    if (t1 < 0 && t2 > 0)
+        intersection = origin + t2 * direction;
+
+    normal = intersection - center;
+    normal.normalize();
+    color = getColor();
+    double u, v;
+    my3d::invertCoordSpherique(intersection, this->center, this->radius, u, v);
+    color = getHasTexture() ? getTexture().getPixel(u / DPI, (v + PI / 2) / PI) : getColor();
+
+    if (getHasBumpMap()) {
+        double dhdu = 0;
+        double dhdv = 0;
+        getBumpMap().bump(u / DPI, (v + PI / 2) / PI, dhdu, dhdv);
+
+        myVector3 dMdu(
+            -radius * my3d::cosf(v) * my3d::sinf(u),
+            radius * my3d::cosf(v) * my3d::cosf(u),
+            0
+        );
+
+        myVector3 dMdv(
+            -radius * my3d::sinf(v) * my3d::cosf(u),
+            -radius * my3d::sinf(v) * my3d::sinf(u),
+            radius * my3d::cosf(v)
+        );
+
+        double K = 0.01;
+        myVector3 bumpNormal = normal + (K * ((dMdu ^ (dhdv * normal)) + (dMdv ^ (dhdu * normal))));
+        bumpNormal.normalize();
+        normal = bumpNormal;
+    }
+
+    return true;
+}
+
+bool mySphere::intersect(myVector3 const& origin, myVector3 const& direction) {
+    double a = direction * direction;
+    double b = 2 * direction * (origin - center);
+    double d = origin * origin - 2 * origin * center + center * center - radius * radius;
+
+    double delta = b * b - 4 * a * d;
+
+    if (delta < 0) {
+        return false;
+    }
+    double t1 = (-b - my3d::sqrtf(delta)) / (2 * a);
+    double t2 = (-b + my3d::sqrtf(delta)) / (2 * a);
+
+    if (t1 < 0 && t2 < 0)
+        return false;
+    return true;
+}
+
+double mySphere::intersectDistance(myVector3 const& origin, myVector3 const& direction) {
+    double a = direction * direction;
+    double b = 2 * direction * (origin - center);
+    double d = origin * origin - 2 * origin * center + center * center - radius * radius;
+
+    double delta = b * b - 4 * a * d;
+
+    if (delta < 0) {
+        return -1;
+    }
+    double t1 = (-b - my3d::sqrtf(delta)) / (2 * a);
+    double t2 = (-b + my3d::sqrtf(delta)) / (2 * a);
+
+    if (t1 < 0 && t2 < 0)
+        return -1;
+    if (t1 > 0 && t2 > 0)
+        return t1;
+    if (t1 < 0 && t2 > 0)
+        return t2;
+    return -1;
+}

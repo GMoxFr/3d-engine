@@ -69,6 +69,81 @@ bool myTriangle::intersect(myVector3 const& origin, myVector3 const& direction, 
     return true;
 }
 
+bool myTriangle::intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color) {
+    normal = this->normal;
+
+    if (std::abs(direction * normal) < EPSILON) {
+        return false;
+    }
+
+    double t = ((A - origin) * normal) / (direction * normal);
+
+    if (t < 0) {
+        return false;
+    }
+
+    intersection = origin + (t * direction);
+
+    double u = (AC_normal * (intersection - A)) / ABAC_magnitude;
+    double v = (AB_normal * (A - intersection)) / ACAB_magnitude;
+
+    if ((u < 0 || u > 1 || v < 0 || v > 1) || u + v > 1)
+        return false;
+    
+    color = hasTexture ? texture->getPixel(u, v) : getColor();
+
+    // Bump Map
+    if (hasBumpMap) {
+        double dhdu, dhdv;
+        bumpMap->bump(u, v, dhdu, dhdv);
+        normal = normal + (0.01 * (((B - A) ^ (dhdv * normal)) + ((C - A) ^ (dhdu * normal))));
+        normal.normalize();
+    }
+
+    return true;
+}
+
+bool myTriangle::intersect(myVector3 const& origin, myVector3 const& direction) {
+    if (std::abs(direction * normal) < EPSILON) {
+        return false;
+    }
+
+    double t = ((A - origin) * normal) / (direction * normal);
+
+    if (t < 0) {
+        return false;
+    }
+
+    myVector3 intersection = origin + (t * direction);
+
+    double u = (AC_normal * (intersection - A)) / ABAC_magnitude;
+    double v = (AB_normal * (A - intersection)) / ACAB_magnitude;
+
+    return !(u < 0 || u > 1 || v < 0 || v > 1) && u + v <= 1;
+}
+
+double myTriangle::intersectDistance(myVector3 const& origin, myVector3 const& direction) {
+    if (std::abs(direction * normal) < EPSILON) {
+        return -1;
+    }
+
+    double t = ((A - origin) * normal) / (direction * normal);
+
+    if (t < 0) {
+        return -1;
+    }
+
+    myVector3 intersection = origin + (t * direction);
+
+    double u = (AC_normal * (intersection - A)) / ABAC_magnitude;
+    double v = (AB_normal * (A - intersection)) / ACAB_magnitude;
+
+    if (u < 0 || u > 1 || v < 0 || v > 1 || u + v > 1)
+        return -1;
+
+    return t;
+}
+
 void myTriangle::precalculate() {
     normal = (B - A) ^ (C - A);
     normal.normalize();

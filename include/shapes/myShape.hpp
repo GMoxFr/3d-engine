@@ -100,20 +100,13 @@ class myShape {
 
                 double lightIntensity = 1.0;
                 std::vector<myVector3> directions = my3d::ringDirection(-light->getDirection());
-                // std::vector<myVector3> directions = my3d::randomizeDirection(-light->getDirection());
 
                 for(myVector3 const& dir : directions) {
                     bool blocked = false;
                     for (std::unique_ptr<myShape> const& shape : shapes) {
                         if (shape.get() == this) continue;
 
-                        myVector3 i;
-                        myVector3 n;
-                        myColor c;
-                        double u;
-                        double v;
-
-                        if (shape->intersect(pos, dir, i, n, c, u, v)) {
+                        if (shape->intersect(pos, dir)) {
                             blocked = true;
                             break;
                         }
@@ -130,4 +123,7 @@ class myShape {
 
         virtual void draw(myImage& I, std::vector<std::unique_ptr<myLight>> const& L) = 0;
         virtual bool intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color, double &u, double &v) = 0;
+        virtual bool intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color) = 0;
+        virtual bool intersect(myVector3 const& origin, myVector3 const& direction) = 0;
+        virtual double intersectDistance(myVector3 const& origin, myVector3 const& direction) = 0;
 };

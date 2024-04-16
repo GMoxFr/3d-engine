@@ -71,6 +71,10 @@ all:			erase full
 fast:			FLAGS += -O2 -march=native
 fast:			erase full
 
+profiling:		FLAGS += -pg -O2 -march=native
+profiling:		LIBRARIES += -pg
+profiling:		erase full
+
 full:			init $(MOBJ) $(OBJ)
 			@$(COMPILER) $(MOBJ) $(OBJ) -o $(NAME) $(LIBSPATH) $(LIBRARIES)	\
 			 2>> $(LOGDIR)/$(NAME) &&							\

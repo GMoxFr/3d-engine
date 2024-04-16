@@ -1,0 +1,39 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -0.5],
+            "intensity": 1
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Obj",
+            "obj": "assets/models/cube.obj",
+            "position": [200, 400, 360],
+            "color": [255, 0, 0],
+            "scale": 100,
+            "rotation": [45, 0, 0]
+        },
+        {
+            "type": "Sphere",
+            "center": [640, 1000, 360],
+            "radius": 240,
+            "texture": "earth-8k.jpg",
+            "bumpMap": "bump2.png"
+        },
+        {
+            "type": "Parallelogram",
+            "A": [-25600, -1000, 0],
+            "B": [38400, -1000, 0],
+            "C": [-25600, 15000, 0],
+            "color": [255, 255, 255]
+        }
+    ]
+}

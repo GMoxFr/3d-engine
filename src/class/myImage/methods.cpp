@@ -30,30 +30,25 @@ myColorWithMetadata myImage::handleBounce(myVector3 start, myVector3 rayDirectio
     myVector3 closestNormal;
     myColor closestColor;
     double minDistance = std::numeric_limits<double>::max();
-    myShape const* closestShape = nullptr;
+    double d = 0;
+    myShape* closestShape = nullptr;
+
+    double u;
+    double v;
 
     for (std::unique_ptr<myShape> const& shape: shapes) {
         if (shape.get() == baseShape) continue;
 
-        myVector3 intersection;
-        myVector3 normal;
-        myColor color;
-        double u;
-        double v;
-
-        if (shape->intersect(start, rayDirection, intersection, normal, color, u, v)) {
-            double distance = intersection.distanceTo(start);
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestIntersection = intersection;
-                closestNormal = normal;
-                closestColor = color;
-                closestShape = shape.get();
-            }
+        d = shape->intersectDistance(start, rayDirection);
+        if (d < minDistance && d > EPSILON) {
+            closestShape = shape.get();
+            minDistance = d;
         }
     }
 
     if (closestShape != nullptr) {
+        (*closestShape).intersect(start, rayDirection, closestIntersection, closestNormal, closestColor, u, v);
+
         myColorWithMetadata newColor;
         newColor.color = (*closestShape).applyLighting(closestIntersection, closestNormal, closestColor, lights, shapes);
         newColor.modified = true;

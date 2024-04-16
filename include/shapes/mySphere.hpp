@@ -16,4 +16,7 @@ class mySphere : public myShape {
 
         void draw(myImage& I, std::vector<std::unique_ptr<myLight>> const& L) override;
         bool intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color, double &u, double &v) override;
+        bool intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color) override;
+        bool intersect(myVector3 const& origin, myVector3 const& direction) override;
+        double intersectDistance(myVector3 const& origin, myVector3 const& direction) override;
 };

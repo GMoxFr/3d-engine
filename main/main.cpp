@@ -135,6 +135,7 @@ int main(int argc, char** argv) {
     for (std::thread& renderThread : renderThreads)
         renderThread.join();
     updateThread.join();
+    saveThread.join();
 
     return 0;
 }
