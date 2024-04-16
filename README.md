@@ -1,88 +1,84 @@
-# 3d-engine
+# 3D Engine Project
 
-## Description
+## Project Description
 
-The goal of this project is to create a custom 3d engine, using SFML for the window.
+This project is a custom 3D engine developed as part of the fourth-year curriculum at ESIEE Engineering School. It utilizes SFML solely for writing pixels to the window from a custom image buffer. Every aspect of the image generation process is 100% custom-made, including a bespoke Color class, which features a `.toSFML()` method for compatibility with SFML. The engine is crafted to be lightweight and educational, aiming to showcase the principles of 3D graphics programming in detail.
+
+## Quick Start
+
+Clone the repository, install dependencies, compile the project, and run a basic demo using the following commands:
+
+```bash
+git clone git@github.com:GMoxFr/3d-engine.git
+cd 3d-engine
+./install_dependencies.sh
+make
+./3d-engine -C assets/confs/sample_config.json
+```
 
 ## Installation
 
 ### Linux
 
-Here's what you need to do to work on this project on Linux.
-
 #### Dependencies
 
-- Build Essentials: `apt-get install build-essential`
-- SFML: `apt-get install libsfml-dev`
-- Make: `apt-get install make`
-- JSON for Modern C++: `apt-get install nlohmann-json3-dev`
+Install the required dependencies:
+```bash
+apt-get install build-essential libsfml-dev make nlohmann-json3-dev
+```
+Alternatively, run the provided script: 
+```bash
+./install_dependencies.sh
+```
 
-Or you can install all the dependencies using `apt-get install build-essential libsfml-dev make nlohmann-json3-dev` or execute the `install_dependencies.sh` script with `./install_dependencies.sh`.
+#### Compilation and Execution
 
-#### Compilation
-
-Compile the project:
-`make`
-
-To recompile the project (this will clean and then compile again):
-`make re`
-
-To remove compiled object files:
-`make clean`
-
-To remove both compiled object files and the executable:
-`make fclean`
-
-#### Execution
-
-Execute the project using
-`./3d-engine --help`
+Follow the standard make commands to compile and execute the project as detailed in the original guide.
 
 ### macOS
 
-Here's what you need to do to work on this project on macOS.
+Installation steps for macOS are similar to Linux, using Homebrew for package management.
 
 #### Dependencies
 
-- Command Line Tools: `xcode-select --install`
-- SFML: `brew install sfml`
-- OpenAL: `brew install openal-soft`
-- Make: `brew install make`
-- JSON for Modern C++: `brew install nlohmann-json`
+Install the required dependencies:
+```bash
+brew install sfml openal-soft make nlohmann-json
+```
+Alternatively, run the provided script: 
+```bash
+./install_dependencies.sh
+```
 
-Or you can install all the dependencies using `brew install sfml openal-soft make nlohmann-json` or execute the `install_dependencies.sh` script with `./install_dependencies.sh`.
+#### Compilation and Execution
 
-#### Compilation
-
-Compile the project:
-`make`
-
-To recompile the project (this will clean and then compile again):
-`make re`
-
-To remove compiled object files:
-`make clean`
-
-To remove both compiled object files and the executable:
-`make fclean`
-
-#### Execution
-
-Execute the project using
-`./3d-engine --help`
+Follow the standard make commands to compile and execute the project as detailed in the original guide.
 
 ## Development
 
-### Architecture
+The project's architecture is clearly structured with source files, headers, and error logs each in their respective directories. A detailed layout is provided in the original guide.
 
-The project is structured as follows:
- - The main function is in main/main.cpp
- - The source files are in src/\*\*/*.cpp
- - The header files are in include/\*\*/*.hpp
- - When compiling if errors are found they will be in errors/ directory
+### Configuration and Assets
 
-### Possible improvements
+- Demo configuration files are located in assets/confs/*.json.
+- Textures should be placed in assets/textures/* with .png or .jpg formats.
 
-- [x] For the Ray-Tracing, only check the closest object for each ray.
-- [ ] Upgrade shadows for the Ray-Tracing. Currently, the shadows are not very realistic as they're only compute if a shape is between the light and the object. It would be better to compute the shadows using the Ray-Tracing.
+### Possible Improvements and Roadmap
 
+- [x] Implementation of a more efficient raytracing algorithm (that avoid checking every object in the scene for a single ray but rather only the closest object that that ray intersects).
+- [ ] Add examples and screenshots to the README.
+- [x] Improved shadow computation for more realistic rendering.
+- [ ] Implementation of PointLight to complement the existing Directional and Ambient Light.
+- [ ] Documentation and API reference.
+
+### How to do Profiling
+
+To profile the project, we're using `gprof`. To do so, compile the project using `make profiling` and run the executable. Then, execute the following command:
+
+```bash
+gprof 3d-engine gmon.out > analysis.txt
+```
+
+## Examples and Screenshots
+
+TODO
