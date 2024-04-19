@@ -24,7 +24,6 @@ class myShape {
         double refraction;
 
     protected:
-        const myColor& getColor() const { return color; }
         void setColor(myColor const& clr) { color = clr; }
 
         const myTexture& getTexture() const { return *texture; }
@@ -34,7 +33,6 @@ class myShape {
         bool getHasTexture() const { return hasTexture; }
         bool getHasBumpMap() const { return hasBumpMap; }
 
-        double getDiffuse() const { return diffuse; }
         void setDiffuse(double d) { diffuse = d; }
 
         void setFresnel(double f) { fresnel = f; }
@@ -85,6 +83,8 @@ class myShape {
             bumpMap.reset();
         }
 
+        const myColor& getColor() const { return color; }
+        double getDiffuse() const { return diffuse; }
         double getFresnel() const { return fresnel; }
         double getReflection() const { return reflection; }
         double getRefraction() const { return refraction; }

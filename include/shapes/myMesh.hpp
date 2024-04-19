@@ -8,8 +8,9 @@
 
 class myMesh : public myShape {
     private:
-        std::vector<std::unique_ptr<myTriangle>> triangles;
+        std::vector<std::unique_ptr<myShape>> shapes;
         std::vector<std::unique_ptr<myParallelogram>> boundingBox;
+        bool computedBoundingBox = false;
 
     public:
         myMesh(myColor const& clr, double diffuse, double fresnel, double reflection, double refraction);
@@ -22,5 +23,5 @@ class myMesh : public myShape {
         double intersectDistance(myVector3 const& origin, myVector3 const& direction) override;
 
         void addTriangle(std::unique_ptr<myTriangle> triangle);
-        void computeBoundingBox();
+        void computeBoundingBox(int depth = 0);
 };
