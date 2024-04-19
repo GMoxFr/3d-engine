@@ -44,7 +44,7 @@ namespace config {
             } else if (shape["type"] == "Triangle") {
                 loadTriangle(shape, shapes);
             } else if (shape["type"] == "Obj") {
-                loadObj(shape, shapes);
+                loadMesh(shape, shapes);
             }
         }
     }
@@ -149,7 +149,7 @@ namespace config {
         shapes.push_back(std::move(t));
     }
 
-    void loadObj(const nlohmann::json& shape, std::vector<std::unique_ptr<myShape>>& shapes) {
+    void loadMesh(const nlohmann::json& shape, std::vector<std::unique_ptr<myShape>>& shapes) {
         std::string filename = shape["obj"].get<std::string>();
 
         std::vector<myVector3> vertices;
@@ -202,6 +202,14 @@ namespace config {
             vertex = vertex * scale + pos;
         }
 
+        std::unique_ptr<myMesh> m = std::make_unique<myMesh>(
+            myColor(shape["color"].get<std::vector<int>>()),
+            shape.contains("diffuse") ? shape["diffuse"].get<double>() : 1.0,
+            shape.contains("fresnel") ? shape["fresnel"].get<double>() : 0.0,
+            shape.contains("reflection") ? shape["reflection"].get<double>() : 0.0,
+            shape.contains("refraction") ? shape["refraction"].get<double>() : 0.0
+        );
+
         for (const auto& face : faces) {
             std::unique_ptr<myTriangle> t = std::make_unique<myTriangle>(
                 vertices[face[0] - 1],
@@ -214,8 +222,12 @@ namespace config {
                 shape.contains("refraction") ? shape["refraction"].get<double>() : 0.0
             );
 
-            shapes.push_back(std::move(t));
+            m->addTriangle(std::move(t));
         }
+
+        m->computeBoundingBox();
+
+        shapes.push_back(std::move(m));
     }
 
     void loadConfig(std::string_view const& filename, std::vector<std::unique_ptr<myShape>>& shapes, std::vector<std::unique_ptr<myLight>>& lights) {

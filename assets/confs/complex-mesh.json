@@ -1,0 +1,32 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -0.5],
+            "intensity": 1
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Obj",
+            "obj": "assets/models/complex.obj",
+            "position": [640, 400, 360],
+            "color": [55, 71, 0],
+            "scale": 0.5,
+            "rotation": [0, 0, 0]
+        },
+        {
+            "type": "Parallelogram",
+            "A": [-25600, -1000, 0],
+            "B": [38400, -1000, 0],
+            "C": [-25600, 15000, 0],
+            "color": [255, 255, 255]
+        }
+    ]
+}

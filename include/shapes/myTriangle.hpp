@@ -6,10 +6,6 @@
 
 class myTriangle : public myShape {
     private:
-        myVector3 A;
-        myVector3 B;
-        myVector3 C; 
-        
         myVector3 normal;
         myVector3 AB;
         myVector3 AC;
@@ -21,6 +17,10 @@ class myTriangle : public myShape {
         myVector3 AC_normal;
 
     public:
+        myVector3 A;
+        myVector3 B;
+        myVector3 C; 
+
         myTriangle(myVector3 A, myVector3 B, myVector3 C, myColor const& clr, double diffuse = 1.0, double fresnel = 1.0, double reflection = 0.0, double refraction = 0.0);
         myTriangle(myVector3 A, myVector3 B, myVector3 C, std::string const& texture, double diffuse = 1.0, double fresnel = 1.0, double reflection = 0.0, double refraction = 0.0);
         ~myTriangle() override = default;

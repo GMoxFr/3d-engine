@@ -16,6 +16,7 @@
 #include "mySphere.hpp"
 #include "myParallelogram.hpp"
 #include "myTriangle.hpp"
+#include "myMesh.hpp"
 #include "myAmbientLight.hpp"
 #include "myDirectionalLight.hpp"
 
@@ -27,5 +28,5 @@ namespace config {
     void loadSphere(nlohmann::json const& config, std::vector<std::unique_ptr<myShape>>& shapes);
     void loadParallelogram(nlohmann::json const& config, std::vector<std::unique_ptr<myShape>>& shapes);
     void loadTriangle(nlohmann::json const& config, std::vector<std::unique_ptr<myShape>>& shapes);
-    void loadObj(nlohmann::json const& config, std::vector<std::unique_ptr<myShape>>& shapes);
+    void loadMesh(nlohmann::json const& config, std::vector<std::unique_ptr<myShape>>& shapes);
 }
