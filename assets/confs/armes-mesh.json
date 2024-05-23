@@ -15,19 +15,11 @@
     "shapes": [
         {
             "type": "Obj",
-            "obj": "assets/models/xm148.obj",
+            "obj": "assets/models/armes.obj",
             "position": [640, 400, 360],
-            "color": [55, 71, 0],
-            "scale": 10,
-            "rotation": [90, 0, 0]
-        },
-        {
-            "type": "Obj",
-            "obj": "assets/models/xm177.obj",
-            "position": [640, 400, 360],
-            "color": [255, 255, 255],
-            "scale": 10,
-            "rotation": [90, 0, 0]
+            "color": [255, 215, 0],
+            "scale": 65,
+            "rotation": [70, 180, 30]
         },
         {
             "type": "Parallelogram",

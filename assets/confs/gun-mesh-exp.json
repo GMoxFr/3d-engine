@@ -15,26 +15,11 @@
     "shapes": [
         {
             "type": "Obj",
-            "obj": "assets/models/xm148.obj",
-            "position": [640, 400, 360],
-            "color": [55, 71, 0],
-            "scale": 10,
-            "rotation": [90, 0, 0]
-        },
-        {
-            "type": "Obj",
             "obj": "assets/models/xm177.obj",
             "position": [640, 400, 360],
             "color": [255, 255, 255],
-            "scale": 10,
+            "scale": 30,
             "rotation": [90, 0, 0]
-        },
-        {
-            "type": "Parallelogram",
-            "A": [-25600, -1000, 0],
-            "B": [38400, -1000, 0],
-            "C": [-25600, 15000, 0],
-            "color": [255, 255, 255]
         }
     ]
 }
