@@ -301,10 +301,6 @@ bool isTriangleInsideBox(const myTriangle &triangle, const myVector3 &min, const
 
 void myMesh::computeBoundingBox(int depth)
 {
-    for (int i = 0; i < depth; i++)
-        printf("\t");
-    printf("Computing bounding box at depth %d\n", depth);
-
     // Compute the bounding box of the mesh from all the shapes
     // The goals is to compute 6 parallelograms that will form the bounding box
 
@@ -418,8 +414,4 @@ void myMesh::computeBoundingBox(int depth)
         for (int i = 0; i < 8; i++)
             shapes.push_back(std::move(subdivideShapes[i]));
     }
-
-    for (int i = 0; i < depth; i++)
-        printf("\t");
-    printf("Bounding box computed at depth %d\n", depth);
 }
