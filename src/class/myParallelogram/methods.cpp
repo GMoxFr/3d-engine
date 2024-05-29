@@ -1,12 +1,15 @@
 #include "myParallelogram.hpp"
 
-void myParallelogram::draw(myImage& I, std::vector<std::unique_ptr<myLight>> const& L) {
+void myParallelogram::draw(myImage &I, std::vector<std::unique_ptr<myLight>> const &L)
+{
     const int steps = 2000;
-    for (int i = 0; i < steps; i++) {
+    for (int i = 0; i < steps; i++)
+    {
         double u = static_cast<double>(i) / steps;
-        for(int j = 0; j < steps; j++) {
+        for (int j = 0; j < steps; j++)
+        {
             double v = static_cast<double>(j) / steps;
-            
+
             myVector3 pos = A + (u * (B - A)) + (v * (C - A));
 
             // Object
@@ -17,7 +20,8 @@ void myParallelogram::draw(myImage& I, std::vector<std::unique_ptr<myLight>> con
             myColor workingColor = getHasTexture() ? getTexture().getPixel(u, v) : getColor();
 
             // Bump Map
-            if (getHasBumpMap()) {
+            if (getHasBumpMap())
+            {
                 double dhdu = 0;
                 double dhdv = 0;
                 getBumpMap().bump(u, v, dhdu, dhdv);
@@ -37,16 +41,19 @@ void myParallelogram::draw(myImage& I, std::vector<std::unique_ptr<myLight>> con
     }
 }
 
-bool myParallelogram::intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color, double &u, double &v) {
+bool myParallelogram::intersect(myVector3 const &origin, myVector3 const &direction, myVector3 &intersection, myVector3 &normal, myColor &color, double &u, double &v)
+{
     normal = this->normal;
 
-    if (std::abs(direction * normal) < EPSILON) {
+    if (std::abs(direction * normal) < EPSILON)
+    {
         return false;
     }
 
     double t = ((A - origin) * normal) / (direction * normal);
 
-    if (t < 0) {
+    if (t < 0)
+    {
         return false;
     }
 
@@ -57,11 +64,12 @@ bool myParallelogram::intersect(myVector3 const& origin, myVector3 const& direct
 
     if (u < 0 || u > 1 || v < 0 || v > 1)
         return false;
-    
+
     color = hasTexture ? texture->getPixel(u, v) : getColor();
 
     // Bump Map
-    if (hasBumpMap) {
+    if (hasBumpMap)
+    {
         double dhdu, dhdv;
         bumpMap->bump(u, v, dhdu, dhdv);
         normal = normal + (0.01 * (((B - A) ^ (dhdv * normal)) + ((C - A) ^ (dhdu * normal))));
@@ -71,16 +79,19 @@ bool myParallelogram::intersect(myVector3 const& origin, myVector3 const& direct
     return true;
 }
 
-bool myParallelogram::intersect(myVector3 const& origin, myVector3 const& direction, myVector3& intersection, myVector3& normal, myColor& color) {
+bool myParallelogram::intersect(myVector3 const &origin, myVector3 const &direction, myVector3 &intersection, myVector3 &normal, myColor &color)
+{
     normal = this->normal;
 
-    if (std::abs(direction * normal) < EPSILON) {
+    if (std::abs(direction * normal) < EPSILON)
+    {
         return false;
     }
 
     double t = ((A - origin) * normal) / (direction * normal);
 
-    if (t < 0) {
+    if (t < 0)
+    {
         return false;
     }
 
@@ -91,11 +102,12 @@ bool myParallelogram::intersect(myVector3 const& origin, myVector3 const& direct
 
     if (u < 0 || u > 1 || v < 0 || v > 1)
         return false;
-    
+
     color = hasTexture ? texture->getPixel(u, v) : getColor();
 
     // Bump Map
-    if (hasBumpMap) {
+    if (hasBumpMap)
+    {
         double dhdu, dhdv;
         bumpMap->bump(u, v, dhdu, dhdv);
         normal = normal + (0.01 * (((B - A) ^ (dhdv * normal)) + ((C - A) ^ (dhdu * normal))));
@@ -105,14 +117,17 @@ bool myParallelogram::intersect(myVector3 const& origin, myVector3 const& direct
     return true;
 }
 
-bool myParallelogram::intersect(myVector3 const& origin, myVector3 const& direction) {
-    if (std::abs(direction * normal) < EPSILON) {
+bool myParallelogram::intersect(myVector3 const &origin, myVector3 const &direction)
+{
+    if (std::abs(direction * normal) < EPSILON)
+    {
         return false;
     }
 
     double t = ((A - origin) * normal) / (direction * normal);
 
-    if (t < 0) {
+    if (t < 0)
+    {
         return false;
     }
 
@@ -124,14 +139,17 @@ bool myParallelogram::intersect(myVector3 const& origin, myVector3 const& direct
     return u >= 0 && u <= 1 && v >= 0 && v <= 1;
 }
 
-double myParallelogram::intersectDistance(myVector3 const& origin, myVector3 const& direction) {
-    if (std::abs(direction * normal) < EPSILON) {
+double myParallelogram::intersectDistance(myVector3 const &origin, myVector3 const &direction)
+{
+    if (std::abs(direction * normal) < EPSILON)
+    {
         return -1;
     }
 
     double t = ((A - origin) * normal) / (direction * normal);
 
-    if (t < 0) {
+    if (t < 0)
+    {
         return -1;
     }
 
@@ -146,7 +164,8 @@ double myParallelogram::intersectDistance(myVector3 const& origin, myVector3 con
     return t;
 }
 
-void myParallelogram::precalculate() {
+void myParallelogram::precalculate()
+{
     normal = (B - A) ^ (C - A);
     normal.normalize();
 

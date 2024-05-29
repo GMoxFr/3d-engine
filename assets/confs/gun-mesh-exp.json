@@ -1,0 +1,25 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -0.5],
+            "intensity": 1
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Obj",
+            "obj": "assets/models/xm177.obj",
+            "position": [640, 400, 360],
+            "color": [255, 255, 255],
+            "scale": 30,
+            "rotation": [90, 0, 0]
+        }
+    ]
+}

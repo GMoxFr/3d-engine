@@ -1,0 +1,320 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.2
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "intensity": 1,
+            "direction": [1, 1, -0.5]
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Parallelogram",
+            "A": [-384, 1024, -100],
+            "B": [1664, 1024, -100],
+            "C": [-384, 3072, 1000],
+            "texture": "chess/checkerboard.png",
+            "reflection": 0.7
+        },
+        {
+            "type": "Parallelogram",
+            "A": [-2430, -1024, -1201],
+            "B": [3711, -1024, -1201],
+            "C": [-2430, 5120, 2099],
+            "texture": "chess/back-3.png"
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/tour-g.obj",
+            "position": [-256, 2976, 925],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/cavalier-g.obj",
+            "position": [-256, 2714, 788],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/fou-g.obj",
+            "position": [-256, 2451, 651],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/reine-g.obj",
+            "position": [-256, 2189, 514],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/roi-g.obj",
+            "position": [-256, 1927, 376],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/fou-g.obj",
+            "position": [-256, 1665, 239],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/cavalier-g.obj",
+            "position": [-256, 1402, 102],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/tour-g.obj",
+            "position": [-256, 1140, -35],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-g.obj",
+            "position": [1, 2976, 925],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-g.obj",
+            "position": [1, 2714, 788],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-g.obj",
+            "position": [1, 2451, 651],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-g.obj",
+            "position": [1, 2189, 514],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-g.obj",
+            "position": [1, 1927, 376],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-g.obj",
+            "position": [1, 1665, 239],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-g.obj",
+            "position": [1, 1402, 102],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-g.obj",
+            "position": [1, 1140, -35],
+            "color": [255, 255, 255],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/tour-d.obj",
+            "position": [1540, 2976, 925],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/cavalier-d.obj",
+            "position": [1540, 2714, 788],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/fou-d.obj",
+            "position": [1540, 2451, 651],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/roi-d.obj",
+            "position": [1540, 2189, 514],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/reine-d.obj",
+            "position": [1540, 1927, 376],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/fou-d.obj",
+            "position": [1540, 1665, 239],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/cavalier-d.obj",
+            "position": [1540, 1402, 102],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/tour-d.obj",
+            "position": [1540, 1140, -35],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-d.obj",
+            "position": [1283, 2976, 925],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-d.obj",
+            "position": [1283, 2714, 788],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-d.obj",
+            "position": [1283, 2451, 651],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-d.obj",
+            "position": [1283, 2189, 514],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-d.obj",
+            "position": [1283, 1927, 376],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-d.obj",
+            "position": [1283, 1665, 239],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-d.obj",
+            "position": [1283, 1402, 102],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/chess/pion-d.obj",
+            "position": [1283, 1140, -35],
+            "color": [40, 40, 40],
+            "scale": 2500,
+            "rotation": [118.21, 0, 0],
+            "reflection": 0.1
+        }
+    ]
+}

@@ -25,7 +25,7 @@
             "type": "Obj",
             "obj": "assets/models/xm177.obj",
             "position": [640, 400, 360],
-            "color": [55, 71, 0],
+            "color": [255, 255, 255],
             "scale": 10,
             "rotation": [90, 0, 0]
         },

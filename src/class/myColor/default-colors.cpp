@@ -17,4 +17,6 @@ const myColor myColor::GOLD(255, 215, 0);
 const myColor myColor::SILVER(192, 192, 192);
 const myColor myColor::GRAY(128, 128, 128);
 
+const myColor myColor::TRANSPARENT(0, 0, 0, 0);
+
 const myColor myColor::AMBIENT_LIGHT(0.1, 0.1, 0.1);

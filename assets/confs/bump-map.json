@@ -1,0 +1,30 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [-1, 1, -1],
+            "intensity": 1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -1],
+            "intensity": 0.3
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Sphere",
+            "center": [640, 1000, 360],
+            "radius": 240,
+            "texture": "tiles_0119_color_1k.jpg",
+            "bumpMap": "tiles_0119_height_1k.png"
+        }
+    ]
+}

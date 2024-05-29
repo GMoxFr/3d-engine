@@ -25,7 +25,8 @@
 #include "myAmbientLight.hpp"
 #include "myDirectionalLight.hpp"
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
     //////////////////////
     // Argument Parsing //
     //////////////////////
@@ -33,8 +34,11 @@ int main(int argc, char** argv) {
     std::string saveFilename;
     std::string configFilename;
     int threads = 4;
+    bool octree = false;
+    bool display = true;
 
-    if (my3d::argumentParser(argc, argv, configFilename, saveFilename, threads) == 1) {
+    if (my3d::argumentParser(argc, argv, configFilename, saveFilename, threads, octree, display) == 1)
+    {
         return 1;
     }
 
@@ -42,14 +46,18 @@ int main(int argc, char** argv) {
     // Global Initialization //
     ///////////////////////////
 
-    myImage I(WINDOW_WIDTH, WINDOW_HEIGHT, myColor::BLACK);
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "3D Engine");
+    myImage I(WINDOW_WIDTH, WINDOW_HEIGHT, myColor::TRANSPARENT);
     sf::Texture texture;
     sf::Sprite sprite;
-    
+
     std::vector<std::unique_ptr<myShape>> shapes;
     std::vector<std::unique_ptr<myLight>> lights;
-    config::loadConfig(configFilename, shapes, lights);
+    if (config::loadConfig(configFilename, shapes, lights, octree) == 1)
+        return 1;
+
+    sf::RenderWindow window;
+    if (display)
+        window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Rendering : " + configFilename);
 
     std::atomic<bool> running = true;
     std::atomic<int> done = 0;
@@ -62,13 +70,18 @@ int main(int argc, char** argv) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
+    int state = 0;
+    auto lastUpdate = std::chrono::high_resolution_clock::now();
+
     /////////////////////////////
     // 3D Engine Render Thread //
     /////////////////////////////
 
-    for (int k = 0; k < threads; ++k) {
+    for (int k = 0; k < threads; ++k)
+    {
         int extraPixels = 0;
-        if (extraPixelCount < leftoverPixels) {
+        if (extraPixelCount < leftoverPixels)
+        {
             extraPixels = 1;
             extraPixelCount++;
         }
@@ -76,65 +89,82 @@ int main(int argc, char** argv) {
         int startX = k * widthPerThread;
         int endX = startX + widthPerThread + extraPixels;
 
-        renderThreads.emplace_back([&I, &shapes, &lights, &done, startX, endX]() {
+        renderThreads.emplace_back([&I, &shapes, &lights, &done, startX, endX]()
+                                   {
             I.rayCast(myVector3::CAMERA, shapes, lights, startX, 0, endX, WINDOW_HEIGHT);
-            done++;
-        });
+            done++; });
     }
 
-    std::thread saveThread([&saving, &done, &I, &saveFilename, &threads, &start]() {
-        while (saving) {
-            if (done == threads) {
-                std::cout << "Rendering took " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() << "ms" << std::endl;
-                if (!saveFilename.empty()) {
-                    std::cout << "Saving image to " << saveFilename << std::endl;
+    std::thread saveThread([&saving, &done, &I, &saveFilename, &threads, &start, &state, &lastUpdate]()
+                           {
+        while (saving.load())
+        {
+            my3d::renderingLog(state, lastUpdate);
+
+            if (done == threads)
+            {
+                std::cout << CBLUE << "\rRendering took " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() << "ms" << CRESET << std::endl;
+                if (!saveFilename.empty())
+                {
+                    std::cout << CPURPLE << "Saving image to " << saveFilename << CRESET << std::flush;
                     I.toPNG(saveFilename);
+                    std::cout << CBLUE << "\r" << std::string(200, ' ') << "\r" << "Saved image to " << saveFilename << CRESET << std::endl;
                 }
                 saving = false;
             }
-        }
-    });
+        } });
 
     //////////////////////////
     // Window Update Thread //
     //////////////////////////
 
-    std::thread updateThread([&running, &texture, &I]() {
-        while(running) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(8));
-            texture.loadFromImage(I.toSFMLImage());
-        }
-    });
+    std::unique_ptr<std::thread> updateThread;
+
+    if (display)
+    {
+        updateThread = std::make_unique<std::thread>([&running, &texture, &I]()
+                                                     {
+            while(running.load()) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(8));
+                texture.loadFromImage(I.toSFMLImage());
+            } });
+    }
 
     /////////////////////////
     // SFML Window Handler //
     /////////////////////////
 
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                window.close();
-            }
+    if (display)
+    {
+        while (window.isOpen())
+        {
+            sf::Event event;
+            while (window.pollEvent(event))
+                if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                    window.close();
+
+            // Load image into texture and associate with sprite
+            sprite.setTexture(texture, true);
+
+            // Draw the sprite
+            window.clear();
+            window.draw(sprite);
+            window.display();
         }
-
-        // Load image into texture and associate with sprite
-        sprite.setTexture(texture, true);
-
-        // Draw the sprite
-        window.clear();
-        window.draw(sprite);
-        window.display();
     }
+    else
+        while (done < threads)
+            (void)0;
 
     /////////////////////////
     // Thread Termination  //
     /////////////////////////
 
     running = false;
-    for (std::thread& renderThread : renderThreads)
+    for (std::thread &renderThread : renderThreads)
         renderThread.join();
-    updateThread.join();
+    if (updateThread && updateThread->joinable())
+        updateThread->join();
     saveThread.join();
 
     return 0;

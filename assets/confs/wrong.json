@@ -1,0 +1,34 @@
+{
+    "lights": [
+        {
+            "ntype": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [-1, 1, -1],
+            "intensity": 1
+        },
+        {
+            "type": "DirectionalLight",
+            "nocolor": [255, 255, 255],
+            "direction": [1, 1, -1],
+            "intensity": 0.3
+        },
+        {
+            "type": "NotDirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -1],
+            "intensity": 0.3
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Sphere",
+            "center": [640, 1000, 360],
+            "radius": 240
+        }
+    ]
+}

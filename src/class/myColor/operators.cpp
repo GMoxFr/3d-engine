@@ -1,7 +1,8 @@
 #include "myColor.hpp"
 
 // Assignment operator for sf::Color
-myColor& myColor::operator=(const sf::Color& c) {
+myColor &myColor::operator=(const sf::Color &c)
+{
     r = static_cast<double>(c.r) / 255.0;
     g = static_cast<double>(c.g) / 255.0;
     b = static_cast<double>(c.b) / 255.0;
@@ -11,7 +12,8 @@ myColor& myColor::operator=(const sf::Color& c) {
 }
 
 // Addition operator
-myColor myColor::operator+(const myColor& c) const {
+myColor myColor::operator+(const myColor &c) const
+{
     myColor result;
     result.r = my3d::clamp(r + c.r);
     result.g = my3d::clamp(g + c.g);
@@ -22,7 +24,8 @@ myColor myColor::operator+(const myColor& c) const {
 }
 
 // Subtraction operator
-myColor myColor::operator-(const myColor& c) const {
+myColor myColor::operator-(const myColor &c) const
+{
     myColor result;
     result.r = my3d::clamp(r - c.r);
     result.g = my3d::clamp(g - c.g);
@@ -33,7 +36,8 @@ myColor myColor::operator-(const myColor& c) const {
 }
 
 // Multiplication operator
-myColor myColor::operator*(const myColor& c) const {
+myColor myColor::operator*(const myColor &c) const
+{
     myColor result;
     result.r = my3d::clamp(r * c.r);
     result.g = my3d::clamp(g * c.g);
@@ -44,7 +48,8 @@ myColor myColor::operator*(const myColor& c) const {
 }
 
 // Addition assignment operator
-myColor& myColor::operator+=(const myColor& c) {
+myColor &myColor::operator+=(const myColor &c)
+{
     r = my3d::clamp(r + c.r);
     g = my3d::clamp(g + c.g);
     b = my3d::clamp(b + c.b);
@@ -54,7 +59,8 @@ myColor& myColor::operator+=(const myColor& c) {
 }
 
 // Subtraction assignment operator
-myColor& myColor::operator-=(const myColor& c) {
+myColor &myColor::operator-=(const myColor &c)
+{
     r = my3d::clamp(r - c.r);
     g = my3d::clamp(g - c.g);
     b = my3d::clamp(b - c.b);
@@ -64,7 +70,8 @@ myColor& myColor::operator-=(const myColor& c) {
 }
 
 // Multiplication assignment operator
-myColor& myColor::operator*=(const myColor& c) {
+myColor &myColor::operator*=(const myColor &c)
+{
     r = my3d::clamp(r * c.r);
     g = my3d::clamp(g * c.g);
     b = my3d::clamp(b * c.b);
@@ -74,7 +81,8 @@ myColor& myColor::operator*=(const myColor& c) {
 }
 
 // Multiplication operator with a double
-myColor myColor::operator*(double factor) const {
+myColor myColor::operator*(double factor) const
+{
     myColor result;
     result.r = my3d::clamp(r * factor);
     result.g = my3d::clamp(g * factor);
@@ -85,8 +93,10 @@ myColor myColor::operator*(double factor) const {
 }
 
 // Division operator with a double
-myColor myColor::operator/(double factor) const {
-    if (std::abs(factor) < EPSILON) {
+myColor myColor::operator/(double factor) const
+{
+    if (std::abs(factor) < EPSILON)
+    {
         throw DivisionByZeroException();
     }
     myColor result;
@@ -99,7 +109,8 @@ myColor myColor::operator/(double factor) const {
 }
 
 // Multiplication assignment operator with a double
-myColor& myColor::operator*=(double factor) {
+myColor &myColor::operator*=(double factor)
+{
     r = my3d::clamp(r * factor);
     g = my3d::clamp(g * factor);
     b = my3d::clamp(b * factor);
@@ -109,8 +120,10 @@ myColor& myColor::operator*=(double factor) {
 }
 
 // Division assignment operator with a double
-myColor& myColor::operator/=(double factor) {
-    if (std::abs(factor) < EPSILON) {
+myColor &myColor::operator/=(double factor)
+{
+    if (std::abs(factor) < EPSILON)
+    {
         throw DivisionByZeroException();
     }
     r = my3d::clamp(r / factor);
@@ -122,17 +135,20 @@ myColor& myColor::operator/=(double factor) {
 }
 
 // Equality operator
-bool operator==(const myColor& lhs, const myColor& rhs) {
+bool operator==(const myColor &lhs, const myColor &rhs)
+{
     return (lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b && lhs.a == rhs.a);
 }
 
 // Inequality operator
-bool operator!=(const myColor& lhs, const myColor& rhs) {
+bool operator!=(const myColor &lhs, const myColor &rhs)
+{
     return !(lhs == rhs);
 }
 
 // Negation operator
-myColor myColor::operator-() const {
+myColor myColor::operator-() const
+{
     myColor result;
     result.r = 1.0 - r;
     result.g = 1.0 - g;
@@ -143,17 +159,18 @@ myColor myColor::operator-() const {
 }
 
 // Output stream operator
-std::ostream& operator<<(std::ostream& os, const myColor& c) {
+std::ostream &operator<<(std::ostream &os, const myColor &c)
+{
     os << "Color(" << (int)c.r << ", " << (int)c.g << ", " << (int)c.b << ", " << (int)c.a << ")";
     return os;
 }
 
 // Conversion operator to sf::Color
-myColor::operator sf::Color() const {
+myColor::operator sf::Color() const
+{
     return sf::Color(
         static_cast<u_int8_t>(r * 255.0),
         static_cast<u_int8_t>(g * 255.0),
         static_cast<u_int8_t>(b * 255.0),
-        static_cast<u_int8_t>(a * 255.0)
-    );
+        static_cast<u_int8_t>(a * 255.0));
 }
