@@ -96,13 +96,15 @@ namespace my3d
 
     void displayHelp(std::string const &programName)
     {
-        std::cout << "Usage: " << programName << " <arguments> [options]" << std::endl;
-        std::cout << "Arguments:" << std::endl;
-        std::cout << "  -C, --config <filename>\tLoad the scene from a JSON file" << std::endl;
-        std::cout << "Options:" << std::endl;
-        std::cout << "  -h, --help\t\t\tShow this help message" << std::endl;
-        std::cout << "  -S, --save <filename>\t\tSave the image to a PNG file" << std::endl;
-        std::cout << "  -T, --threads <number>\tUse a specific number of threads for rendering (default is 4)" << std::endl;
+        std::cout << CYELLOW << "Usage: " << programName << CGREEN << " <arguments>" << CCYAN << " [options]" << CRESET << std::endl;
+        std::cout << CPURPLE << "Arguments:" << std::endl;
+        std::cout << CGREEN << "  -C, --config <filename>\tLoad the scene from a JSON file" << CRESET << std::endl;
+        std::cout << CPURPLE << "Options:" << std::endl;
+        std::cout << CCYAN << "  -h, --help\t\t\tShow this help message" << CRESET << std::endl;
+        std::cout << CCYAN << "  -S, --save <filename>\t\tSave the image to a PNG file" << CRESET << std::endl;
+        std::cout << CCYAN << "  -T, --threads <number>\tUse a specific number of threads for rendering (default is 4)" << CRESET << std::endl;
+        std::cout << CCYAN << "  -O, --octree\t\t\tEnable the use of an octree for faster high-density mesh rendering" << CRESET << std::endl;
+        std::cout << CCYAN << "  --no-display\t\t\tDo not open a window to display the image" << CRESET << std::endl;
     }
 
     bool handleSAVE(int &i, const char **argv, int argc, std::string &filename)
@@ -113,14 +115,14 @@ namespace my3d
             filename = argv[i];
             if (!my3d::isValidExtension(filename, ".png"))
             {
-                std::cout << "Error: The provided filename does not have a .png or .PNG extension." << std::endl;
+                std::cout << CRED << "Error: The provided filename does not have a .png or .PNG extension." << CRESET << std::endl;
                 return false;
             }
             return true;
         }
         else
         {
-            std::cout << "Error: missing filename after " << argv[i - 1] << std::endl;
+            std::cout << CRED << "Error: missing filename after " << argv[i - 1] << CRESET << std::endl;
             return false;
         }
     }
@@ -133,14 +135,14 @@ namespace my3d
             filename = argv[i];
             if (!my3d::isValidExtension(filename, ".json"))
             {
-                std::cout << "Error: The provided filename does not have a .png or .PNG extension." << std::endl;
+                std::cout << CRED << "Error: The provided filename does not have a .json or .JSON extension." << CRESET << std::endl;
                 return false;
             }
             return true;
         }
         else
         {
-            std::cout << "Error: missing filename after " << argv[i - 1] << std::endl;
+            std::cout << CRED << "Error: missing filename after " << argv[i - 1] << CRESET << std::endl;
             return false;
         }
     }
@@ -153,19 +155,19 @@ namespace my3d
             threads = std::stoi(argv[i]);
             if (threads <= 0)
             {
-                std::cout << "Error: The number of threads must be greater than 0." << std::endl;
+                std::cout << CRED << "Error: The number of threads must be greater than 0." << CRESET << std::endl;
                 return false;
             }
             return true;
         }
         else
         {
-            std::cout << "Error: missing number of threads after " << argv[i - 1] << std::endl;
+            std::cout << CRED << "Error: missing number of threads after " << argv[i - 1] << CRESET << std::endl;
             return false;
         }
     }
 
-    int argumentParser(int argc, char **argv, std::string &configFilename, std::string &saveFilename, int &threads)
+    int argumentParser(int argc, char **argv, std::string &configFilename, std::string &saveFilename, int &threads, bool &octree, bool &display)
     {
         std::map<std::string, ArgumentType, std::less<>> argumentMap = {
             {"-h", ArgumentType::HELP},
@@ -175,7 +177,10 @@ namespace my3d
             {"-C", ArgumentType::CONFIG},
             {"--config", ArgumentType::CONFIG},
             {"-T", ArgumentType::THREADS},
-            {"--threads", ArgumentType::THREADS}};
+            {"--threads", ArgumentType::THREADS},
+            {"--octree", ArgumentType::OCTREE},
+            {"-O", ArgumentType::OCTREE},
+            {"--no-display", ArgumentType::DISPLAY}};
 
         int i = 1;
         while (i < argc)
@@ -201,9 +206,17 @@ namespace my3d
                     return 1;
                 break;
 
+            case ArgumentType::OCTREE:
+                octree = true;
+                break;
+
+            case ArgumentType::DISPLAY:
+                display = false;
+                break;
+
             default:
-                std::cout << "Error: Unknown argument " << arg << std::endl;
-                std::cout << "Try '" << argv[0] << " --help' for more information" << std::endl;
+                std::cout << CRED << "Error: Unknown argument " << arg << CRESET << std::endl;
+                std::cout << CYELLOW << "Try '" << argv[0] << " --help' for more information" << CRESET << std::endl;
                 return 1;
             }
             i++;
@@ -211,10 +224,24 @@ namespace my3d
 
         if (configFilename.empty())
         {
-            std::cout << "Error: No config file provided" << std::endl;
-            std::cout << "Try '" << argv[0] << " --help' for more information" << std::endl;
+            std::cout << CRED << "Error: No config file provided" << CRESET << std::endl;
+            std::cout << CYELLOW << "Try '" << argv[0] << " --help' for more information" << CRESET << std::endl;
             return 1;
         }
+
+        // COUT a recap of every parameters
+        std::cout << CBLUE << "3D Engine Rendering Parameters:" << CRESET << std::endl;
+        std::cout << CBLUE << "\t[x] CONFIG GIVEN" << CRESET << std::endl;
+        std::cout << CBLUE << "\t\tConfig file: " << configFilename << CRESET << std::endl;
+        std::cout << CBLUE << "\t[" << (saveFilename.empty() ? " " : "x") << "] SAVING IMAGE" << CRESET << std::endl;
+        if (!saveFilename.empty())
+            std::cout << CBLUE << "\t\tSave file: " << saveFilename << CRESET << std::endl;
+        std::cout << CBLUE << "\t[" << (threads > 1 ? "x" : " ") << "] MULTITHREADING" << CRESET << std::endl;
+        if (threads > 1)
+            std::cout << CBLUE << "\t\tThreads: " << threads << CRESET << std::endl;
+        std::cout << CBLUE << "\t[" << (octree ? "x" : " ") << "] OCTREE" << CRESET << std::endl;
+        std::cout << CBLUE << "\t[" << (display ? "x" : " ") << "] DISPLAY" << CRESET << std::endl
+                  << std::endl;
 
         return 0;
     }
@@ -271,6 +298,36 @@ namespace my3d
         }
 
         return directions;
+    }
+
+    void renderingLog(int &state, std::chrono::_V2::system_clock::time_point &lastUpdate)
+    {
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - lastUpdate).count() > 100)
+        {
+            std::cout << CPURPLE;
+
+            switch (state)
+            {
+            case 0:
+                std::cout << "\rRendering [-]" << CRESET << std::flush;
+                state = 1;
+                break;
+            case 1:
+                std::cout << "\rRendering [\\]" << CRESET << std::flush;
+                state = 2;
+                break;
+            case 2:
+                std::cout << "\rRendering [|]" << CRESET << std::flush;
+                state = 3;
+                break;
+            case 3:
+                std::cout << "\rRendering [/]" << CRESET << std::flush;
+                state = 0;
+                break;
+            }
+
+            lastUpdate = std::chrono::high_resolution_clock::now();
+        }
     }
 
     // std::vector<myVector3> randomizeDirection(const myVector3& direction) {

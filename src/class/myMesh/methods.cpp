@@ -299,7 +299,7 @@ bool isTriangleInsideBox(const myTriangle &triangle, const myVector3 &min, const
     return false;
 }
 
-void myMesh::computeBoundingBox(int depth)
+void myMesh::computeBoundingBox(int depth, bool octree)
 {
     // Compute the bounding box of the mesh from all the shapes
     // The goals is to compute 6 parallelograms that will form the bounding box
@@ -349,7 +349,7 @@ void myMesh::computeBoundingBox(int depth)
         computedBoundingBox = true;
     }
 
-    if (shapes.size() > 750 && depth < 25)
+    if (shapes.size() > 750 && depth < 25 && octree)
     {
         myVector3 center = myVector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
 

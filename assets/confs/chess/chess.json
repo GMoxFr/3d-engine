@@ -26,7 +26,7 @@
             "A": [-2430, -1024, -1201],
             "B": [3711, -1024, -1201],
             "C": [-2430, 5120, 2099],
-            "texture": "chess/back.png"
+            "texture": "chess/back-3.png"
         },
         {
             "type": "Obj",
@@ -201,7 +201,7 @@
         },
         {
             "type": "Obj",
-            "obj": "assets/models/chess/reine-d.obj",
+            "obj": "assets/models/chess/roi-d.obj",
             "position": [1540, 2189, 514],
             "color": [40, 40, 40],
             "scale": 2500,
@@ -210,7 +210,7 @@
         },
         {
             "type": "Obj",
-            "obj": "assets/models/chess/roi-d.obj",
+            "obj": "assets/models/chess/reine-d.obj",
             "position": [1540, 1927, 376],
             "color": [40, 40, 40],
             "scale": 2500,

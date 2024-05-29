@@ -76,5 +76,7 @@ public:
     static const myColor SILVER;
     static const myColor GRAY;
 
+    static const myColor TRANSPARENT;
+
     static const myColor AMBIENT_LIGHT;
 };
