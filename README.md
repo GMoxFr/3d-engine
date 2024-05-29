@@ -80,7 +80,7 @@ make clean # Clean the project object files
 make fclean # Clean the project and remove the executable
 
 # Additionally, you can compile the project with optimizations using the following command:
-make fast # Compile the project with optimizations flags (I recommend using the -j flag to speed up the compilation)
+make fast
 ```
 
 ### macOS
