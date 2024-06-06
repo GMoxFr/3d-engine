@@ -299,16 +299,348 @@ void myMesh::addTriangle(std::unique_ptr<myTriangle> triangle)
 // 	return false;
 // }
 
+// const double epsilon = 1e-6;
+
+// bool tR(const myVector3 &point, const myVector3 &center) { return (point.x - center.x) > epsilon; }
+// bool tL(const myVector3 &point, const myVector3 &center) { return (point.x - center.x) < -epsilon; }
+// bool tU(const myVector3 &point, const myVector3 &center) { return (point.y - center.y) > epsilon; }
+// bool tD(const myVector3 &point, const myVector3 &center) { return (point.y - center.y) < -epsilon; }
+// bool tF(const myVector3 &point, const myVector3 &center) { return (point.z - center.z) > epsilon; }
+// bool tB(const myVector3 &point, const myVector3 &center) { return (point.z - center.z) < -epsilon; }
+
+// void myMesh::computeBoundingBox(int depth, bool octree)
+// {
+// 	// Compute the bounding box of the mesh from all the shapes
+// 	// The goal is to compute 6 parallelograms that will form the bounding box
+
+// 	// Initialize the min and max values
+// 	double minX = std::numeric_limits<double>::max();
+// 	double minY = std::numeric_limits<double>::max();
+// 	double minZ = std::numeric_limits<double>::max();
+
+// 	double maxX = std::numeric_limits<double>::min();
+// 	double maxY = std::numeric_limits<double>::min();
+// 	double maxZ = std::numeric_limits<double>::min();
+
+// 	if (!computedBoundingBox)
+// 	{
+// 		for (auto const &shape : shapes)
+// 		{
+// 			auto triangle = dynamic_cast<myTriangle *>(shape.get());
+
+// 			myVector3 A = triangle->A;
+// 			myVector3 B = triangle->B;
+// 			myVector3 C = triangle->C;
+
+// 			minX = std::min({minX, A.x, B.x, C.x});
+// 			minY = std::min({minY, A.y, B.y, C.y});
+// 			minZ = std::min({minZ, A.z, B.z, C.z});
+
+// 			maxX = std::max({maxX, A.x, B.x, C.x});
+// 			maxY = std::max({maxY, A.y, B.y, C.y});
+// 			maxZ = std::max({maxZ, A.z, B.z, C.z});
+// 		}
+
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(minX, minY, minZ), myVector3(maxX, minY, minZ), myVector3(minX, maxY, minZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Front face
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(minX, maxY, minZ), myVector3(maxX, maxY, minZ), myVector3(minX, maxY, maxZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Top face
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(maxX, minY, minZ), myVector3(maxX, maxY, minZ), myVector3(maxX, minY, maxZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Right face
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(minX, minY, minZ), myVector3(minX, maxY, minZ), myVector3(minX, minY, maxZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Left face
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(minX, minY, minZ), myVector3(maxX, minY, minZ), myVector3(minX, minY, maxZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Bottom face
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(minX, minY, maxZ), myVector3(maxX, minY, maxZ), myVector3(minX, maxY, maxZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Back face
+
+// 		computedBoundingBox = true;
+// 	}
+// 	else
+// 	{
+// 		minX = boundingBox[0]->A.x;
+// 		minY = boundingBox[0]->A.y;
+// 		minZ = boundingBox[0]->A.z;
+
+// 		maxX = boundingBox[0]->B.x;
+// 		maxY = boundingBox[0]->C.y;
+// 		maxZ = boundingBox[5]->C.z;
+// 	}
+
+// 	if (shapes.size() > 750 && depth < 25 && octree)
+// 	{
+// 		// Calcul du centre de la bounding box
+// 		myVector3 center = myVector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
+
+// 		// Création des sous-meshes pour les 8 sous-régions
+// 		std::unique_ptr<myMesh> subdivideShapes[8];
+// 		for (int i = 0; i < 8; i++)
+// 		{
+// 			subdivideShapes[i] = std::make_unique<myMesh>(this->getColor(), this->getDiffuse(), this->getFresnel(), this->getReflection(), this->getRefraction());
+// 			subdivideShapes[i]->computedBoundingBox = true;
+// 		}
+
+// 		std::array<std::pair<myVector3, myVector3>, 8> boxBounds = {
+// 			std::make_pair(myVector3(minX, minY, minZ), myVector3(center.x, center.y, center.z)), // Left Down Front
+// 			std::make_pair(myVector3(minX, minY, center.z), myVector3(center.x, center.y, maxZ)), // Left Down Back
+// 			std::make_pair(myVector3(minX, center.y, minZ), myVector3(center.x, maxY, center.z)), // Left Up Front
+// 			std::make_pair(myVector3(minX, center.y, center.z), myVector3(center.x, maxY, maxZ)), // Left Up Back
+// 			std::make_pair(myVector3(center.x, minY, minZ), myVector3(maxX, center.y, center.z)), // Right Down Front
+// 			std::make_pair(myVector3(center.x, minY, center.z), myVector3(maxX, center.y, maxZ)), // Right Down Back
+// 			std::make_pair(myVector3(center.x, center.y, minZ), myVector3(maxX, maxY, center.z)), // Right Up Front
+// 			std::make_pair(myVector3(center.x, center.y, center.z), myVector3(maxX, maxY, maxZ))  // Right Up Back
+// 		};
+
+// 		for (int i = 0; i < 8; i++)
+// 		{
+// 			const auto &[minCorner, maxCorner] = boxBounds[i];
+// 			myVector3 centerX = myVector3(maxCorner.x, minCorner.y, minCorner.z);
+// 			myVector3 centerY = myVector3(minCorner.x, maxCorner.y, minCorner.z);
+// 			myVector3 centerZ = myVector3(minCorner.x, minCorner.y, maxCorner.z);
+
+// 			myColor randColor = myColor::getRandColor();
+
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(minCorner, centerX, centerY, randColor, 0.0, 0.0, 0.0, 0.0));
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(minCorner, centerZ, centerY, randColor, 0.0, 0.0, 0.0, 0.0));
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(minCorner, centerX, centerZ, randColor, 0.0, 0.0, 0.0, 0.0));
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(center, centerX, centerY, randColor, 0.0, 0.0, 0.0, 0.0));
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(center, centerZ, centerY, randColor, 0.0, 0.0, 0.0, 0.0));
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(center, centerX, centerZ, randColor, 0.0, 0.0, 0.0, 0.0));
+// 		}
+
+// 		for (auto const &shape : shapes)
+// 		{
+// 			auto triangle = dynamic_cast<myTriangle *>(shape.get());
+// 			myVector3 A = triangle->A;
+// 			myVector3 B = triangle->B;
+// 			myVector3 C = triangle->C;
+
+// 			// Conditions booléennes pour chaque sous-espace
+// 			bool _Left = tL(A, center) && tL(B, center) && tL(C, center);
+// 			bool _Right = tR(A, center) && tR(B, center) && tR(C, center);
+// 			bool _Up = tU(A, center) && tU(B, center) && tU(C, center);
+// 			bool _Down = tD(A, center) && tD(B, center) && tD(C, center);
+// 			bool _Front = tF(A, center) && tF(B, center) && tF(C, center);
+// 			bool _Back = tB(A, center) && tB(B, center) && tB(C, center);
+
+// 			bool putSomeWhere = false;
+
+// 			// Ajout du triangle aux sous-meshes appropriés en fonction de leur position
+// 			if (_Left && _Down && _Front)
+// 			{
+// 				subdivideShapes[0]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 				putSomeWhere = true;
+// 			}
+// 			if (_Left && _Down && _Back)
+// 			{
+// 				subdivideShapes[1]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 				putSomeWhere = true;
+// 			}
+// 			if (_Left && _Up && _Front)
+// 			{
+// 				subdivideShapes[2]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 				putSomeWhere = true;
+// 			}
+// 			if (_Left && _Up && _Back)
+// 			{
+// 				subdivideShapes[3]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 				putSomeWhere = true;
+// 			}
+// 			if (_Right && _Down && _Front)
+// 			{
+// 				subdivideShapes[4]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 				putSomeWhere = true;
+// 			}
+// 			if (_Right && _Down && _Back)
+// 			{
+// 				subdivideShapes[5]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 				putSomeWhere = true;
+// 			}
+// 			if (_Right && _Up && _Front)
+// 			{
+// 				subdivideShapes[6]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 				putSomeWhere = true;
+// 			}
+// 			if (_Right && _Up && _Back)
+// 			{
+// 				subdivideShapes[7]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 				putSomeWhere = true;
+// 			}
+
+// 			if (!putSomeWhere)
+// 			{
+// 				std::cout << "Triangle not put anywhere" << std::endl;
+// 				std::cout << "Left: " << _Left << " Right: " << _Right << " Up: " << _Up << " Down: " << _Down << " Front: " << _Front << " Back: " << _Back << std::endl;
+// 			}
+// 		}
+
+// 		// Calcul récursif des bounding boxes pour chaque sous-mesh
+// 		for (int i = 0; i < 8; i++)
+// 		{
+// 			subdivideShapes[i]->computeBoundingBox(depth + 1, octree);
+// 		}
+
+// 		// Réinitialisation et stockage des nouvelles subdivisions
+// 		shapes.clear();
+// 		for (int i = 0; i < 8; i++)
+// 		{
+// 			shapes.push_back(std::move(subdivideShapes[i]));
+// 		}
+// 	}
+// }
+
+// void myMesh::computeBoundingBox(int depth, bool octree)
+// {
+// 	// Compute the bounding box of the mesh from all the shapes
+// 	// Initialize the min and max values
+// 	double minX = std::numeric_limits<double>::max();
+// 	double minY = std::numeric_limits<double>::max();
+// 	double minZ = std::numeric_limits<double>::max();
+// 	double maxX = std::numeric_limits<double>::min();
+// 	double maxY = std::numeric_limits<double>::min();
+// 	double maxZ = std::numeric_limits<double>::min();
+
+// 	if (!computedBoundingBox)
+// 	{
+// 		for (auto const &shape : shapes)
+// 		{
+// 			auto triangle = dynamic_cast<myTriangle *>(shape.get());
+// 			if (!triangle)
+// 				continue; // Safety check for casting
+
+// 			myVector3 A = triangle->A;
+// 			myVector3 B = triangle->B;
+// 			myVector3 C = triangle->C;
+
+// 			minX = std::min({minX, A.x, B.x, C.x});
+// 			minY = std::min({minY, A.y, B.y, C.y});
+// 			minZ = std::min({minZ, A.z, B.z, C.z});
+// 			maxX = std::max({maxX, A.x, B.x, C.x});
+// 			maxY = std::max({maxY, A.y, B.y, C.y});
+// 			maxZ = std::max({maxZ, A.z, B.z, C.z});
+// 		}
+
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(minX, minY, minZ), myVector3(maxX, minY, minZ), myVector3(minX, maxY, minZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Front face
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(minX, maxY, minZ), myVector3(maxX, maxY, minZ), myVector3(minX, maxY, maxZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Top face
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(maxX, minY, minZ), myVector3(maxX, maxY, minZ), myVector3(maxX, minY, maxZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Right face
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(minX, minY, minZ), myVector3(minX, maxY, minZ), myVector3(minX, minY, maxZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Left face
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(minX, minY, minZ), myVector3(maxX, minY, minZ), myVector3(minX, minY, maxZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Bottom face
+// 		boundingBox.push_back(std::make_unique<myParallelogram>(myVector3(minX, minY, maxZ), myVector3(maxX, minY, maxZ), myVector3(minX, maxY, maxZ), myColor::WHITE, 0.0, 0.0, 0.0, 0.0)); // Back face
+
+// 		computedBoundingBox = true;
+// 	}
+// 	else
+// 	{
+// 		minX = boundingBox[0]->A.x;
+// 		minY = boundingBox[0]->A.y;
+// 		minZ = boundingBox[0]->A.z;
+// 		maxX = boundingBox[0]->B.x;
+// 		maxY = boundingBox[0]->C.y;
+// 		maxZ = boundingBox[5]->C.z;
+// 	}
+
+// 	if (shapes.size() > 750 && depth < 25 && octree)
+// 	{
+// 		myVector3 center = myVector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
+// 		std::unique_ptr<myMesh> subdivideShapes[8]; // Array for 8 sub-meshes
+
+// 		// Define boundaries for each sub-mesh based on center calculations
+// 		std::array<std::pair<myVector3, myVector3>, 8> boxBounds = {
+// 			std::make_pair(myVector3(minX, minY, minZ), myVector3(center.x, center.y, center.z)), // Left Down Front
+// 			std::make_pair(myVector3(minX, minY, center.z), myVector3(center.x, center.y, maxZ)), // Left Down Back
+// 			std::make_pair(myVector3(minX, center.y, minZ), myVector3(center.x, maxY, center.z)), // Left Up Front
+// 			std::make_pair(myVector3(minX, center.y, center.z), myVector3(center.x, maxY, maxZ)), // Left Up Back
+// 			std::make_pair(myVector3(center.x, minY, minZ), myVector3(maxX, center.y, center.z)), // Right Down Front
+// 			std::make_pair(myVector3(center.x, minY, center.z), myVector3(maxX, center.y, maxZ)), // Right Down Back
+// 			std::make_pair(myVector3(center.x, center.y, minZ), myVector3(maxX, maxY, center.z)), // Right Up Front
+// 			std::make_pair(myVector3(center.x, center.y, center.z), myVector3(maxX, maxY, maxZ))  // Right Up Back
+// 		};
+
+// 		for (auto &subMesh : subdivideShapes)
+// 		{
+// 			subMesh = std::make_unique<myMesh>(this->getColor(), this->getDiffuse(), this->getFresnel(), this->getReflection(), this->getRefraction());
+// 			subMesh->computedBoundingBox = true;
+// 		}
+
+// 		// Create bounding boxes for each sub-mesh
+// 		for (int i = 0; i < 8; i++)
+// 		{
+// 			const auto &[minCorner, maxCorner] = boxBounds[i];
+// 			myVector3 centerX = myVector3(maxCorner.x, minCorner.y, minCorner.z);
+// 			myVector3 centerY = myVector3(minCorner.x, maxCorner.y, minCorner.z);
+// 			myVector3 centerZ = myVector3(minCorner.x, minCorner.y, maxCorner.z);
+
+// 			myColor randColor = myColor::getRandColor();
+
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(minCorner, centerX, centerY, randColor, 0.0, 0.0, 0.0, 0.0));
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(minCorner, centerZ, centerY, randColor, 0.0, 0.0, 0.0, 0.0));
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(minCorner, centerX, centerZ, randColor, 0.0, 0.0, 0.0, 0.0));
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(center, centerX, centerY, randColor, 0.0, 0.0, 0.0, 0.0));
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(center, centerZ, centerY, randColor, 0.0, 0.0, 0.0, 0.0));
+// 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(center, centerX, centerZ, randColor, 0.0, 0.0, 0.0, 0.0));
+// 		}
+
+// 		for (auto const &shape : shapes)
+// 		{
+// 			auto triangle = dynamic_cast<myTriangle *>(shape.get());
+// 			if (!triangle)
+// 				continue; // Safety check for casting
+
+// 			myVector3 A = triangle->A;
+// 			myVector3 B = triangle->B;
+// 			myVector3 C = triangle->C;
+
+// 			// Determine positions relative to center, using a small epsilon for boundary cases
+// 			const double epsilon = 1e-6;
+// 			bool left = A.x < center.x + epsilon || B.x < center.x + epsilon || C.x < center.x + epsilon;
+// 			bool right = A.x > center.x - epsilon || B.x > center.x - epsilon || C.x > center.x - epsilon;
+// 			bool down = A.y < center.y + epsilon || B.y < center.y + epsilon || C.y < center.y + epsilon;
+// 			bool up = A.y > center.y - epsilon || B.y > center.y - epsilon || C.y > center.y - epsilon;
+// 			bool front = A.z < center.z + epsilon || B.z < center.z + epsilon || C.z < center.z + epsilon;
+// 			bool back = A.z > center.z - epsilon || B.z > center.z - epsilon || C.z > center.z - epsilon;
+
+// 			// Add triangle to all matching sub-meshes
+// 			if (left && down && front)
+// 				subdivideShapes[0]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 			if (left && down && back)
+// 				subdivideShapes[1]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 			if (left && up && front)
+// 				subdivideShapes[2]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 			if (left && up && back)
+// 				subdivideShapes[3]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 			if (right && down && front)
+// 				subdivideShapes[4]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 			if (right && down && back)
+// 				subdivideShapes[5]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 			if (right && up && front)
+// 				subdivideShapes[6]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 			if (right && up && back)
+// 				subdivideShapes[7]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+// 		}
+
+// 		// Recurse for each sub-mesh
+// 		for (auto &subMesh : subdivideShapes)
+// 		{
+// 			subMesh->computeBoundingBox(depth + 1, octree);
+// 		}
+
+// 		// Clear and repopulate shapes list
+// 		shapes.clear();
+// 		for (auto &subMesh : subdivideShapes)
+// 		{
+// 			shapes.push_back(std::move(subMesh));
+// 		}
+// 	}
+// }
+
+bool intersectsSubregion(const myVector3 &A, const myVector3 &B, const myVector3 &C, const myVector3 &minCorner, const myVector3 &maxCorner)
+{
+	myVector3 triMin(std::min({A.x, B.x, C.x}), std::min({A.y, B.y, C.y}), std::min({A.z, B.z, C.z}));
+	myVector3 triMax(std::max({A.x, B.x, C.x}), std::max({A.y, B.y, C.y}), std::max({A.z, B.z, C.z}));
+	return (triMin.x <= maxCorner.x && triMax.x >= minCorner.x) &&
+		   (triMin.y <= maxCorner.y && triMax.y >= minCorner.y) &&
+		   (triMin.z <= maxCorner.z && triMax.z >= minCorner.z);
+}
+
 void myMesh::computeBoundingBox(int depth, bool octree)
 {
-	// Compute the bounding box of the mesh from all the shapes
-	// The goal is to compute 6 parallelograms that will form the bounding box
-
-	// Initialize the min and max values
 	double minX = std::numeric_limits<double>::max();
 	double minY = std::numeric_limits<double>::max();
 	double minZ = std::numeric_limits<double>::max();
-
 	double maxX = std::numeric_limits<double>::min();
 	double maxY = std::numeric_limits<double>::min();
 	double maxZ = std::numeric_limits<double>::min();
@@ -318,6 +650,8 @@ void myMesh::computeBoundingBox(int depth, bool octree)
 		for (auto const &shape : shapes)
 		{
 			auto triangle = dynamic_cast<myTriangle *>(shape.get());
+			if (!triangle)
+				continue;
 
 			myVector3 A = triangle->A;
 			myVector3 B = triangle->B;
@@ -326,7 +660,6 @@ void myMesh::computeBoundingBox(int depth, bool octree)
 			minX = std::min({minX, A.x, B.x, C.x});
 			minY = std::min({minY, A.y, B.y, C.y});
 			minZ = std::min({minZ, A.z, B.z, C.z});
-
 			maxX = std::max({maxX, A.x, B.x, C.x});
 			maxY = std::max({maxY, A.y, B.y, C.y});
 			maxZ = std::max({maxZ, A.z, B.z, C.z});
@@ -346,7 +679,6 @@ void myMesh::computeBoundingBox(int depth, bool octree)
 		minX = boundingBox[0]->A.x;
 		minY = boundingBox[0]->A.y;
 		minZ = boundingBox[0]->A.z;
-
 		maxX = boundingBox[0]->B.x;
 		maxY = boundingBox[0]->C.y;
 		maxZ = boundingBox[5]->C.z;
@@ -354,28 +686,43 @@ void myMesh::computeBoundingBox(int depth, bool octree)
 
 	if (shapes.size() > 750 && depth < 25 && octree)
 	{
-		myVector3 center = myVector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
-
+		myVector3 center((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
 		std::unique_ptr<myMesh> subdivideShapes[8];
-		for (int i = 0; i < 8; i++)
-		{
-			subdivideShapes[i] = std::make_unique<myMesh>(this->getColor(), this->getDiffuse(), this->getFresnel(), this->getReflection(), this->getRefraction());
-			subdivideShapes[i]->computedBoundingBox = true;
-		}
 
 		std::array<std::pair<myVector3, myVector3>, 8> boxBounds = {
-			std::make_pair(myVector3(minX, minY, minZ), myVector3(center.x, center.y, center.z)), // Front bottom left
-			std::make_pair(myVector3(center.x, minY, minZ), myVector3(maxX, center.y, center.z)), // Front bottom right
-			std::make_pair(myVector3(minX, center.y, minZ), myVector3(center.x, maxY, center.z)), // Front top left
-			std::make_pair(myVector3(center.x, center.y, minZ), myVector3(maxX, maxY, center.z)), // Front top right
-			std::make_pair(myVector3(minX, minY, center.z), myVector3(center.x, center.y, maxZ)), // Back bottom left
-			std::make_pair(myVector3(center.x, minY, center.z), myVector3(maxX, center.y, maxZ)), // Back bottom right
-			std::make_pair(myVector3(minX, center.y, center.z), myVector3(center.x, maxY, maxZ)), // Back top left
-			std::make_pair(myVector3(center.x, center.y, center.z), myVector3(maxX, maxY, maxZ))  // Back top right
+			std::make_pair(myVector3(minX, minY, minZ), myVector3(center.x, center.y, center.z)), // Left Down Front
+			std::make_pair(myVector3(minX, minY, center.z), myVector3(center.x, center.y, maxZ)), // Left Down Back
+			std::make_pair(myVector3(minX, center.y, minZ), myVector3(center.x, maxY, center.z)), // Left Up Front
+			std::make_pair(myVector3(minX, center.y, center.z), myVector3(center.x, maxY, maxZ)), // Left Up Back
+			std::make_pair(myVector3(center.x, minY, minZ), myVector3(maxX, center.y, center.z)), // Right Down Front
+			std::make_pair(myVector3(center.x, minY, center.z), myVector3(maxX, center.y, maxZ)), // Right Down Back
+			std::make_pair(myVector3(center.x, center.y, minZ), myVector3(maxX, maxY, center.z)), // Right Up Front
+			std::make_pair(myVector3(center.x, center.y, center.z), myVector3(maxX, maxY, maxZ))  // Right Up Back
 		};
 
 		for (int i = 0; i < 8; i++)
 		{
+			subdivideShapes[i] = std::make_unique<myMesh>(this->getColor(), this->getDiffuse(), this->getFresnel(), this->getReflection(), this->getRefraction());
+
+			// myVector3 bottomLeftFront = boxBounds[i].first;
+			// myVector3 topRightBack = boxBounds[i].second;
+
+			// myVector3 bottomRightFront = myVector3(topRightBack.x, bottomLeftFront.y, bottomLeftFront.z);
+			// myVector3 topRightFront = myVector3(topRightBack.x, topRightBack.y, bottomLeftFront.z);
+			// myVector3 topLeftFront = myVector3(bottomLeftFront.x, topRightBack.y, bottomLeftFront.z);
+			// myVector3 bottomLeftBack = myVector3(bottomLeftFront.x, bottomLeftFront.y, topRightBack.z);
+			// myVector3 bottomRightBack = myVector3(topRightBack.x, bottomLeftFront.y, topRightBack.z);
+			// myVector3 topLeftBack = myVector3(bottomLeftFront.x, topRightBack.y, topRightBack.z);
+
+			// subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(bottomLeftFront, bottomRightFront, topRightFront, myColor::getRandColor(), 0.0, 0.0, 0.0, 0.0)); // Front face
+			// subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(bottomLeftFront, topLeftFront, topLeftBack, myColor::getRandColor(), 0.0, 0.0, 0.0, 0.0));		 // Left face
+			// subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(bottomLeftFront, bottomLeftBack, bottomRightBack, myColor::getRandColor(), 0.0, 0.0, 0.0, 0.0)); // Bottom face
+			// subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(topRightFront, topRightBack, bottomRightBack, myColor::getRandColor(), 0.0, 0.0, 0.0, 0.0));	 // Right face
+			// subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(topLeftFront, topRightFront, topRightBack, myColor::getRandColor(), 0.0, 0.0, 0.0, 0.0));		 // Top face
+			// subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(bottomLeftBack, bottomRightBack, topRightBack, myColor::getRandColor(), 0.0, 0.0, 0.0, 0.0));	 // Back face
+
+			// subdivideShapes[i]->computedBoundingBox = true;
+
 			const auto &[minCorner, maxCorner] = boxBounds[i];
 			myVector3 centerX = myVector3(maxCorner.x, minCorner.y, minCorner.z);
 			myVector3 centerY = myVector3(minCorner.x, maxCorner.y, minCorner.z);
@@ -389,61 +736,34 @@ void myMesh::computeBoundingBox(int depth, bool octree)
 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(center, centerX, centerY, randColor, 0.0, 0.0, 0.0, 0.0));
 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(center, centerZ, centerY, randColor, 0.0, 0.0, 0.0, 0.0));
 			subdivideShapes[i]->boundingBox.push_back(std::make_unique<myParallelogram>(center, centerX, centerZ, randColor, 0.0, 0.0, 0.0, 0.0));
-		}
 
-		myPlane leftRightPlane(center, myVector3(1, 0, 0));
-		myPlane upDownPlane(center, myVector3(0, 1, 0));
-		myPlane frontBackPlane(center, myVector3(0, 0, 1));
+			subdivideShapes[i]->computedBoundingBox = true;
 
-		for (auto const &shape : shapes)
-		{
-			auto triangle = dynamic_cast<myTriangle *>(shape.get());
-
-			myVector3 points[3] = {triangle->A, triangle->B, triangle->C};
-
-			bool _Left = false, _Right = false, _Up = false, _Down = false, _Back = false, _Front = false;
-
-			for (myVector3 &point : points)
+			for (auto &shape : shapes)
 			{
-				if (leftRightPlane.isPointInOppositeDirection(point))
-					_Left = true;
-				else if (leftRightPlane.isPointInNormalDirection(point))
-					_Right = true;
-				if (upDownPlane.isPointInOppositeDirection(point))
-					_Down = true;
-				else if (upDownPlane.isPointInNormalDirection(point))
-					_Up = true;
-				if (frontBackPlane.isPointInOppositeDirection(point))
-					_Front = true;
-				else if (frontBackPlane.isPointInNormalDirection(point))
-					_Back = true;
-			}
+				auto triangle = dynamic_cast<myTriangle *>(shape.get());
+				if (!triangle)
+					continue;
 
-			// Add the triangle to the corresponding subspace
-			if (_Left && _Down && _Front)
-				subdivideShapes[0]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
-			if (_Right && _Down && _Front)
-				subdivideShapes[1]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
-			if (_Left && _Up && _Front)
-				subdivideShapes[2]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
-			if (_Right && _Up && _Front)
-				subdivideShapes[3]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
-			if (_Left && _Down && _Back)
-				subdivideShapes[4]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
-			if (_Right && _Down && _Back)
-				subdivideShapes[5]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
-			if (_Left && _Up && _Back)
-				subdivideShapes[6]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
-			if (_Right && _Up && _Back)
-				subdivideShapes[7]->addTriangle(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+				if (intersectsSubregion(triangle->A, triangle->B, triangle->C, boxBounds[i].first, boxBounds[i].second))
+				{
+					subdivideShapes[i]->shapes.push_back(std::make_unique<myTriangle>(triangle->A, triangle->B, triangle->C, triangle->getColor(), triangle->getDiffuse(), triangle->getFresnel(), triangle->getReflection(), triangle->getRefraction()));
+				}
+			}
+			if (!subdivideShapes[i]->shapes.empty())
+			{
+				subdivideShapes[i]->computeBoundingBox(depth + 1, octree);
+				// 	shapes.push_back(std::move(subdivideShapes[i]));
+			}
 		}
 
-		for (int i = 0; i < 8; i++)
-			subdivideShapes[i]->computeBoundingBox(depth + 1, octree);
-
-		// Add the subdivideShapes to the shapes, and remove everything else in it
 		shapes.clear();
 		for (int i = 0; i < 8; i++)
-			shapes.push_back(std::move(subdivideShapes[i]));
+		{
+			if (!subdivideShapes[i]->shapes.empty())
+			{
+				shapes.push_back(std::move(subdivideShapes[i]));
+			}
+		}
 	}
 }
