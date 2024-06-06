@@ -60,7 +60,7 @@ install_linux() {
     # elif command -v zypper >/dev/null 2>&1; then
     #     install_zypper
     else
-        echo "Unsupported package manager. Supported: apt, pacman, yum, dnf, zypper."
+        echo "Unsupported package manager. Supported: apt."
         exit 1
     fi
 }
