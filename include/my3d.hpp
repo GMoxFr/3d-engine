@@ -5,6 +5,8 @@
 #include <string_view>
 #include <algorithm>
 #include <chrono>
+#include <vector>
+#include <iostream>
 
 #include "constants.hpp"
 
@@ -19,6 +21,7 @@ class myTriangle;
 class myTexture;
 class myAmbientLight;
 class myDirectionalLight;
+class myPlane;
 
 //////////////////////////
 // METHODS DECLARATION  //
@@ -26,34 +29,36 @@ class myDirectionalLight;
 
 enum class ArgumentType
 {
-    HELP,
-    SAVE,
-    CONFIG,
-    THREADS,
-    OCTREE,
-    DISPLAY,
-    UNKNOWN
+	HELP,
+	SAVE,
+	CONFIG,
+	THREADS,
+	OCTREE,
+	DISPLAY,
+	UNKNOWN
 };
 
 namespace my3d
 {
-    double clamp(double v);
-    double cosf(double theta);
-    double sinf(double theta);
-    double sqrtf(double x);
-    void initRand();
-    double randNP(double v);
-    double randP(double v);
-    void invertCoordSpherique(const myVector3 &P3D, const myVector3 &sphereCenter, double r, double &u, double &v);
-    void smallSleep(int delay);
-    bool isValidExtension(std::string_view filename, std::string_view extension);
-    void displayHelp(std::string const &programName);
-    bool handleSAVE(int &i, const char **argv, int argc, std::string &filename);
-    bool handleCONFIG(int &i, const char **argv, int argc, std::string &filename);
-    bool handleTHREADS(int &i, const char **argv, int argc, int &threads);
-    int argumentParser(int argc, char **argv, std::string &configFilename, std::string &saveFilename, int &threads, bool &octree, bool &display);
-    std::vector<myVector3> generateRingRays(const myVector3 &direction, int rays, double deviationAngle);
-    std::vector<myVector3> ringDirection(const myVector3 &direction);
-    std::vector<myVector3> randomizeDirection(const myVector3 &direction);
-    void renderingLog(int &state, std::chrono::_V2::system_clock::time_point &timeSinceLastUpdate);
+	double clamp(double v);
+	double cosf(double theta);
+	double sinf(double theta);
+	double sqrtf(double x);
+	void initRand();
+	double randNP(double v);
+	double randP(double v);
+	void invertCoordSpherique(const myVector3 &P3D, const myVector3 &sphereCenter, double r, double &u, double &v);
+	void smallSleep(int delay);
+	bool isValidExtension(std::string_view filename, std::string_view extension);
+	void displayHelp(std::string const &programName);
+	bool handleSAVE(int &i, const char **argv, int argc, std::string &filename);
+	bool handleCONFIG(int &i, const char **argv, int argc, std::string &filename);
+	bool handleTHREADS(int &i, const char **argv, int argc, int &threads);
+	int argumentParser(int argc, char **argv, std::string &configFilename, std::string &saveFilename, int &threads, bool &octree, bool &display);
+	std::vector<myVector3> generateRingRays(const myVector3 &direction, int rays, double deviationAngle);
+	std::vector<myVector3> ringDirection(const myVector3 &direction);
+	std::vector<myVector3> randomizeDirection(const myVector3 &direction);
+
+	using SYSTEM_CLOCK_TIME_POINT = std::chrono::time_point<std::chrono::steady_clock>;
+	void renderingLog(int &state, SYSTEM_CLOCK_TIME_POINT &timeSinceLastUpdate);
 }

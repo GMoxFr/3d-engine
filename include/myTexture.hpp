@@ -9,18 +9,18 @@
 class myTexture
 {
 private:
-    int width;
-    int height;
-    std::vector<myColor> pixels;
-    bool error = false;
+	int width;
+	int height;
+	std::vector<myColor> pixels;
+	bool error = false;
 
-    myColor interpolate(double u, double v) const;
+	myColor interpolate(double u, double v) const;
 
 public:
-    explicit myTexture(const std::string &filename);
+	explicit myTexture(const std::string &filename);
 
-    myColor getPixel(double u, double v) const;
-    void bump(double u, double v, double &dhdu, double &dhdv) const;
+	myColor getPixel(double u, double v) const;
+	void bump(double u, double v, double &dhdu, double &dhdv) const;
 
-    bool getError() const { return error; }
+	bool getError() const { return error; }
 };
