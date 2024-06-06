@@ -352,7 +352,7 @@ void myMesh::computeBoundingBox(int depth, bool octree)
 		maxZ = boundingBox[5]->C.z;
 	}
 
-	if (shapes.size() > 750 && depth < 2 && octree)
+	if (shapes.size() > 750 && depth < 25 && octree)
 	{
 		myVector3 center = myVector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
 
