@@ -95,7 +95,7 @@ bool mySphere::intersect(myVector3 const &origin, myVector3 const &direction, my
             -radius * my3d::sinf(v) * my3d::sinf(u),
             radius * my3d::cosf(v));
 
-        double K = 0.01;
+        double K = 0.1;
         myVector3 bumpNormal = normal + (K * ((dMdu ^ (dhdv * normal)) + (dMdv ^ (dhdu * normal))));
         bumpNormal.normalize();
         normal = bumpNormal;
@@ -150,7 +150,7 @@ bool mySphere::intersect(myVector3 const &origin, myVector3 const &direction, my
             -radius * my3d::sinf(v) * my3d::sinf(u),
             radius * my3d::cosf(v));
 
-        double K = 0.01;
+        double K = 0.1;
         myVector3 bumpNormal = normal + (K * ((dMdu ^ (dhdv * normal)) + (dMdv ^ (dhdu * normal))));
         bumpNormal.normalize();
         normal = bumpNormal;

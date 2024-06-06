@@ -3,13 +3,13 @@
         {
             "type": "AmbientLight",
             "color": [255, 255, 255],
-            "intensity": 0.1
+            "intensity": 0.3
         },
         {
             "type": "DirectionalLight",
             "color": [255, 255, 255],
             "direction": [1, 1, -0.5],
-            "intensity": 1
+            "intensity": 0.9
         }
     ],
     "shapes": [
@@ -17,7 +17,7 @@
             "type": "Obj",
             "obj": "assets/models/armes.obj",
             "position": [640, 400, 360],
-            "color": [255, 215, 0],
+            "color": [130, 130, 130],
             "scale": 65,
             "rotation": [70, 180, 30]
         },

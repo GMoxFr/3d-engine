@@ -407,7 +407,7 @@ void myMesh::computeBoundingBox(int depth, bool octree)
         }
 
         for (int i = 0; i < 8; i++)
-            subdivideShapes[i]->computeBoundingBox(depth + 1);
+            subdivideShapes[i]->computeBoundingBox(depth + 1, octree);
 
         // Add the subdivideShapes to the shapes, and remove everything else in it
         shapes.clear();

@@ -3,13 +3,19 @@
         {
             "type": "AmbientLight",
             "color": [255, 255, 255],
-            "intensity": 0.2
+            "intensity": 0.1
         },
         {
             "type": "DirectionalLight",
             "color": [255, 255, 255],
-            "intensity": 1,
+            "intensity": 0.7,
             "direction": [1, 1, -0.5]
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "intensity": 0.3,
+            "direction": [-1, 1, -0.5]
         }
     ],
     "shapes": [
