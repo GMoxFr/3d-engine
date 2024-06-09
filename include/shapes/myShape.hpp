@@ -48,7 +48,7 @@ public:
 																																diffuse(diffuse),
 																																fresnel(fresnel),
 																																reflection(reflection),
-																																refraction(refraction) {};
+																																refraction(refraction){};
 
 	myShape(std::string const &texture, double diffuse = 1.0, double fresnel = 1.0, double reflection = 0.0, double refraction = 0.0) : hasTexture(true),
 																																		diffuse(diffuse),
@@ -108,7 +108,11 @@ public:
 			}
 
 			double lightIntensity = 1.0;
+			// Soft shadow
 			std::vector<myVector3> directions = my3d::ringDirection(-light->getDirection());
+
+			// Hard shadow
+			// std::vector<myVector3> directions = {-light->getDirection()};
 
 			for (myVector3 const &dir : directions)
 			{
