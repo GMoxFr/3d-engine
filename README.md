@@ -161,5 +161,5 @@ gprof 3d-engine gmon.out > analysis.txt
 ## Examples and Screenshots
 
 Here are some examples of the engine's capabilities:
-![Chessboard](assets/renders/chess/chess.png)
+![Chessboard](assets/renders/soutenance/chess.png)
 *Here's a chessboard showing reflections, refractions, shadows, and mesh rendering.*
