@@ -1,0 +1,33 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [1, 1, -0.5],
+            "intensity": 1
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Obj",
+            "obj": "assets/models/xm148.obj",
+            "position": [690, 400, 410],
+            "color": [180, 180, 180],
+            "scale": 15,
+            "rotation": [90, 0, 0]
+        },
+        {
+            "type": "Obj",
+            "obj": "assets/models/xm177.obj",
+            "position": [690, 400, 410],
+            "color": [180, 180, 180],
+            "scale": 15,
+            "rotation": [90, 0, 0]
+        }
+    ]
+}

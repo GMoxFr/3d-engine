@@ -1,0 +1,24 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [-1, 1, -0.5],
+            "intensity": 1
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Parallelogram",
+            "A": [440, 500, 160],
+            "B": [970, 600, 160],
+            "C": [440, 600, 680],
+            "color": [0, 0, 255]
+        }
+    ]
+}

@@ -1,0 +1,36 @@
+{
+    "lights": [
+        {
+            "type": "AmbientLight",
+            "color": [255, 255, 255],
+            "intensity": 0.1
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 255, 255],
+            "direction": [-1, 1, -0.5],
+            "intensity": 0.8
+        },
+        {
+            "type": "DirectionalLight",
+            "color": [255, 100, 100],
+            "direction": [1, 1, -0.5],
+            "intensity": 0.6
+        }
+    ],
+    "shapes": [
+        {
+            "type": "Sphere",
+            "center": [640, 1000, 360],
+            "radius": 270,
+            "color": [255, 0, 0]
+        },
+        {
+            "type": "Parallelogram",
+            "A": [-25600, -1000, 0],
+            "B": [38400, -1000, 0],
+            "C": [-25600, 15000, 0],
+            "color": [255, 255, 255]
+        }
+    ]
+}
